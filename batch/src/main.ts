@@ -4,7 +4,6 @@ import { Api } from "./edinet/api";
 import dotenv from "dotenv";
 import { Finance } from "./libs/finance";
 import { inspect } from "util";
-import { Utils } from "./libs/utils";
 import { DateUtil } from "./libs/date";
 
 dotenv.config();

@@ -29,11 +29,14 @@ export class Api {
       const response = await axios.get(this.domain + "documents.json", {
         params: param,
       });
+      if (!response.data.results) {
+        return { documentIdList: [], quarterlyDocumentIdList: [] };
+      }
       const regex = new RegExp(/^有価証券報告書－第\d+期/);
       const quarterlyRegex = new RegExp(/^四半期報告書－第\d+/);
       /** 有価証券報告書と四半期報告書のデータを取得する */
       const documentIdList = [
-        ...this.filterDocuments(response.data.results, regex),
+        ...this.filterDocuments(response?.data.results, regex),
       ];
       const quarterlyDocumentIdList = [
         ...this.filterDocuments(response.data.results, quarterlyRegex),
