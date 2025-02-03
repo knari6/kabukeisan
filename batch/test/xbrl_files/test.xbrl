@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xbrli:xbrl xmlns:iso4217="http://www.xbrl.org/2003/iso4217" xmlns:jpcrp030000-asr_E27043-000="http://disclosure.edinet-fsa.go.jp/jpcrp030000/asr/001/E27043-000/2024-09-30/01/2025-01-06" xmlns:jpcrp_cor="http://disclosure.edinet-fsa.go.jp/taxonomy/jpcrp/2023-12-01/jpcrp_cor" xmlns:jpdei_cor="http://disclosure.edinet-fsa.go.jp/taxonomy/jpdei/2013-08-31/jpdei_cor" xmlns:jppfs_cor="http://disclosure.edinet-fsa.go.jp/taxonomy/jppfs/2023-12-01/jppfs_cor" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:utr="http://www.xbrl.org/2009/utr" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <xbrli:context id="FilingDateInstant">
+    <xbrli:entity>
+      <xbrli:identifier scheme="http://disclosure.edinet-fsa.go.jp">E27043-000</xbrli:identifier>
+    </xbrli:entity>
+  <xbrli:period>
+    <xbrli:instant>2025-01-06</xbrli:instant>
+  </xbrli:period>
+  </xbrli:context>
+</xbrli:xbrl>
