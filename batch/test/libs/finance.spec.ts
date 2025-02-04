@@ -30,38 +30,32 @@ describe("Finance", () => {
     mockFinanceStatement = {
       balanceSheet: {
         assets: {
-          currentAssets: {
-            total: random.randomInt(10000, 100000),
-            cashAndDeposits: random.randomInt(1000, 10000),
-            accountsReceivable: random.randomInt(1000, 10000),
-            merchandiseAndFinishedGoods: random.randomInt(1000, 10000),
-            securities: random.randomInt(1000, 10000),
-            inventory: random.randomInt(1000, 10000),
-            other: random.randomInt(1000, 10000),
-          },
-          fixedAssets: {
-            total: random.randomInt(1000, 10000),
-            tangibleFixedAssets: random.randomInt(1000, 10000),
-            land: random.randomInt(1000, 10000),
-            intangibleFixedAssets: random.randomInt(1000, 10000),
-            investmentSecurities: random.randomInt(1000, 10000),
-          },
-          total: random.randomInt(1000, 10000),
+          currentAssets: random.randomInt(10000, 100000),
+          cashAndDeposits: random.randomInt(1000, 10000),
+          accountsReceivable: random.randomInt(1000, 10000),
+          merchandiseAndFinishedGoods: random.randomInt(1000, 10000),
+          securities: random.randomInt(1000, 10000),
+          inventory: random.randomInt(1000, 10000),
+          otherCurrentAssets: random.randomInt(1000, 10000),
+          fixedAssets: random.randomInt(1000, 10000),
+          tangibleFixedAssets: random.randomInt(1000, 10000),
+          land: random.randomInt(1000, 10000),
+          intangibleFixedAssets: random.randomInt(1000, 10000),
+          investmentSecurities: random.randomInt(1000, 10000),
           other: random.randomInt(1000, 10000),
+          asset: random.randomInt(1000, 10000),
         },
         liabilities: {
-          currentLiabilities: {
-            debt: random.randomInt(1000, 10000),
-            other: random.randomInt(1000, 10000),
-            total: random.randomInt(1000, 10000),
-          },
+          currentLiabilities: random.randomInt(1000, 10000),
+          debt: random.randomInt(1000, 10000),
+          otherCurrentLiabilities: random.randomInt(1000, 10000),
           fixedLiabilities: random.randomInt(1000, 10000),
+          liability: random.randomInt(1000, 10000),
           other: random.randomInt(1000, 10000),
-          total: random.randomInt(1000, 10000),
         },
         netAssets: {
-          total: random.randomInt(1000, 10000),
           equity: random.randomInt(1000, 10000),
+          total: random.randomInt(1000, 10000),
         },
       },
       incomeStatement: {
@@ -92,6 +86,7 @@ describe("Finance", () => {
         companyName: "",
         filingDate: "",
         fiscalPeriod: "",
+        quarter: "",
       },
     };
   });
@@ -118,8 +113,7 @@ describe("Finance", () => {
   describe("ROICの計算", () => {
     it("値を返すこと", () => {
       const equity = mockFinanceStatement.balanceSheet.netAssets.equity;
-      const debt =
-        mockFinanceStatement.balanceSheet.liabilities.currentLiabilities.debt;
+      const debt = mockFinanceStatement.balanceSheet.liabilities.debt;
       const { operatingIncome, tax, incomeBeforeIncomeTaxes } =
         mockFinanceStatement.incomeStatement;
       const expected =
@@ -130,7 +124,7 @@ describe("Finance", () => {
     });
     it("有利子負債と自己資本の合計が0の時エラーを返すこと", () => {
       mockFinanceStatement.balanceSheet.netAssets.equity = 0;
-      mockFinanceStatement.balanceSheet.liabilities.currentLiabilities.debt = 0;
+      mockFinanceStatement.balanceSheet.liabilities.debt = 0;
       expect(() => finance.calcROIC(financialStatements)).toThrow(
         "自己資本と有利子負債の合計が0になったため計算できません"
       );
@@ -140,13 +134,14 @@ describe("Finance", () => {
         1000,
         10000
       );
-      mockFinanceStatement.balanceSheet.liabilities.currentLiabilities.debt =
-        random.randomInt(1000, 10000);
+      mockFinanceStatement.balanceSheet.liabilities.debt = random.randomInt(
+        1000,
+        10000
+      );
       mockFinanceStatement.incomeStatement.incomeBeforeIncomeTaxes = -1000;
 
       const equity = mockFinanceStatement.balanceSheet.netAssets.equity;
-      const debt =
-        mockFinanceStatement.balanceSheet.liabilities.currentLiabilities.debt;
+      const debt = mockFinanceStatement.balanceSheet.liabilities.debt;
       const { operatingIncome } = mockFinanceStatement.incomeStatement;
       const expected = (operatingIncome * 0.7) / (equity + debt);
       const acutual = finance.calcROIC(mockFinanceStatement);
@@ -177,19 +172,19 @@ describe("Finance", () => {
 
   describe("ROAの計算", () => {
     it("値を返すこと", () => {
-      const assets = mockFinanceStatement.balanceSheet.assets.total;
+      const assets = mockFinanceStatement.balanceSheet.assets.asset;
       const expected = mockFinanceStatement.incomeStatement.profitLoss / assets;
       const acutual = finance.calcROA(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("資産が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.balanceSheet.assets.total = 0;
+      mockFinanceStatement.balanceSheet.assets.asset = 0;
       expect(() => finance.calcROA(mockFinanceStatement)).toThrow(
         "資産が0になったため計算できません"
       );
     });
     it("資産がマイナスの場合エラーを返すこと", () => {
-      mockFinanceStatement.balanceSheet.assets.total = -1000;
+      mockFinanceStatement.balanceSheet.assets.asset = -1000;
       expect(() => finance.calcROA(mockFinanceStatement)).toThrow(
         "資産がマイナスになったため計算できません"
       );
@@ -199,13 +194,13 @@ describe("Finance", () => {
   describe("自己資本比率の計算", () => {
     it("値を返すこと", () => {
       const equity = mockFinanceStatement.balanceSheet.netAssets.equity;
-      const assets = mockFinanceStatement.balanceSheet.assets.total;
+      const assets = mockFinanceStatement.balanceSheet.assets.asset;
       const expected = equity / assets;
       const acutual = finance.calcEquityRatio(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("資産が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.balanceSheet.assets.total = 0;
+      mockFinanceStatement.balanceSheet.assets.asset = 0;
       expect(() => finance.calcEquityRatio(mockFinanceStatement)).toThrow(
         "資産が0になったため計算できません"
       );
@@ -295,15 +290,13 @@ describe("Finance", () => {
       const cash =
         mockFinanceStatement.cashFlowStatement.cashAndCashEquivalents;
       const accountsReceivable =
-        mockFinanceStatement.balanceSheet.assets.currentAssets
-          .accountsReceivable;
-      const securities =
-        mockFinanceStatement.balanceSheet.assets.currentAssets.securities;
-      const land = mockFinanceStatement.balanceSheet.assets.fixedAssets.land;
+        mockFinanceStatement.balanceSheet.assets.accountsReceivable;
+      const securities = mockFinanceStatement.balanceSheet.assets.securities;
+      const land = mockFinanceStatement.balanceSheet.assets.land;
       const investmentSecurities =
-        mockFinanceStatement.balanceSheet.assets.fixedAssets
-          .investmentSecurities;
-      const liabilities = mockFinanceStatement.balanceSheet.liabilities.total;
+        mockFinanceStatement.balanceSheet.assets.investmentSecurities;
+      const liabilities =
+        mockFinanceStatement.balanceSheet.liabilities.liability;
       const expected =
         ((cash +
           accountsReceivable +
