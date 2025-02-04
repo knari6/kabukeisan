@@ -1,12 +1,12 @@
 import { describe, it } from "vitest";
 
-describe("AccountDataFactory", () => {
+describe("CompanyFactory", () => {
   describe("create", () => {
     describe("パラメータがあるとき", () => {
-      it("登録できること", () => {});
+      it("指定した内容で登録されること", () => []);
     });
     describe("パラメータがないとき", () => {
-      it("登録できること", () => {});
+      it("randomな値で登録されること", () => {});
     });
   });
 });
