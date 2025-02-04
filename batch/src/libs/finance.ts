@@ -16,99 +16,103 @@ export class Finance {
         /** 資産 */
         assets: {
           /** 流動資産 */
-          currentAssets: {
-            /** 現金預金 */
-            cashAndDeposits: this.extractNumber(
-              xmlData,
-              "jppfs_cor:CashAndDeposits",
-              context
-            ),
-            /** 売上債権 */
-            accountsReceivable: this.extractNumber(
-              xmlData,
-              "jppfs_cor:AccountsReceivableTrade",
-              context
-            ),
-            /** 製品 */
-            merchandiseAndFinishedGoods: this.extractNumber(
-              xmlData,
-              "jppfs_cor:MerchandiseAndFinishedGoods",
-              context
-            ),
-            /** 有価証券 */
-            securities: this.extractNumber(
-              xmlData,
-              "jppfs_cor:Securities",
-              context
-            ),
-            /** 棚卸資産 */
-            inventory: this.extractNumber(
-              xmlData,
-              "jppfs_cor:Inventory",
-              context
-            ),
-            /** その他 */
-            other: this.extractNumber(xmlData, "jppfs_cor:OtherCA", context),
-            /** 流動資産合計 */
-            total: this.extractNumber(
-              xmlData,
-              "jppfs_cor:CurrentAssets",
-              context
-            ),
-          },
+          currentAssets: this.extractNumber(
+            xmlData,
+            "jppfs_cor:CurrentAssets",
+            context
+          ),
+          /** 現金預金 */
+          cashAndDeposits: this.extractNumber(
+            xmlData,
+            "jppfs_cor:CashAndDeposits",
+            context
+          ),
+          /** 売上債権 */
+          accountsReceivable: this.extractNumber(
+            xmlData,
+            "jppfs_cor:AccountsReceivableTrade",
+            context
+          ),
+          /** 製品 */
+          merchandiseAndFinishedGoods: this.extractNumber(
+            xmlData,
+            "jppfs_cor:MerchandiseAndFinishedGoods",
+            context
+          ),
+          /** 有価証券 */
+          securities: this.extractNumber(
+            xmlData,
+            "jppfs_cor:Securities",
+            context
+          ),
+          /** 棚卸資産 */
+          inventory: this.extractNumber(
+            xmlData,
+            "jppfs_cor:Inventory",
+            context
+          ),
+          /** その他 */
+          otherCurrentAssets: this.extractNumber(
+            xmlData,
+            "jppfs_cor:OtherCA",
+            context
+          ),
+
           /** 固定資産 */
-          fixedAssets: {
-            /** 固定資産合計 */
-            total: this.extractNumber(
-              xmlData,
-              "jppfs_cor:NoncurrentAssets",
-              context
-            ),
-            /** 有形固定資産 */
-            tangibleFixedAssets: this.extractNumber(
-              xmlData,
-              "jppfs_cor:PropertyPlantAndEquipment",
-              context
-            ),
-            /** 土地 */
-            land: this.extractNumber(xmlData, "jppfs_cor:Land", context),
-            /** 無形固定資産 */
-            intangibleFixedAssets: this.extractNumber(
-              xmlData,
-              "jppfs_cor:IntangibleAssets",
-              context
-            ),
-            /** 投資その他有価証券 */
-            investmentSecurities: this.extractNumber(
-              xmlData,
-              "jppfs_cor:InvestmentsAndOtherAssets",
-              "CurrentYearInstant"
-            ),
-          },
+          fixedAssets: this.extractNumber(
+            xmlData,
+            "jppfs_cor:NoncurrentAssets",
+            context
+          ),
+          /** 有形固定資産 */
+          tangibleFixedAssets: this.extractNumber(
+            xmlData,
+            "jppfs_cor:PropertyPlantAndEquipment",
+            context
+          ),
+          /** 土地 */
+          land: this.extractNumber(xmlData, "jppfs_cor:Land", context),
+          /** 無形固定資産 */
+          intangibleFixedAssets: this.extractNumber(
+            xmlData,
+            "jppfs_cor:IntangibleAssets",
+            context
+          ),
+          /** 投資その他有価証券 */
+          investmentSecurities: this.extractNumber(
+            xmlData,
+            "jppfs_cor:InvestmentsAndOtherAssets",
+            "CurrentYearInstant"
+          ),
+
           /** その他 */
           other: this.extractNumber(xmlData, "jppfs_cor:OtherAssets", context),
           /** 資産合計 */
-          total: this.extractNumber(xmlData, "jppfs_cor:Assets", context),
+          asset: this.extractNumber(xmlData, "jppfs_cor:Assets", context),
         },
         /** 負債 */
         liabilities: {
           /** 流動負債 */
-          currentLiabilities: {
-            /** 債務 */
-            debt: this.extractNumber(
-              xmlData,
-              "jppfs_cor:ShortTermLoansPayable",
-              context
-            ),
-            /** その他 */
-            other: this.extractNumber(xmlData, "jppfs_cor:OtherCL", context),
-            /** 流動負債合計 */
-            total: this.extractNumber(
-              xmlData,
-              "jppfs_cor:CurrentLiabilities",
-              context
-            ),
-          },
+          /** 流動負債合計 */
+          currentLiabilities: this.extractNumber(
+            xmlData,
+            "jppfs_cor:CurrentLiabilities",
+            context
+          ),
+          /** 債務 */
+          debt: this.extractNumber(
+            xmlData,
+            "jppfs_cor:ShortTermLoansPayable",
+            context
+          ),
+
+          /** その他 */
+          otherCurrentLiabilities: this.extractNumber(
+            xmlData,
+            "jppfs_cor:OtherCL",
+            context
+          ),
+
           /** 固定負債 */
           fixedLiabilities: this.extractNumber(
             xmlData,
@@ -122,7 +126,11 @@ export class Finance {
             context
           ),
           /** 負債合計 */
-          total: this.extractNumber(xmlData, "jppfs_cor:Liabilities", context),
+          liability: this.extractNumber(
+            xmlData,
+            "jppfs_cor:Liabilities",
+            context
+          ),
         },
         netAssets: {
           /** 純資産合計 */
@@ -246,9 +254,14 @@ export class Finance {
           "jpdei_cor:FundNameInJapaneseDEI"
         ),
         /** 提出日 */
-        filingDate: this.extractValue(xmlData, "jpsps_cor:FilingDateCoverPage"),
+        filingDate: this.extractValue(xmlData, "jpcrp_cor:FilingDateCoverPage"),
         /** 会計期間 */
-        fiscalPeriod: this.extractValue(xmlData, "jppfs_cor:FiscalPeriod"),
+        fiscalPeriod: this.extractValue(
+          xmlData,
+          "jpcrp_cor:FiscalYearCoverPage"
+        ),
+        /** 四半期 */
+        quarter: this.extractValue(xmlData, "jppfs_cor:Quarter"),
       },
     };
   }
@@ -260,8 +273,7 @@ export class Finance {
    */
   public calcROIC(financialStatement: FinancialStatement): number {
     const equity = financialStatement.balanceSheet.netAssets.equity;
-    const debt =
-      financialStatement.balanceSheet.liabilities.currentLiabilities.debt;
+    const debt = financialStatement.balanceSheet.liabilities.debt;
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
     const tax = financialStatement.incomeStatement.tax;
     const incomeBeforeIncomeTaxes =
@@ -300,7 +312,7 @@ export class Finance {
    * @returns
    */
   public calcROA(financialStatement: FinancialStatement): number {
-    const assets = financialStatement.balanceSheet.assets.total;
+    const assets = financialStatement.balanceSheet.assets.asset;
     const profitLoss = financialStatement.incomeStatement.profitLoss;
     if (assets === 0) {
       throw "資産が0になったため計算できません";
@@ -318,7 +330,7 @@ export class Finance {
    */
   public calcEquityRatio(financialStatement: FinancialStatement): number {
     const equity = financialStatement.balanceSheet.netAssets.equity;
-    const assets = financialStatement.balanceSheet.assets.total;
+    const assets = financialStatement.balanceSheet.assets.asset;
     if (assets === 0) {
       throw "資産が0になったため計算できません";
     }
@@ -393,13 +405,12 @@ export class Finance {
   public calcNetCurrentAssets(financialStatement: FinancialStatement): number {
     const cash = financialStatement.cashFlowStatement.cashAndCashEquivalents;
     const accountsReceivable =
-      financialStatement.balanceSheet.assets.currentAssets.accountsReceivable;
-    const securities =
-      financialStatement.balanceSheet.assets.currentAssets.securities;
-    const land = financialStatement.balanceSheet.assets.fixedAssets.land;
+      financialStatement.balanceSheet.assets.accountsReceivable;
+    const securities = financialStatement.balanceSheet.assets.securities;
+    const land = financialStatement.balanceSheet.assets.land;
     const investmentSecurities =
-      financialStatement.balanceSheet.assets.fixedAssets.investmentSecurities;
-    const liabilities = financialStatement.balanceSheet.liabilities.total;
+      financialStatement.balanceSheet.assets.investmentSecurities;
+    const liabilities = financialStatement.balanceSheet.liabilities.liability;
     try {
       return (
         ((cash +

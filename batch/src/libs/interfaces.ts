@@ -218,56 +218,48 @@ export interface BalanceSheet {
   /** 資産 */
   assets: {
     /** 流動資産 */
-    currentAssets: {
-      /** 流動資産合計 */
-      total: number;
-      /** 現金預金 */
-      cashAndDeposits: number;
-      /** 売上債権 */
-      accountsReceivable: number;
-      /** 製品 */
-      merchandiseAndFinishedGoods: number;
-      /** 有価証券 */
-      securities: number;
-      /** 棚卸資産 */
-      inventory: number;
-      /** その他 */
-      other: number;
-    };
-    fixedAssets: {
-      /** 固定資産合計 */
-      total: number;
-      /** 有形固定資産 */
-      tangibleFixedAssets: number;
-      /** 土地 */
-      land: number;
-      /** 無形固定資産 */
-      intangibleFixedAssets: number;
-      /** 投資その他有価証券 */
-      investmentSecurities: number;
-    };
+    currentAssets: number;
+    /** 現金預金 */
+    cashAndDeposits: number;
+    /** 売上債権 */
+    accountsReceivable: number;
+    /** 製品 */
+    merchandiseAndFinishedGoods: number;
+    /** 有価証券 */
+    securities: number;
+    /** 棚卸資産 */
+    inventory: number;
+    /** その他 */
+    otherCurrentAssets: number;
+    /** 固定資産 */
+    fixedAssets: number;
+    /** 有形固定資産 */
+    tangibleFixedAssets: number;
+    /** 土地 */
+    land: number;
+    /** 無形固定資産 */
+    intangibleFixedAssets: number;
+    /** 投資その他有価証券 */
+    investmentSecurities: number;
     /** その他 */
     other: number;
     /** 資産合計 */
-    total: number;
+    asset: number;
   };
   /** 負債 */
   liabilities: {
     /** 流動負債 */
-    currentLiabilities: {
-      /** 借入債務 */
-      debt: number;
-      /** その他流動負債 */
-      other: number;
-      /** 流動負債合計 */
-      total: number;
-    };
+    currentLiabilities: number;
+    /** 借入債務 */
+    debt: number;
+    /** その他流動負債 */
+    otherCurrentLiabilities: number;
     /** 固定負債 */
     fixedLiabilities: number;
     /** その他 */
     other: number;
     /** 負債合計 */
-    total: number;
+    liability: number;
   };
   /** 純資産 */
   netAssets: {
@@ -334,4 +326,6 @@ export interface Metadata {
   filingDate: string;
   /** 計算期間 */
   fiscalPeriod: string;
+  /** 四半期 */
+  quarter: string;
 }
