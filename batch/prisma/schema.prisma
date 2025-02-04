@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,4 +5,72 @@ generator client {
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  email    String
+  username String  @unique
+  age      String?
+}
+
+model AccountDatas {
+  ID                        Int       @id @default(autoincrement())
+  code                      String    @db.VarChar(20)
+  year                      String    @db.VarChar(20)
+  current_asset             String?   @db.VarChar(20)
+  cash                      String?   @db.VarChar(20)
+  trade_receivable          String?   @db.VarChar(20)
+  security                  String?   @db.VarChar(20)
+  inventory                 String?   @db.VarChar(20)
+  other_current_asset       String?   @db.VarChar(20)
+  non_current_asset         String?   @db.VarChar(20)
+  tangible_asset            String?   @db.VarChar(20)
+  long_term_security        String?   @db.VarChar(20)
+  investment                String?   @db.VarChar(20)
+  other_asset               String?   @db.VarChar(20)
+  assets                    String?   @db.VarChar(20)
+  liability                 String?   @db.VarChar(20)
+  current_liability         String?   @db.VarChar(20)
+  accounts_payable_trade    String?   @db.VarChar(20)
+  other_current_liability   String?   @db.VarChar(20)
+  non_current_liability     String?   @db.VarChar(20)
+  bond                      String?   @db.VarChar(20)
+  long_term_debt            String?   @db.VarChar(20)
+  equity                    String?   @db.VarChar(20)
+  sale                      String?   @db.VarChar(20)
+  gross_profit              String?   @db.VarChar(20)
+  operating_income          String?   @db.VarChar(20)
+  ordinary_income           String?   @db.VarChar(20)
+  pre_tax_profit            String?   @db.VarChar(20)
+  profit                    String?   @db.VarChar(20)
+  depreciation_amortization String?   @db.VarChar(20)
+  impairment_loss           String?   @db.VarChar(20)
+  research_and_development  String?   @db.VarChar(20)
+  operating_activities      String?   @db.VarChar(20)
+  investment_activities     String?   @db.VarChar(20)
+  financing_activities      String?   @db.VarChar(20)
+  dividends_paid            String?   @db.VarChar(20)
+  capital_expenditures      String?   @db.VarChar(20)
+  goodwill_amortizaion      String?   @db.VarChar(20)
+  companies                 Companies @relation(fields: [code, year], references: [code, year])
+
+  @@index([code, year], map: "account_datas_code_year_fkey")
+}
+
+model Companies {
+  id            Int             @id @default(autoincrement())
+  code          String
+  name          String
+  year          String
+  account_datas AccountDatas[]
+
+  @@unique([code, year])
+}
+
+model users {
+  id       Int     @id @default(autoincrement())
+  email    String
+  username String  @unique
+  age      String?
 }
