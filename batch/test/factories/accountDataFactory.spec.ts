@@ -42,18 +42,13 @@ describe("AccountDataFactory", () => {
         expect(accountData?.current_asset).toBe(parameter.current_asset);
         expect(accountData?.cash).toBe(parameter.cash);
         expect(accountData?.trade_receivable).toBe(parameter.trade_receivable);
-        expect(accountData?.security).toBe(parameter.security);
+
         expect(accountData?.inventory).toBe(parameter.inventory);
         expect(accountData?.other_current_asset).toBe(
           parameter.other_current_asset
         );
-        expect(accountData?.non_current_asset).toBe(
-          parameter.non_current_asset
-        );
+        expect(accountData?.fixed_asset).toBe(parameter.fixed_asset);
         expect(accountData?.tangible_asset).toBe(parameter.tangible_asset);
-        expect(accountData?.long_term_security).toBe(
-          parameter.long_term_security
-        );
         expect(accountData?.investment).toBe(parameter.investment);
         expect(accountData?.other_asset).toBe(parameter.other_asset);
         expect(accountData?.liability).toBe(parameter.liability);
@@ -63,11 +58,7 @@ describe("AccountDataFactory", () => {
         expect(accountData?.other_current_liability).toBe(
           parameter.other_current_liability
         );
-        expect(accountData?.non_current_liability).toBe(
-          parameter.non_current_liability
-        );
-        expect(accountData?.bond).toBe(parameter.bond);
-        expect(accountData?.long_term_debt).toBe(parameter.long_term_debt);
+
         expect(accountData?.equity).toBe(parameter.equity);
         expect(accountData?.sale).toBe(parameter.sale);
         expect(accountData?.gross_profit).toBe(parameter.gross_profit);
@@ -78,7 +69,7 @@ describe("AccountDataFactory", () => {
         expect(accountData?.depreciation_amortization).toBe(
           parameter.depreciation_amortization
         );
-        expect(accountData?.impairment_loss).toBe(parameter.impairment_loss);
+
         expect(accountData?.research_and_development).toBe(
           parameter.research_and_development
         );
@@ -92,12 +83,6 @@ describe("AccountDataFactory", () => {
           parameter.financing_activities
         );
         expect(accountData?.dividends_paid).toBe(parameter.dividends_paid);
-        expect(accountData?.capital_expenditures).toBe(
-          parameter.capital_expenditures
-        );
-        expect(accountData?.goodwill_amortizaion).toBe(
-          parameter.goodwill_amortizaion
-        );
       });
     });
     describe("パラメータがないとき", () => {

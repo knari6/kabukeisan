@@ -193,6 +193,8 @@ export interface DocumentListRequest {
 }
 
 export interface FinancialStatement {
+  /** メタデータ */
+  information: Information;
   /** 貸借対照表 */
   balanceSheet: BalanceSheet;
   /** 損益計算書 */
@@ -203,8 +205,6 @@ export interface FinancialStatement {
   capitalAndRDExpenses: CapitalAndRDExpenses;
   /** 株式情報 */
   stockInfo: StockInfo;
-  /** メタデータ */
-  metadata: Metadata;
 }
 
 /** 株式情報 */
@@ -298,6 +298,8 @@ export interface CashFlowStatement {
   netCashProvidedByFinancingActivities: number;
   /** 現金同等物 */
   cashAndCashEquivalents: number;
+  /** 配当支払い */
+  dividendsPaid: number;
 }
 
 /** 設備投資・減価償却費・研究開発費 */
@@ -319,8 +321,10 @@ export interface InterestBearingLiabilities {
   /** 有利子負債 */
 }
 
-export interface Metadata {
-  /** ファンド名 */
+export interface Information {
+  /** 証券コード */
+  code: string;
+  /** ファンド名 | 会社名 */
   companyName: string;
   /** 提出日 */
   filingDate: string;

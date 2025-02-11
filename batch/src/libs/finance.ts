@@ -12,6 +12,24 @@ export class Finance {
     const durationContext = "CurrentYearDuration_NonConsolidatedMember";
 
     return {
+      information: {
+        /** 証券コード */
+        code: this.extractValue(xmlData, "jpdei_cor:SecurityCodeDEI"),
+        /** ファンド名 */
+        companyName: this.extractValue(
+          xmlData,
+          "jpdei_cor:FilerNameInJapaneseDEI"
+        ),
+        /** 提出日 */
+        filingDate: this.extractValue(xmlData, "jpcrp_cor:FilingDateCoverPage"),
+        /** 会計期間 */
+        fiscalPeriod: this.extractValue(
+          xmlData,
+          "jpcrp_cor:FiscalYearCoverPage"
+        ),
+        /** 四半期 */
+        quarter: this.extractValue(xmlData, "jppfs_cor:Quarter"),
+      },
       balanceSheet: {
         /** 資産 */
         assets: {
@@ -212,6 +230,12 @@ export class Finance {
           "jppfs_cor:CashAndCashEquivalents",
           "CurrentYearInstant"
         ),
+        /** 配当支払い */
+        dividendsPaid: this.extractNumber(
+          xmlData,
+          "jppfs_cor:DividendsPaid",
+          "CurrentYearDuration"
+        ),
       },
       capitalAndRDExpenses: {
         /** 減価償却費 */
@@ -246,22 +270,6 @@ export class Finance {
           "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
           context
         ),
-      },
-      metadata: {
-        /** ファンド名 */
-        companyName: this.extractValue(
-          xmlData,
-          "jpdei_cor:FundNameInJapaneseDEI"
-        ),
-        /** 提出日 */
-        filingDate: this.extractValue(xmlData, "jpcrp_cor:FilingDateCoverPage"),
-        /** 会計期間 */
-        fiscalPeriod: this.extractValue(
-          xmlData,
-          "jpcrp_cor:FiscalYearCoverPage"
-        ),
-        /** 四半期 */
-        quarter: this.extractValue(xmlData, "jppfs_cor:Quarter"),
       },
     };
   }
