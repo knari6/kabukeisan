@@ -12,6 +12,8 @@ model User {
   email    String
   username String  @unique
   age      String?
+  created_at DateTime @default(now()) @map("created_at") @db.Timestamp(3)
+  updated_at DateTime @default(now()) @map("updated_at") @db.Timestamp(3)
 }
 
 model AccountDatas {
@@ -54,7 +56,8 @@ model AccountDatas {
   capital_expenditures      String?   @db.VarChar(20)
   goodwill_amortizaion      String?   @db.VarChar(20)
   companies                 Companies @relation(fields: [code, year], references: [code, year])
-
+  created_at                DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  updated_at                DateTime  @default(now()) @map("updated_at") @db.Timestamp(3)
   @@index([code, year], map: "account_datas_code_year_fkey")
 }
 
@@ -64,13 +67,7 @@ model Companies {
   name          String
   year          String
   account_datas AccountDatas[]
-
+  created_at    DateTime        @default(now()) @map("created_at") @db.Timestamp(3)
+  updated_at    DateTime        @default(now()) @map("updated_at") @db.Timestamp(3)
   @@unique([code, year])
-}
-
-model users {
-  id       Int     @id @default(autoincrement())
-  email    String
-  username String  @unique
-  age      String?
 }
