@@ -456,7 +456,7 @@ describe("Finance", () => {
       let expected = 0;
       let fcfValue = fcf;
       for (let index = 0; index < 5; index++) {
-        expected += fcfValue / (1 + discountRate) ** (index + 1);
+        expected += fcfValue / Math.pow(1 + discountRate, index + 1);
         fcfValue = fcfValue * (1 + growthRate);
       }
       const acutual = finance.calcDCF(fcf, discountRate, growthRate);

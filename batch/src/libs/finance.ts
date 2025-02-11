@@ -560,7 +560,7 @@ export class Finance {
     }
     let result = 0;
     for (let index = 0; index < 5; index++) {
-      result += fcf / (1 + discountRate) ** (index + 1);
+      result += fcf / Math.pow(1 + discountRate, index + 1);
       fcf = fcf * (1 + growthRate);
     }
     return result;

@@ -19,11 +19,14 @@ export class Api {
    * @param date string(YYYY-MM-DD)
    * @returns DocumentListResponse | void
    */
-  public async fetchList(date: string): Promise<DocumentIdList | void> {
+  public async fetchList(
+    date: string,
+    apiKey: string
+  ): Promise<DocumentIdList | void> {
     const param: DocumentListRequest = {
       date,
       type: DOCUMENT_TYPE.DOCUMENT_DATA,
-      "Subscription-Key": this.apiKey,
+      "Subscription-Key": apiKey,
     };
     try {
       const response = await axios.get(this.domain + "documents.json", {
@@ -54,10 +57,10 @@ export class Api {
    * @param docID 書類管理番号
    * @returns DocumentListResponse | void
    */
-  public async fetchDocument(docID: string): Promise<Buffer> {
+  public async fetchDocument(docID: string, apiKey: string): Promise<Buffer> {
     const params = {
       type: 1,
-      "Subscription-Key": this.apiKey,
+      "Subscription-Key": apiKey,
     };
     try {
       const response = await axios.get(this.domain + "documents/" + docID, {
