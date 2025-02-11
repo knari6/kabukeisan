@@ -14,4 +14,12 @@ export class Random {
     }
     return max;
   }
+
+  public randomDate() {
+    return new Date(
+      this.randomInt(2025, 2020),
+      this.randomInt(12, 1),
+      this.randomInt(31, 1)
+    );
+  }
 }
