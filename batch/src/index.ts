@@ -17,7 +17,7 @@ const utils = new Utils();
 
 const dateFrom = process.argv[2];
 const dateTo = process.argv[3];
-
+const apiKey = process.argv[4];
 async function execute() {
   const startDate = new Date(
     parseInt(dateFrom.substring(0, 4), 10),
@@ -33,7 +33,8 @@ async function execute() {
   const currentDate = new Date(startDate);
   while (currentDate <= endDate) {
     const results = await edinet.fetchList(
-      DateUtil.getYYYYMMDDWithHyphens(currentDate)
+      DateUtil.getYYYYMMDDWithHyphens(currentDate),
+      apiKey
     );
     console.log(results?.documentIdList);
     // if (results?.documentIdList) {
@@ -46,8 +47,8 @@ async function execute() {
   }
 }
 
-async function parseXbrl(docID: string) {
-  const xbrlFileData = await edinet.fetchDocument(docID);
+async function parseXbrl(docID: string, apiKey: string) {
+  const xbrlFileData = await edinet.fetchDocument(docID, apiKey);
   file.zipFile(xbrlFileData, docID);
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
@@ -64,10 +65,12 @@ async function parseXbrl(docID: string) {
   );
 }
 
-const startTime = performance.now();
-execute().then(() => {
-  const endTime = performance.now();
-  console.log(`Execution time: ${endTime - startTime} milliseconds`);
-  const used = process.memoryUsage().heapUsed / 1024 / 1024;
-  console.log(`Memory usage: ${used} MB`);
-});
+// const startTime = performance.now();
+// execute().then(() => {
+//   const endTime = performance.now();
+//   console.log(`Execution time: ${endTime - startTime} milliseconds`);
+//   const used = process.memoryUsage().heapUsed / 1024 / 1024;
+//   console.log(`Memory usage: ${used} MB`);
+// });
+
+parseXbrl("S100TA0D", apiKey);

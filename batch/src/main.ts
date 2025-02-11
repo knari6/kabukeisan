@@ -17,6 +17,9 @@ const dateFrom = process.argv[2];
 const dateTo = process.argv[3];
 
 async function execute() {
+  // .envファイルの読み込みを確認
+  console.log("DATABASE_URL:", process.env.DATABASE_URL);
+  const apiKey = process.argv[4];
   const startDate = new Date(
     parseInt(dateFrom.substring(0, 4), 10),
     parseInt(dateFrom.substring(4, 6), 10) - 1,
@@ -28,12 +31,16 @@ async function execute() {
     parseInt(dateTo.substring(6, 8), 10)
   );
   for await (const currentDate of dateRange(startDate, endDate)) {
-    console.log(currentDate);
-    for await (const docID of getDocumentIds(currentDate)) {
-      // await parseXbrl(docID);
-      console.log(docID);
+    for await (const docID of getDocumentIds(currentDate, apiKey)) {
+      await parseXbrl(docID, apiKey);
     }
   }
+  // console.log("--------------quarterly-----------------------------------");
+  // for await (const currentDate of dateRange(startDate, endDate)) {
+  //   for await (const docID of getQuarterlyDocumentIds(currentDate)) {
+  //     console.log(docID);
+  //   }
+  // }
 }
 
 async function* dateRange(startDate: Date, endDate: Date) {
@@ -44,8 +51,11 @@ async function* dateRange(startDate: Date, endDate: Date) {
   }
 }
 
-async function* getDocumentIds(date: Date) {
-  const results = await edinet.fetchList(DateUtil.getYYYYMMDDWithHyphens(date));
+async function* getDocumentIds(date: Date, apiKey: string) {
+  const results = await edinet.fetchList(
+    DateUtil.getYYYYMMDDWithHyphens(date),
+    apiKey
+  );
   if (results?.documentIdList) {
     for (const docID of results.documentIdList) {
       yield docID;
@@ -53,8 +63,20 @@ async function* getDocumentIds(date: Date) {
   }
 }
 
-async function parseXbrl(docID: string) {
-  const xbrlFileData = await edinet.fetchDocument(docID);
+async function* getQuarterlyDocumentIds(date: Date, apiKey: string) {
+  const results = await edinet.fetchList(
+    DateUtil.getYYYYMMDDWithHyphens(date),
+    apiKey
+  );
+  if (results?.quarterlyDocumentIdList) {
+    for (const docID of results.quarterlyDocumentIdList) {
+      yield docID;
+    }
+  }
+}
+
+async function parseXbrl(docID: string, apiKey: string) {
+  const xbrlFileData = await edinet.fetchDocument(docID, apiKey);
   file.zipFile(xbrlFileData, docID);
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
@@ -70,10 +92,11 @@ async function parseXbrl(docID: string) {
   );
 }
 
-const startTime = performance.now();
-execute().then(() => {
-  const endTime = performance.now();
-  console.log(`Execution time: ${endTime - startTime} milliseconds`);
-  const used = process.memoryUsage().heapUsed / 1024 / 1024;
-  console.log(`Memory usage: ${used} MB`);
-});
+// const startTime = performance.now();
+// execute().then(() => {
+//   const endTime = performance.now();
+//   console.log(`Execution time: ${endTime - startTime} milliseconds`);
+//   const used = process.memoryUsage().heapUsed / 1024 / 1024;
+//   console.log(`Memory usage: ${used} MB`);
+// });
+execute();
