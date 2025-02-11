@@ -17,7 +17,7 @@ model User {
 }
 
 model AccountDatas {
-  ID                        Int       @id @default(autoincrement())
+  id                        Int       @id @default(autoincrement())
   code                      String    @db.VarChar(20)
   year                      String    @db.VarChar(20)
   current_asset             String?   @db.VarChar(20)
