@@ -110,7 +110,6 @@ export class Finance {
         },
         /** 負債 */
         liabilities: {
-          /** 流動負債 */
           /** 流動負債合計 */
           currentLiabilities: this.extractNumber(
             xmlData,

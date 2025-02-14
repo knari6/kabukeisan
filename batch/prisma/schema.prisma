@@ -24,7 +24,7 @@ model AccountDatas {
   cash                      String?   @db.VarChar(20)
   trade_receivable          String?   @db.VarChar(20)
 
-
+  securities                  String?   @db.VarChar(20)
   inventory                 String?   @db.VarChar(20)
   other_current_asset       String?   @db.VarChar(20)
   fixed_asset               String?   @db.VarChar(20)

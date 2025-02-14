@@ -5,6 +5,9 @@ import dotenv from "dotenv";
 import { Finance } from "./libs/finance";
 import { inspect } from "util";
 import { DateUtil } from "./libs/date";
+import { PrismaClient } from "@prisma/client";
+import { AccountDataRepository } from "./repositories/account-data";
+import { CompaniesRepository } from "./repositories/companies";
 
 dotenv.config();
 
@@ -12,7 +15,9 @@ const edinet = new Api();
 const file = new File();
 const parse = new Parse();
 const finance = new Finance();
-
+const prismaClient = new PrismaClient();
+const accountDataRepository = new AccountDataRepository(prismaClient);
+const companiesRepository = new CompaniesRepository(prismaClient);
 const dateFrom = process.argv[2];
 const dateTo = process.argv[3];
 
@@ -32,6 +37,7 @@ async function execute() {
   );
   for await (const currentDate of dateRange(startDate, endDate)) {
     for await (const docID of getDocumentIds(currentDate, apiKey)) {
+      console.log(docID, currentDate);
       await parseXbrl(docID, apiKey);
     }
   }
@@ -81,6 +87,7 @@ async function parseXbrl(docID: string, apiKey: string) {
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
   const financialStatements = finance.extractFinancialStatements(data);
+
   console.log(
     inspect(financialStatements, {
       depth: null,
@@ -90,6 +97,8 @@ async function parseXbrl(docID: string, apiKey: string) {
       breakLength: 80,
     })
   );
+  await companiesRepository.write(financialStatements);
+  await accountDataRepository.write(financialStatements);
 }
 
 // const startTime = performance.now();
