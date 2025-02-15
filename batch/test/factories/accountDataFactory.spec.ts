@@ -14,9 +14,6 @@ describe("AccountDataFactory", () => {
     await prismaService.onModuleDestroy();
   });
 
-  beforeEach(async () => {
-    await new DBHelper(prismaService).cleanUp();
-  });
   afterAll(async () => {
     await new DBHelper(prismaService).cleanUp();
   });
