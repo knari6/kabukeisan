@@ -547,7 +547,6 @@ export class Finance {
       currentAssetsWithoutCash -
       accountsPayable -
       (currentAssetsWithoutCashOneYearAgo - accountsPayableOneYearAgo);
-    console.log(result);
     return result;
   }
 

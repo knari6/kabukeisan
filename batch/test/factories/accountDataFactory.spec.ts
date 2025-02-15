@@ -30,7 +30,6 @@ describe("AccountDataFactory", () => {
           where: { id: created.id },
           include: { companies: true },
         });
-        console.log(parameter);
       });
 
       it("登録できること", () => {

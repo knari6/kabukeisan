@@ -7,7 +7,7 @@ describe("test-helper", async () => {
   let parse: Parse;
   beforeEach(async () => {
     parse = new Parse();
-    xmlData = await parse.xbrl("test/xbrl_finance");
+    xmlData = await parse.xbrl("test/helper-xbrl");
   });
   describe("extractNumber", () => {
     it("値を返すこと", () => {

@@ -28,6 +28,13 @@ describe("Finance", () => {
     finance = new Finance();
     random = new Random();
     mockFinanceStatement = {
+      information: {
+        code: random.randomInt(1000, 10000).toString(),
+        companyName: "テスト会社",
+        filingDate: "2024-01-01",
+        fiscalPeriod: "2024",
+        quarter: "1",
+      },
       balanceSheet: {
         assets: {
           currentAssets: random.randomInt(10000, 100000),
@@ -72,6 +79,7 @@ describe("Finance", () => {
         netCashProvidedByInvestingActivities: random.randomInt(1000, 10000),
         netCashProvidedByFinancingActivities: random.randomInt(1000, 10000),
         cashAndCashEquivalents: random.randomInt(1000, 10000),
+        dividendsPaid: random.randomInt(1000, 10000),
       },
       capitalAndRDExpenses: {
         depreciation: random.randomInt(1000, 10000),
@@ -81,12 +89,6 @@ describe("Finance", () => {
       },
       stockInfo: {
         stockAmount: random.randomInt(1000, 10000),
-      },
-      metadata: {
-        companyName: "",
-        filingDate: "",
-        fiscalPeriod: "",
-        quarter: "",
       },
     };
   });
@@ -100,13 +102,30 @@ describe("Finance", () => {
   });
 
   describe("extractFinancialStatements", () => {
-    beforeEach(() => {
-      xmlData = parse.xbrl("test/xbrl_files");
-      financialStatements = finance.extractFinancialStatements(xmlData);
+    random = new Random();
+    describe("証券コードがある場合", () => {
+      beforeEach(async () => {
+        xmlData = await parse.xbrl("test/xbrl_finance");
+        financialStatements = finance.extractFinancialStatements(
+          xmlData,
+          `${random.randomDate().getFullYear()}-${
+            random.randomDate().getMonth() + 1
+          }-${random.randomDate().getDate()}`
+        );
+      });
+      it("should return financial statements", () => {
+        expect(financialStatements).toBeDefined();
+      });
     });
-
-    it("should return financial statements", () => {
-      expect(financialStatements).toBeDefined();
+    describe("証券コードがない場合", () => {
+      beforeEach(async () => {
+        xmlData = await parse.xbrl("test/xbrl_without_code");
+      });
+      it("エラーを返すこと", () => {
+        expect(() =>
+          finance.extractFinancialStatements(xmlData, "2024-01-01")
+        ).toThrow("証券コードがありません");
+      });
     });
   });
 
@@ -125,7 +144,7 @@ describe("Finance", () => {
     it("有利子負債と自己資本の合計が0の時エラーを返すこと", () => {
       mockFinanceStatement.balanceSheet.netAssets.equity = 0;
       mockFinanceStatement.balanceSheet.liabilities.debt = 0;
-      expect(() => finance.calcROIC(financialStatements)).toThrow(
+      expect(() => finance.calcROIC(mockFinanceStatement)).toThrow(
         "自己資本と有利子負債の合計が0になったため計算できません"
       );
     });

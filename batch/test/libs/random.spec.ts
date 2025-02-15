@@ -15,7 +15,6 @@ describe("random", () => {
     });
     it("1から10の値を返すこと", () => {
       const actual = random.randomInt(10, 1);
-      console.log(actual);
       expect(actual).toBeGreaterThanOrEqual(1);
       expect(actual).toBeLessThanOrEqual(10);
     });
@@ -25,7 +24,6 @@ describe("random", () => {
     });
     it("maxとminが逆の場合も正しく動作すること", () => {
       const actual = random.randomInt(1, 10);
-      console.log(actual);
       expect(actual).toBeGreaterThanOrEqual(1);
       expect(actual).toBeLessThanOrEqual(10);
     });

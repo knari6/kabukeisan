@@ -1642,7 +1642,6 @@
 
   <jpdei_cor:EDINETCodeDEI contextRef="FilingDateInstant">E02204</jpdei_cor:EDINETCodeDEI>
   <jpdei_cor:FundCodeDEI contextRef="FilingDateInstant" xsi:nil="true"/>
-  <jpdei_cor:SecurityCodeDEI contextRef="FilingDateInstant">72790</jpdei_cor:SecurityCodeDEI>
   <jpdei_cor:FilerNameInJapaneseDEI contextRef="FilingDateInstant">株式会社ハイレックスコーポレーション</jpdei_cor:FilerNameInJapaneseDEI>
   <jpdei_cor:FilerNameInEnglishDEI contextRef="FilingDateInstant">HI-LEX CORPORATION</jpdei_cor:FilerNameInEnglishDEI>
   <jpdei_cor:FundNameInJapaneseDEI contextRef="FilingDateInstant" xsi:nil="true"/>
