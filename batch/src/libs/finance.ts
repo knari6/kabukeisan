@@ -10,25 +10,39 @@ export class Finance {
   public extractFinancialStatements(xmlData: any): FinancialStatement {
     const context = "CurrentYearInstant_NonConsolidatedMember";
     const durationContext = "CurrentYearDuration_NonConsolidatedMember";
-
+    const informationContext = "FilingDateInstant";
     return {
       information: {
         /** 証券コード */
-        code: this.extractValue(xmlData, "jpdei_cor:SecurityCodeDEI"),
+        code: this.extractValue(
+          xmlData,
+          "jpdei_cor:SecurityCodeDEI",
+          informationContext
+        ),
         /** ファンド名 */
         companyName: this.extractValue(
           xmlData,
-          "jpdei_cor:FilerNameInJapaneseDEI"
+          "jpdei_cor:FilerNameInJapaneseDEI",
+          informationContext
         ),
         /** 提出日 */
-        filingDate: this.extractValue(xmlData, "jpcrp_cor:FilingDateCoverPage"),
+        filingDate: this.extractValue(
+          xmlData,
+          "jpcrp_cor:FilingDateCoverPage",
+          informationContext
+        ),
         /** 会計期間 */
         fiscalPeriod: this.extractValue(
           xmlData,
-          "jpcrp_cor:FiscalYearCoverPage"
+          "jpcrp_cor:FiscalYearCoverPage",
+          informationContext
         ),
         /** 四半期 */
-        quarter: this.extractValue(xmlData, "jppfs_cor:Quarter"),
+        quarter: this.extractValue(
+          xmlData,
+          "jppfs_cor:Quarter",
+          informationContext
+        ),
       },
       balanceSheet: {
         /** 資産 */
@@ -597,9 +611,11 @@ export class Finance {
    * @param key
    * @returns
    */
-  private extractValue(xmlData: any, key: string): string {
+  private extractValue(xmlData: any, key: string, context: string): string {
     try {
-      const value = xmlData["xbrli:xbrl"][key];
+      const value = xmlData["xbrli:xbrl"][key]?.find(
+        (item: any) => item["$"].contextRef === context
+      );
       return value ? value["_"] : "";
     } catch (error) {
       return "";

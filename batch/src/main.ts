@@ -97,8 +97,9 @@ async function parseXbrl(docID: string, apiKey: string) {
       breakLength: 80,
     })
   );
-  await companiesRepository.write(financialStatements);
-  await accountDataRepository.write(financialStatements);
+  console.log(financialStatements.information.code);
+  // await companiesRepository.write(financialStatements);
+  // await accountDataRepository.write(financialStatements);
 }
 
 // const startTime = performance.now();
