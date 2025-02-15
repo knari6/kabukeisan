@@ -36,9 +36,19 @@ async function execute() {
     parseInt(dateTo.substring(6, 8), 10)
   );
   for await (const currentDate of dateRange(startDate, endDate)) {
-    for await (const docID of getDocumentIds(currentDate, apiKey)) {
-      console.log(docID, currentDate);
-      await parseXbrl(docID, apiKey);
+    for await (const { docID, fiscalYear } of getDocumentIds(
+      currentDate,
+      apiKey
+    )) {
+      if (!fiscalYear) {
+        continue;
+      }
+      try {
+        await parseXbrl(docID, fiscalYear, apiKey);
+      } catch (error) {
+        console.error(error);
+        continue;
+      }
     }
   }
   // console.log("--------------quarterly-----------------------------------");
@@ -62,6 +72,7 @@ async function* getDocumentIds(date: Date, apiKey: string) {
     DateUtil.getYYYYMMDDWithHyphens(date),
     apiKey
   );
+  console.log(results);
   if (results?.documentIdList) {
     for (const docID of results.documentIdList) {
       yield docID;
@@ -81,12 +92,16 @@ async function* getQuarterlyDocumentIds(date: Date, apiKey: string) {
   }
 }
 
-async function parseXbrl(docID: string, apiKey: string) {
+async function parseXbrl(docID: string, fiscalYear: string, apiKey: string) {
   const xbrlFileData = await edinet.fetchDocument(docID, apiKey);
   file.zipFile(xbrlFileData, docID);
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
-  const financialStatements = finance.extractFinancialStatements(data);
+
+  const financialStatements = finance.extractFinancialStatements(
+    data,
+    fiscalYear
+  );
 
   console.log(
     inspect(financialStatements, {
@@ -102,11 +117,4 @@ async function parseXbrl(docID: string, apiKey: string) {
   // await accountDataRepository.write(financialStatements);
 }
 
-// const startTime = performance.now();
-// execute().then(() => {
-//   const endTime = performance.now();
-//   console.log(`Execution time: ${endTime - startTime} milliseconds`);
-//   const used = process.memoryUsage().heapUsed / 1024 / 1024;
-//   console.log(`Memory usage: ${used} MB`);
-// });
 execute();

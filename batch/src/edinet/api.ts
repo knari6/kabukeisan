@@ -44,7 +44,16 @@ export class Api {
       const quarterlyDocumentIdList = [
         ...this.filterDocuments(response.data.results, quarterlyRegex),
       ];
-      return { documentIdList, quarterlyDocumentIdList };
+      return {
+        documentIdList: documentIdList.map((item) => ({
+          docID: item.docID,
+          fiscalYear: item.fiscalYear || "",
+        })),
+        quarterlyDocumentIdList: quarterlyDocumentIdList.map((item) => ({
+          docID: item.docID,
+          fiscalYear: item.fiscalYear || "",
+        })),
+      };
     } catch (error) {
       console.error(error);
       throw error;
@@ -86,7 +95,7 @@ export class Api {
   ) {
     for (const item of documents) {
       if (pattern.test(item.docDescription)) {
-        yield item.docID;
+        yield { docID: item.docID, fiscalYear: item.periodEnd };
       }
     }
   }

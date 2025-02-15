@@ -7,18 +7,25 @@ export class Finance {
    * @param xmlData
    * @returns
    */
-  public extractFinancialStatements(xmlData: any): FinancialStatement {
+  public extractFinancialStatements(
+    xmlData: any,
+    fiscalYear: string
+  ): FinancialStatement {
     const context = "CurrentYearInstant_NonConsolidatedMember";
     const durationContext = "CurrentYearDuration_NonConsolidatedMember";
     const informationContext = "FilingDateInstant";
+    const code = this.extractValue(
+      xmlData,
+      "jpdei_cor:SecurityCodeDEI",
+      informationContext
+    );
+    if (!code) {
+      throw "証券コードがありません";
+    }
     return {
       information: {
         /** 証券コード */
-        code: this.extractValue(
-          xmlData,
-          "jpdei_cor:SecurityCodeDEI",
-          informationContext
-        ),
+        code: code.substring(0, 4),
         /** ファンド名 */
         companyName: this.extractValue(
           xmlData,
@@ -32,11 +39,7 @@ export class Finance {
           informationContext
         ),
         /** 会計期間 */
-        fiscalPeriod: this.extractValue(
-          xmlData,
-          "jpcrp_cor:FiscalYearCoverPage",
-          informationContext
-        ),
+        fiscalPeriod: fiscalYear.substring(0, 4),
         /** 四半期 */
         quarter: this.extractValue(
           xmlData,

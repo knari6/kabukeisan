@@ -14,9 +14,9 @@ export interface DocumentListResponse {
 
 export interface DocumentIdList {
   /** 有価証券報告書 */
-  documentIdList: string[];
+  documentIdList: { docID: string; fiscalYear: string }[];
   /** 四半期報告書 */
-  quarterlyDocumentIdList: string[];
+  quarterlyDocumentIdList: { docID: string; fiscalYear: string }[];
 }
 
 /** メタデータ */
