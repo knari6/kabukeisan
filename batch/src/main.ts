@@ -7,7 +7,7 @@ import { inspect } from "util";
 import { DateUtil } from "./libs/date";
 import { PrismaClient } from "@prisma/client";
 import { AccountDataRepository } from "./repositories/account-data";
-import { CompaniesRepository } from "./repositories/companies";
+import { CompanyRepository } from "./repositories/company";
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ const parse = new Parse();
 const finance = new Finance();
 const prismaClient = new PrismaClient();
 const accountDataRepository = new AccountDataRepository(prismaClient);
-const companiesRepository = new CompaniesRepository(prismaClient);
+const companyRepository = new CompanyRepository(prismaClient);
 const dateFrom = process.argv[2];
 const dateTo = process.argv[3];
 
@@ -67,12 +67,16 @@ async function* dateRange(startDate: Date, endDate: Date) {
   }
 }
 
+/**
+ * 通期の報告書のIDと決算期のリストを取得する
+ * @param date
+ * @param apiKey
+ */
 async function* getDocumentIds(date: Date, apiKey: string) {
   const results = await edinet.fetchList(
     DateUtil.getYYYYMMDDWithHyphens(date),
     apiKey
   );
-  console.log(results);
   if (results?.documentIdList) {
     for (const docID of results.documentIdList) {
       yield docID;
@@ -80,6 +84,11 @@ async function* getDocumentIds(date: Date, apiKey: string) {
   }
 }
 
+/**
+ * 四半期報告書のIDと決算期のリストを取得する
+ * @param date
+ * @param apiKey
+ */
 async function* getQuarterlyDocumentIds(date: Date, apiKey: string) {
   const results = await edinet.fetchList(
     DateUtil.getYYYYMMDDWithHyphens(date),
