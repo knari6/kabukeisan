@@ -12,6 +12,7 @@ export class AccountDataFactory {
     const yearValue = random.randomInt(1950, 2999).toString();
 
     return {
+      quater: random.randomInt(1, 5).toString(),
       current_asset: random.randomInt(1000, 10000).toString(),
       cash: random.randomInt(1000, 10000).toString(),
       trade_receivable: random.randomInt(1000, 10000).toString(),
