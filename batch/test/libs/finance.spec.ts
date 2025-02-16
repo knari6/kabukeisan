@@ -9,7 +9,7 @@ import {
 } from "vitest";
 import { Finance } from "../../src/libs/finance";
 import { Parse } from "../../src/libs/parse";
-import { FinancialStatement } from "../../src/libs/interfaces";
+import { FinancialData } from "../../src/libs/interfaces";
 import { Random } from "../../src/libs/random";
 import { File } from "../../src/libs/file";
 import { extractNumber } from "../helper/test-helper";
@@ -19,8 +19,8 @@ describe("Finance", () => {
   let parse: Parse;
   let random: Random;
   let xmlData: any;
-  let financialStatements: FinancialStatement;
-  let mockFinanceStatement: FinancialStatement;
+  let financialStatements: FinancialData;
+  let mockFinanceStatement: FinancialData;
   let consoleErrorSpy: any;
 
   beforeAll(() => {

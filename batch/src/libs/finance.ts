@@ -1,4 +1,4 @@
-import { FinancialStatement } from "./interfaces";
+import { FinancialData } from "./interfaces";
 
 export class Finance {
   constructor() {}
@@ -10,7 +10,7 @@ export class Finance {
   public extractFinancialStatements(
     xmlData: any,
     fiscalYear: string
-  ): FinancialStatement {
+  ): FinancialData {
     const context = "CurrentYearInstant_NonConsolidatedMember";
     const durationContext = "CurrentYearDuration_NonConsolidatedMember";
     const informationContext = "FilingDateInstant";
@@ -295,7 +295,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcROIC(financialStatement: FinancialStatement): number {
+  public calcROIC(financialStatement: FinancialData): number {
     const equity = financialStatement.balanceSheet.netAssets.equity;
     const debt = financialStatement.balanceSheet.liabilities.debt;
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
@@ -317,7 +317,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcROE(financialStatement: FinancialStatement): number {
+  public calcROE(financialStatement: FinancialData): number {
     const equity = financialStatement.balanceSheet.netAssets.equity;
     const profitLoss = financialStatement.incomeStatement.profitLoss;
 
@@ -335,7 +335,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcROA(financialStatement: FinancialStatement): number {
+  public calcROA(financialStatement: FinancialData): number {
     const assets = financialStatement.balanceSheet.assets.asset;
     const profitLoss = financialStatement.incomeStatement.profitLoss;
     if (assets === 0) {
@@ -352,7 +352,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcEquityRatio(financialStatement: FinancialStatement): number {
+  public calcEquityRatio(financialStatement: FinancialData): number {
     const equity = financialStatement.balanceSheet.netAssets.equity;
     const assets = financialStatement.balanceSheet.assets.asset;
     if (assets === 0) {
@@ -366,7 +366,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcGrossProfitMargin(financialStatement: FinancialStatement): number {
+  public calcGrossProfitMargin(financialStatement: FinancialData): number {
     const netSales = financialStatement.incomeStatement.netSales;
     const costOfSales = financialStatement.incomeStatement.costOfSales;
     if (netSales === 0) {
@@ -380,9 +380,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcOperatingProfitMargin(
-    financialStatement: FinancialStatement
-  ): number {
+  public calcOperatingProfitMargin(financialStatement: FinancialData): number {
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
     const netSales = financialStatement.incomeStatement.netSales;
     if (netSales === 0) {
@@ -396,9 +394,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcOrdinaryProfitMargin(
-    financialStatement: FinancialStatement
-  ): number {
+  public calcOrdinaryProfitMargin(financialStatement: FinancialData): number {
     const ordinaryIncome = financialStatement.incomeStatement.ordinaryIncome;
     const netSales = financialStatement.incomeStatement.netSales;
     if (netSales === 0) {
@@ -412,7 +408,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcNetProfitMargin(financialStatement: FinancialStatement): number {
+  public calcNetProfitMargin(financialStatement: FinancialData): number {
     const profitLoss = financialStatement.incomeStatement.profitLoss;
     const netSales = financialStatement.incomeStatement.netSales;
     if (netSales === 0) {
@@ -426,7 +422,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcNetCurrentAssets(financialStatement: FinancialStatement): number {
+  public calcNetCurrentAssets(financialStatement: FinancialData): number {
     const cash = financialStatement.cashFlowStatement.cashAndCashEquivalents;
     const accountsReceivable =
       financialStatement.balanceSheet.assets.accountsReceivable;
@@ -457,7 +453,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcNOPAT(financialStatement: FinancialStatement): number {
+  public calcNOPAT(financialStatement: FinancialData): number {
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
     const tax = financialStatement.incomeStatement.tax;
     return operatingIncome - tax;
@@ -468,7 +464,7 @@ export class Finance {
    * @param financialStatement
    * @returns
    */
-  public calcNonCashExpenses(financialStatement: FinancialStatement): number {
+  public calcNonCashExpenses(financialStatement: FinancialData): number {
     const amortization = financialStatement.capitalAndRDExpenses.amortization;
     const depreciation = financialStatement.capitalAndRDExpenses.depreciation;
     return amortization + depreciation;

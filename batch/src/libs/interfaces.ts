@@ -192,7 +192,7 @@ export interface DocumentListRequest {
   "Subscription-Key": string;
 }
 
-export interface FinancialStatement {
+export interface FinancialData {
   /** メタデータ */
   information: Information;
   /** 貸借対照表 */
@@ -331,5 +331,7 @@ export interface Information {
   /** 計算期間 */
   fiscalPeriod: string;
   /** 四半期 */
-  quarter: string;
+  quarterType: QuarterType;
 }
+
+export type QuarterType = "Q1" | "Q2" | "Q3" | "Q4" | "FY";
