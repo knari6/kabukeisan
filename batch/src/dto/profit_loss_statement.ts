@@ -1,26 +1,38 @@
 import { PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
+type ProfitLossStatementDtoType = {
+  statementId: number;
+  sale: number;
+  netSale: number;
+  operatingIncome: number;
+  ordinaryIncome: number;
+  profitBeforeTax: number;
+  tax: number;
+  profit: number;
+  createdAt: Date;
+  updatedAt: Date;
+};
+
 export class ProfitLossStatementDto {
   private readonly prismaClient: PrismaClient;
-  private readonly financialData: FinancialData;
-  constructor(prismaClient: PrismaClient, financialData: FinancialData) {
+  constructor(prismaClient: PrismaClient) {
     this.prismaClient = prismaClient;
-    this.financialData = financialData;
   }
 
-  public dto() {
+  public dto(
+    data: FinancialData,
+    statementId: number
+  ): ProfitLossStatementDtoType {
     return {
-      sale: this.financialData.incomeStatement.netSales,
-      netSale:
-        this.financialData.incomeStatement.netSales -
-        this.financialData.incomeStatement.costOfSales,
-      operatingIncome: this.financialData.incomeStatement.operatingIncome,
-      ordinaryIncome: this.financialData.incomeStatement.ordinaryIncome,
-      profitBeforeTax:
-        this.financialData.incomeStatement.incomeBeforeIncomeTaxes,
-      tax: this.financialData.incomeStatement.tax,
-      profit: this.financialData.incomeStatement.profitLoss,
+      statementId: statementId,
+      sale: data.incomeStatement.netSales,
+      netSale: data.incomeStatement.netSales - data.incomeStatement.costOfSales,
+      operatingIncome: data.incomeStatement.operatingIncome,
+      ordinaryIncome: data.incomeStatement.ordinaryIncome,
+      profitBeforeTax: data.incomeStatement.incomeBeforeIncomeTaxes,
+      tax: data.incomeStatement.tax,
+      profit: data.incomeStatement.profitLoss,
       updatedAt: new Date(),
       createdAt: new Date(),
     };

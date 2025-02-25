@@ -2,12 +2,14 @@ import { PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
 type DepriciationDtoType = {
+  statementId: number;
   depreciation: number;
   amortization: number;
-  research_and_development: number;
-  equipment_investment: number;
-  created_at: Date;
-  updated_at: Date;
+  depreciationAndAmortization: number;
+  capitalExpenditure: number;
+  researchAndDevelopment: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export class Depriciation {
@@ -18,16 +20,20 @@ export class Depriciation {
     this.prismaClient = prismaClient;
   }
 
-  public dto(): DepriciationDtoType {
+  public dto(statementId: number): DepriciationDtoType {
     return {
+      statementId: statementId,
       depreciation: this.financialData.capitalAndRDExpenses.depreciation,
       amortization: this.financialData.capitalAndRDExpenses.amortization,
-      research_and_development:
-        this.financialData.capitalAndRDExpenses.researchAndDevelopmentExpenses,
-      equipment_investment:
+      depreciationAndAmortization:
+        this.financialData.capitalAndRDExpenses.depreciation +
+        this.financialData.capitalAndRDExpenses.amortization,
+      capitalExpenditure:
         this.financialData.capitalAndRDExpenses.equipmentInvestment,
-      created_at: new Date(),
-      updated_at: new Date(),
+      researchAndDevelopment:
+        this.financialData.capitalAndRDExpenses.researchAndDevelopmentExpenses,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 }

@@ -3,8 +3,8 @@ import { FinancialData } from "../libs/interfaces";
 type CompanyDtoType = {
   code: string;
   name: string;
-  created_at: Date;
-  updated_at: Date;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export class CompanyDto {
@@ -12,8 +12,8 @@ export class CompanyDto {
     return {
       code: data.information.code,
       name: data.information.companyName,
-      created_at: new Date(),
-      updated_at: new Date(),
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 }

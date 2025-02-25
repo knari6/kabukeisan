@@ -2,9 +2,10 @@ import { PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
 type DebtDtoType = {
-  debt: number;
-  created_at: Date;
-  updated_at: Date;
+  statementId: number;
+  interestBearingDebt: number;
+  createdAt: Date;
+  updatedAt: Date;
 };
 export class DebtDto {
   private readonly prismaClient: PrismaClient;
@@ -14,11 +15,12 @@ export class DebtDto {
     this.financialData = financialData;
   }
 
-  public dto(): DebtDtoType {
+  public dto(statementId: number): DebtDtoType {
     return {
-      debt: this.financialData.balanceSheet.liabilities.debt,
-      created_at: new Date(),
-      updated_at: new Date(),
+      statementId: statementId,
+      interestBearingDebt: this.financialData.balanceSheet.liabilities.debt,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
   }
 }

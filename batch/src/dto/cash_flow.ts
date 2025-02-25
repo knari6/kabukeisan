@@ -1,6 +1,7 @@
 import { FinancialData } from "../libs/interfaces";
 
 type CashFlowDtoType = {
+  statementId: number;
   operatingCf: number;
   investingCf: number;
   financialCf: number;
@@ -15,8 +16,9 @@ export class CashFlowDto {
     this.financialData = financialData;
   }
 
-  public dto(): CashFlowDtoType {
+  public dto(statementId: number): CashFlowDtoType {
     return {
+      statementId: statementId,
       operatingCf:
         this.financialData.cashFlowStatement
           .netCashProvidedByOperatingActivities,

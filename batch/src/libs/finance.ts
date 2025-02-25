@@ -5,7 +5,7 @@ export class Finance {
   /**
    * xbrlファイルから財務諸表を抽出する
    * @param xmlData
-   * @returns
+   * @returns FinancialData
    */
   public extractFinancialStatements(
     xmlData: any,
