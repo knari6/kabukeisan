@@ -332,6 +332,8 @@ export interface Information {
   fiscalPeriod: string;
   /** 四半期 */
   quarterType: QuarterType;
+  /** 年 */
+  year: string;
 }
 
 export type QuarterType = "Q1" | "Q2" | "Q3" | "Q4" | "FY";
