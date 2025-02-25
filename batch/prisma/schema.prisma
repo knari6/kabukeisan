@@ -11,6 +11,7 @@ model Companies {
   id                   Int                  @id @default(autoincrement())
   name                 String               @db.VarChar(255)
   code                 String               @unique @db.VarChar(5)
+  year                 String               @db.VarChar(5)
   financialStatements  FinancialStatements[]
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @updatedAt
@@ -29,8 +30,38 @@ model FinancialStatements {
   cashFlow             CashFlows?
   depreciation         Depreciations?
   debt                 Debts?
-
+  balanceSheet         BalanceSheets?
   @@index([companyId])
+}
+
+model BalanceSheets {
+  id                   Int                  @id @default(autoincrement())
+  statementId          Int                  @unique
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+  assets               Decimal?             @db.Decimal(15, 2)
+  currentAssets        Decimal?             @db.Decimal(15, 2)
+  cashAndDeposits      Decimal?             @db.Decimal(15, 2)
+  accountsReceivable   Decimal?             @db.Decimal(15, 2)
+  merchandiseAndFinishedGoods Decimal?             @db.Decimal(15, 2)
+  securities           Decimal?             @db.Decimal(15, 2)
+  inventory            Decimal?             @db.Decimal(15, 2)
+  otherCurrentAssets   Decimal?             @db.Decimal(15, 2)
+  fixedAssets          Decimal?             @db.Decimal(15, 2)
+  tangibleFixedAssets  Decimal?             @db.Decimal(15, 2)
+  land                 Decimal?             @db.Decimal(15, 2)
+  intangibleFixedAssets Decimal?             @db.Decimal(15, 2)
+  investmentSecurities Decimal?             @db.Decimal(15, 2)
+  otherAssets                Decimal?             @db.Decimal(15, 2)
+  currentLiabilities   Decimal?             @db.Decimal(15, 2)
+  debt                 Decimal?             @db.Decimal(15, 2)
+  otherCurrentLiabilities Decimal?             @db.Decimal(15, 2)
+  fixedLiabilities     Decimal?             @db.Decimal(15, 2)
+  otherLiabilities     Decimal?             @db.Decimal(15, 2)
+  liabilities          Decimal?             @db.Decimal(15, 2)
+  equity               Decimal?             @db.Decimal(15, 2)
+  netAssets            Decimal?             @db.Decimal(15, 2)
+  statement            FinancialStatements  @relation(fields: [statementId], references: [id])
 }
 
 model ProfitLossStatements {
