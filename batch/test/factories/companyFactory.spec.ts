@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { PrismaService } from "../../src/services/prisma.service";
 import { CompanyFactory } from "./companyFactory";
 import { Companies, Prisma } from "@prisma/client";
@@ -24,19 +24,18 @@ describe("CompanyFactory", () => {
         parameter = CompanyFactory.build();
         await factory.create(parameter);
         company = await prismaService.companies.findFirst({
-          where: { code: parameter.code, year: parameter.year },
+          where: { code: parameter.code },
         });
       });
 
       it("指定した内容で登録されること", () => {
         expect(company?.code.toString()).toBe(parameter.code.toString());
         expect(company?.name).toBe(parameter.name);
-        expect(company?.year).toBe(parameter.year);
-        expect(company?.created_at.toString()).toBe(
-          parameter.created_at?.toString()
+        expect(company?.createdAt.toString()).toBe(
+          parameter.createdAt?.toString()
         );
-        expect(company?.updated_at.toString()).toBe(
-          parameter.updated_at?.toString()
+        expect(company?.updatedAt.toString()).toBe(
+          parameter.updatedAt?.toString()
         );
       });
     });
@@ -52,9 +51,9 @@ describe("CompanyFactory", () => {
         expect(company).not.toBeNull();
         expect(company?.code.toString()).not.toBeNull();
         expect(company?.name).not.toBeNull();
-        expect(company?.year).not.toBeNull();
-        expect(company?.created_at).not.toBeNull();
-        expect(company?.updated_at).not.toBeNull();
+
+        expect(company?.createdAt).not.toBeNull();
+        expect(company?.updatedAt).not.toBeNull();
       });
     });
   });

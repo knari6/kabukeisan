@@ -3,18 +3,29 @@ import { FinancialData, QuarterType } from "../libs/interfaces";
 
 export class FinancialStatementDto {
   private readonly prismaClient: PrismaClient;
-  constructor(prismaClient: PrismaClient) {
+  private readonly financialData: FinancialData;
+  private readonly year: string;
+  private readonly quarterType: QuarterType;
+  constructor(
+    prismaClient: PrismaClient,
+    financialData: FinancialData,
+    year: string,
+    quarterType: QuarterType
+  ) {
     this.prismaClient = prismaClient;
+    this.financialData = financialData;
+    this.year = year;
+    this.quarterType = quarterType;
   }
 
   /** FinancialStatementsに登録するデータのためのDTO */
-  public dto(data: FinancialData, year: string, quarterType: QuarterType) {
+  public dto() {
     return {
-      code: data.information.code,
-      name: data.information.companyName,
-      year: year,
-      quarterType: quarterType,
-      stockAmount: data.stockInfo.stockAmount,
+      code: this.financialData.information.code,
+      name: this.financialData.information.companyName,
+      year: this.year,
+      quarterType: this.quarterType,
+      stockAmount: this.financialData.stockInfo.stockAmount,
       created_at: new Date(),
       updated_at: new Date(),
     };

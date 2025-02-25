@@ -1,4 +1,4 @@
-import { FinancialData } from "./interfaces";
+import { FinancialData, QuarterType } from "./interfaces";
 
 export class Finance {
   constructor() {}
@@ -41,10 +41,8 @@ export class Finance {
         /** 会計期間 */
         fiscalPeriod: fiscalYear.substring(0, 4),
         /** 四半期 */
-        quarter: this.extractValue(
-          xmlData,
-          "jppfs_cor:Quarter",
-          informationContext
+        quarterType: this.getQuarterType(
+          this.extractValue(xmlData, "jppfs_cor:Quarter", informationContext)
         ),
       },
       balanceSheet: {
@@ -617,6 +615,21 @@ export class Finance {
       return value ? value["_"] : "";
     } catch (error) {
       return "";
+    }
+  }
+
+  private getQuarterType(quarter: string): QuarterType {
+    switch (quarter) {
+      case "Q1":
+        return "Q1";
+      case "Q2":
+        return "Q2";
+      case "Q3":
+        return "Q3";
+      case "Q4":
+        return "Q4";
+      default:
+        return "FY";
     }
   }
 }

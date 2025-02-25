@@ -12,10 +12,8 @@ export class CompanyFactory {
     return {
       code: random.randomInt(1000, 9999).toString(),
       name: randomUUID(),
-      // 2999年超えることを想定していないため
-      year: random.randomInt(1950, 2999).toString(),
-      created_at: random.randomDate(),
-      updated_at: random.randomDate(),
+      createdAt: random.randomDate(),
+      updatedAt: random.randomDate(),
       ...overrides,
     };
   }

@@ -53,7 +53,7 @@ async function parseXbrl(docID: string, apiKey: string) {
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
   // const data = await parse.xbrl(path);
-  const financialStatements = finance.extractFinancialStatements(data);
+  const financialStatements = finance.extractFinancialStatements(data, "2024");
   console.log(
     inspect(financialStatements, {
       depth: null,
