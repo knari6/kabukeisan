@@ -8,109 +8,110 @@ datasource db {
 }
 
 model Companies {
-  id                   Int                  @id @default(autoincrement())
-  name                 String               @db.VarChar(255)
-  code                 String               @unique @db.VarChar(5)
-  year                 String               @db.VarChar(5)
-  financialStatements  FinancialStatements[]
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
+  id                  BigInt                @id @default(autoincrement())
+  name                String                @db.VarChar(255)
+  code                String                @unique @db.VarChar(5)
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  year                String                @db.VarChar(5)
+  financialStatements FinancialStatements[]
 }
 
 model FinancialStatements {
-  id                   Int                  @id @default(autoincrement())
-  companyId            Int
-  year                 String               @db.VarChar(5)
-  quarterType          QuarterType
-  stockAmount          Int
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  company              Companies            @relation(fields: [companyId], references: [id])
-  profitLossStatement  ProfitLossStatements?
-  cashFlow             CashFlows?
-  depreciation         Depreciations?
-  debt                 Debts?
-  balanceSheet         BalanceSheets?
+  id                  BigInt                @id @default(autoincrement())
+  companyId           BigInt
+  year                String                @db.VarChar(5)
+  quarterType         QuarterType
+  stockAmount         Int
+  createdAt           DateTime              @default(now())
+  updatedAt           DateTime              @updatedAt
+  balanceSheet        BalanceSheets?
+  cashFlow            CashFlows?
+  debt                Debts?
+  depreciation        Depreciations?
+  company             Companies             @relation(fields: [companyId], references: [id])
+  profitLossStatement ProfitLossStatements?
+
   @@index([companyId])
 }
 
 model BalanceSheets {
-  id                   Int                  @id @default(autoincrement())
-  statementId          Int                  @unique
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  assets               Decimal?             @db.Decimal(15, 2)
-  currentAssets        Decimal?             @db.Decimal(15, 2)
-  cashAndDeposits      Decimal?             @db.Decimal(15, 2)
-  accountsReceivable   Decimal?             @db.Decimal(15, 2)
-  merchandiseAndFinishedGoods Decimal?             @db.Decimal(15, 2)
-  securities           Decimal?             @db.Decimal(15, 2)
-  inventory            Decimal?             @db.Decimal(15, 2)
-  otherCurrentAssets   Decimal?             @db.Decimal(15, 2)
-  fixedAssets          Decimal?             @db.Decimal(15, 2)
-  tangibleFixedAssets  Decimal?             @db.Decimal(15, 2)
-  land                 Decimal?             @db.Decimal(15, 2)
-  intangibleFixedAssets Decimal?             @db.Decimal(15, 2)
-  investmentSecurities Decimal?             @db.Decimal(15, 2)
-  otherAssets                Decimal?             @db.Decimal(15, 2)
-  currentLiabilities   Decimal?             @db.Decimal(15, 2)
-  debt                 Decimal?             @db.Decimal(15, 2)
-  otherCurrentLiabilities Decimal?             @db.Decimal(15, 2)
-  fixedLiabilities     Decimal?             @db.Decimal(15, 2)
-  otherLiabilities     Decimal?             @db.Decimal(15, 2)
-  liabilities          Decimal?             @db.Decimal(15, 2)
-  equity               Decimal?             @db.Decimal(15, 2)
-  netAssets            Decimal?             @db.Decimal(15, 2)
-  statement            FinancialStatements  @relation(fields: [statementId], references: [id])
+  id                          BigInt              @id @default(autoincrement())
+  statementId                 BigInt              @unique
+  createdAt                   DateTime            @default(now())
+  updatedAt                   DateTime            @updatedAt
+  assets                      Decimal?            @db.Decimal(15, 2)
+  currentAssets               Decimal?            @db.Decimal(15, 2)
+  cashAndDeposits             Decimal?            @db.Decimal(15, 2)
+  accountsReceivable          Decimal?            @db.Decimal(15, 2)
+  merchandiseAndFinishedGoods Decimal?            @db.Decimal(15, 2)
+  securities                  Decimal?            @db.Decimal(15, 2)
+  inventory                   Decimal?            @db.Decimal(15, 2)
+  otherCurrentAssets          Decimal?            @db.Decimal(15, 2)
+  fixedAssets                 Decimal?            @db.Decimal(15, 2)
+  tangibleFixedAssets         Decimal?            @db.Decimal(15, 2)
+  land                        Decimal?            @db.Decimal(15, 2)
+  intangibleFixedAssets       Decimal?            @db.Decimal(15, 2)
+  investmentSecurities        Decimal?            @db.Decimal(15, 2)
+  otherAssets                 Decimal?            @db.Decimal(15, 2)
+  currentLiabilities          Decimal?            @db.Decimal(15, 2)
+  debt                        Decimal?            @db.Decimal(15, 2)
+  otherCurrentLiabilities     Decimal?            @db.Decimal(15, 2)
+  fixedLiabilities            Decimal?            @db.Decimal(15, 2)
+  otherLiabilities            Decimal?            @db.Decimal(15, 2)
+  liabilities                 Decimal?            @db.Decimal(15, 2)
+  equity                      Decimal?            @db.Decimal(15, 2)
+  netAssets                   Decimal?            @db.Decimal(15, 2)
+  statement                   FinancialStatements @relation(fields: [statementId], references: [id])
 }
 
 model ProfitLossStatements {
-  id                   Int                  @id @default(autoincrement())
-  statementId          Int                  @unique
-  sale                 Decimal?             @db.Decimal(15, 2)
-  netSale              Decimal?             @db.Decimal(15, 2)
-  operatingIncome      Decimal?             @db.Decimal(15, 2)
-  ordinaryIncome       Decimal?             @db.Decimal(15, 2)
-  profitBeforeTax      Decimal?             @db.Decimal(15, 2)
-  tax                  Decimal?             @db.Decimal(15, 2)
-  profit               Decimal?             @db.Decimal(15, 2)
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  statement            FinancialStatements  @relation(fields: [statementId], references: [id])
+  id              BigInt              @id @default(autoincrement())
+  statementId     BigInt              @unique
+  sale            Decimal?            @db.Decimal(15, 2)
+  netSale         Decimal?            @db.Decimal(15, 2)
+  operatingIncome Decimal?            @db.Decimal(15, 2)
+  ordinaryIncome  Decimal?            @db.Decimal(15, 2)
+  profitBeforeTax Decimal?            @db.Decimal(15, 2)
+  tax             Decimal?            @db.Decimal(15, 2)
+  profit          Decimal?            @db.Decimal(15, 2)
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+  statement       FinancialStatements @relation(fields: [statementId], references: [id])
 }
 
 model CashFlows {
-  id                   Int                  @id @default(autoincrement())
-  statementId          Int                  @unique
-  operatingCf          Decimal?             @db.Decimal(15, 2)
-  investingCf          Decimal?             @db.Decimal(15, 2)
-  financialCf          Decimal?             @db.Decimal(15, 2)
-  dividendPaid         Decimal?             @db.Decimal(15, 2)
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  statement            FinancialStatements  @relation(fields: [statementId], references: [id])
+  id           BigInt              @id @default(autoincrement())
+  statementId  BigInt              @unique
+  operatingCf  Decimal?            @db.Decimal(15, 2)
+  investingCf  Decimal?            @db.Decimal(15, 2)
+  financialCf  Decimal?            @db.Decimal(15, 2)
+  dividendPaid Decimal?            @db.Decimal(15, 2)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  statement    FinancialStatements @relation(fields: [statementId], references: [id])
 }
 
 model Depreciations {
-  id                      Int                  @id @default(autoincrement())
-  statementId             Int                  @unique
-  depreciation            Decimal?             @db.Decimal(15, 2)
-  amortization            Decimal?             @db.Decimal(15, 2)
+  id                       BigInt              @id @default(autoincrement())
+  statementId              BigInt              @unique
+  depreciation             Decimal?            @db.Decimal(15, 2)
+  amortization             Decimal?            @db.Decimal(15, 2)
   depreciationAmortization Decimal?            @db.Decimal(15, 2)
-  capitalExpenditure      Decimal?             @db.Decimal(15, 2)
-  researchAndDevelopment  Decimal?             @db.Decimal(15, 2)
-  createdAt              DateTime             @default(now())
-  updatedAt              DateTime             @updatedAt
-  statement              FinancialStatements  @relation(fields: [statementId], references: [id])
+  capitalExpenditure       Decimal?            @db.Decimal(15, 2)
+  researchAndDevelopment   Decimal?            @db.Decimal(15, 2)
+  createdAt                DateTime            @default(now())
+  updatedAt                DateTime            @updatedAt
+  statement                FinancialStatements @relation(fields: [statementId], references: [id])
 }
 
 model Debts {
-  id                   Int                  @id @default(autoincrement())
-  statementId          Int                  @unique
-  interestBearingDebt  Decimal?             @db.Decimal(15, 2)
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @updatedAt
-  statement            FinancialStatements  @relation(fields: [statementId], references: [id])
+  id                  BigInt              @id @default(autoincrement())
+  statementId         BigInt              @unique
+  interestBearingDebt Decimal?            @db.Decimal(15, 2)
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+  statement           FinancialStatements @relation(fields: [statementId], references: [id])
 }
 
 enum QuarterType {

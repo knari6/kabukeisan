@@ -22,4 +22,8 @@ export class Random {
       this.randomInt(31, 1)
     );
   }
+
+  public randomElement<T>(array: T[]): T {
+    return array[this.randomInt(array.length - 1, 0)];
+  }
 }

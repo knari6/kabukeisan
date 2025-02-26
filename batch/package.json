@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.714.0",
-    "@prisma/client": "6.3.0",
+    "@prisma/client": "^6.4.1",
     "@types/xml2js": "^0.4.14",
     "adm-zip": "^0.5.16",
     "axios": "^1.7.9",
@@ -28,7 +28,7 @@
     "@types/adm-zip": "^0.5.7",
     "@types/node": "^22.13.0",
     "@vitest/coverage-v8": "2.1.8",
-    "prisma": "^6.3.0",
+    "prisma": "^6.4.1",
     "ts-dotenv": "^0.9.1",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
