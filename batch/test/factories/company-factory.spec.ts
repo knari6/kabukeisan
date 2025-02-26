@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { PrismaService } from "../../src/services/prisma.service";
-import { CompanyFactory } from "./companyFactory";
+import { CompanyFactory } from "./company-factory";
 import { Companies, Prisma } from "@prisma/client";
 import { DBHelper } from "../helper/db-helper";
 
@@ -10,11 +10,9 @@ describe("CompanyFactory", () => {
 
   afterAll(async () => {
     await prismaService.onModuleDestroy();
-  });
-
-  afterAll(async () => {
     await new DBHelper(prismaService).cleanUp();
   });
+
   describe("create", () => {
     let company: Companies | null;
 
