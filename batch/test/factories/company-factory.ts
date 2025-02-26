@@ -12,7 +12,6 @@ export class CompanyFactory {
     return {
       code: random.randomInt(1000, 9999).toString(),
       name: randomUUID(),
-      year: random.randomInt(2000, 2023).toString(),
       createdAt: random.randomDate(),
       updatedAt: random.randomDate(),
       ...overrides,
