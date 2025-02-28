@@ -5,6 +5,7 @@ export class DBHelper {
   public async cleanUp() {
     // トランザクション内で削除を実行
     await this.prisma.$transaction(async (tx) => {
+      await tx.debtStatements.deleteMany();
       // 最初に子テーブル（外部キーを持つテーブル）のデータを削除
       await tx.financialStatements.deleteMany();
       // その後、親テーブルのデータを削除

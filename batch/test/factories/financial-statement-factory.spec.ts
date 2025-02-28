@@ -62,10 +62,6 @@ describe("FinancialStatementFactory", () => {
             },
           },
         });
-
-        // デバッグ用のログ
-        console.log("Created company:", company);
-        console.log("Created financial statement:", financialStatement);
       });
 
       it("randomな値で登録されること", () => {
