@@ -23,6 +23,7 @@ export class ProfitStatementFactory {
           id: random.randomInt(1, 1000000),
         },
       },
+      ...overrides,
     };
   }
 
