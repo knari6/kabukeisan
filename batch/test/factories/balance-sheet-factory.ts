@@ -5,7 +5,7 @@ export class BalanceSheetFactory {
   constructor(private readonly prismaClient: PrismaClient) {}
 
   public static build(
-    overrides: Partial<Prisma.BalanceSheetCreateInput> = {}
+    overrides: Partial<Prisma.BalanceSheetCreateInput>
   ): Prisma.BalanceSheetCreateInput {
     const random = new Random();
 
