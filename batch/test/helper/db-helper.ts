@@ -2,13 +2,27 @@ import { PrismaService } from "../../src/services/prisma.service";
 
 export class DBHelper {
   public constructor(private readonly prisma: PrismaService) {}
-  public async cleanUp() {
+  public async cleanUp(tableName: string) {
     await this.prisma.$transaction(async (tx) => {
-      await tx.profitLossStatements.deleteMany();
-      await tx.balanceSheet.deleteMany();
-      await tx.cashFlowStatement.deleteMany();
-      await tx.capitalExpenditure.deleteMany();
-      await tx.debtStatements.deleteMany();
+      switch (tableName) {
+        case "profitLossStatements":
+          await tx.profitLossStatements.deleteMany();
+          break;
+        case "balanceSheet":
+          await tx.balanceSheet.deleteMany();
+          break;
+        case "cashFlowStatement":
+          await tx.cashFlowStatement.deleteMany();
+          break;
+        case "capitalExpenditure":
+          await tx.capitalExpenditure.deleteMany();
+          break;
+        case "debtStatements":
+          await tx.debtStatements.deleteMany();
+          break;
+        default:
+          break;
+      }
       await tx.financialStatements.deleteMany();
       await tx.companies.deleteMany();
     });

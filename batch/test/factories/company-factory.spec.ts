@@ -8,11 +8,11 @@ describe("CompanyFactory", () => {
   const prismaService = new PrismaService();
   const factory = new CompanyFactory(prismaService);
   beforeEach(async () => {
-    await new DBHelper(prismaService).cleanUp();
+    await new DBHelper(prismaService).cleanUp("");
     await prismaService.onModuleDestroy();
   });
   afterAll(async () => {
-    await new DBHelper(prismaService).cleanUp();
+    await new DBHelper(prismaService).cleanUp("");
   });
   describe("create", () => {
     let company: Companies | null;

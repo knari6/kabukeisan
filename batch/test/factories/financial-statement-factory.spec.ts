@@ -18,11 +18,11 @@ describe("FinancialStatementFactory", () => {
   const prismaService = new PrismaService();
   const factory = new FinancialStatementFactory(prismaService);
   beforeEach(async () => {
-    await new DBHelper(prismaService).cleanUp();
+    await new DBHelper(prismaService).cleanUp("");
     await prismaService.onModuleDestroy();
   });
   afterAll(async () => {
-    await new DBHelper(prismaService).cleanUp();
+    await new DBHelper(prismaService).cleanUp("");
   });
   describe("create", async () => {
     let financialStatement: FinancialStatements | null;
@@ -68,15 +68,23 @@ describe("FinancialStatementFactory", () => {
 
     describe("パラメータがないとき", async () => {
       beforeEach(async () => {
-        const random = new Random();
         company = await new CompanyFactory(prismaService).create({
           name: "test",
         });
+        const createdCompany = await prismaService.companies.findFirst({
+          where: {
+            id: company.id,
+          },
+        });
+
+        if (!createdCompany) {
+          throw new Error("会社が作成できませんでした");
+        }
 
         financialStatement = await factory.create({
           company: {
             connect: {
-              id: company.id,
+              id: createdCompany?.id,
             },
           },
         });

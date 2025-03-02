@@ -30,10 +30,11 @@ describe("Finance", () => {
     mockFinanceStatement = {
       information: {
         code: random.randomInt(1000, 10000).toString(),
-        companyName: "テスト会社",
+        companyName: "テスト会社ファイナンス",
         filingDate: "2024-01-01",
         fiscalPeriod: "2024",
-        quarter: "1",
+        quarterType: "Q1",
+        year: "2024",
       },
       balanceSheet: {
         assets: {
