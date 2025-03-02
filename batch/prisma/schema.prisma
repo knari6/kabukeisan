@@ -86,8 +86,11 @@ model CashFlowStatement {
   financingCashFlow      Decimal             @map("financing_cash_flow") @db.Decimal(15, 2)
   cashAndCashEquivalents Decimal             @map("cash_and_cash_equivalents") @db.Decimal(15, 2)
   devidendPaid           Decimal             @map("devidend_paid") @db.Decimal(15, 2)
+  createdAt              DateTime            @map("created_at") @db.DateTime(0)
   updatedAt              DateTime            @map("updated_at") @db.DateTime(0)
   statement              FinancialStatements @relation(fields: [statementId], references: [id])
+
+  @@map("CashFlowStatement")
 }
 
 model CapitalExpenditure {

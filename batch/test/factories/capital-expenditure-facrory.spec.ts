@@ -1,35 +1,37 @@
-// import { afterEach, beforeEach, describe, expect, it } from "vitest";
+// import { afterAll, beforeEach, describe, it } from "vitest";
+// import { CompanyFactory } from "./company-factory";
+// import { FinancialStatementFactory } from "./financial-statement-factory";
 // import { PrismaService } from "../../src/services/prisma.service";
-// import { DebtFactory } from "./debt-factory";
+// import { CapitalExpenditureFactory } from "./capital-expenditure-facrory";
+// import { afterEach } from "node:test";
+// import { DBHelper } from "../helper/db-helper";
 // import {
+//   CapitalExpenditure,
 //   Companies,
-//   DebtStatements,
 //   FinancialStatements,
 //   Prisma,
 // } from "@prisma/client";
-// import { DBHelper } from "../helper/db-helper";
 // import { Random } from "../../src/libs/random";
-// import { CompanyFactory } from "./company-factory";
-// import { FinancialStatementFactory } from "./financial-statement-factory";
 
-// describe("DebtFactory", () => {
-//   const prismaService = new PrismaService();
+// describe("CapitalExpenditureFactory", () => {
+//   const prismaService: PrismaService = new PrismaService();
 //   const companyFactory = new CompanyFactory(prismaService);
-//   const financialStatementFactory = new FinancialStatementFactory(
+//   const financialStatementsFactory = new FinancialStatementFactory(
 //     prismaService
 //   );
-//   const debtFactory = new DebtFactory(prismaService);
+//   const capitalExpenditureFactory = new CapitalExpenditureFactory(
+//     prismaService
+//   );
 
 //   describe("create", () => {
-//     let debt: DebtStatements | null;
+//     let capitalExpenditure: CapitalExpenditure | null;
 //     const random = new Random();
-
 //     afterEach(async () => {
-//       await prismaService.onModuleDestroy();
+//       await prismaService.capitalExpenditure.deleteMany();
 //       await new DBHelper(prismaService).cleanUp();
 //     });
 //     describe("パラメータがある時", () => {
-//       let debtParameter: Prisma.DebtStatementsCreateInput;
+//       let capitalExpenditureParameter: Prisma.CapitalExpenditureCreateInput;
 //       let company: Companies;
 //       let financialStatement: FinancialStatements;
 
@@ -39,7 +41,7 @@
 //           code: `${random.randomInt(1000, 9999)}`,
 //         });
 
-//         financialStatement = await financialStatementFactory.create({
+//         financialStatement = await financialStatementsFactory.create({
 //           company: {
 //             connect: {
 //               id: company.id,
@@ -56,33 +58,32 @@
 //           throw new Error("財務諸表が作成できませんでした");
 //         }
 
-//         debtParameter = DebtFactory.build({
+//         capitalExpenditureParameter = CapitalExpenditureFactory.build({
 //           statement: {
 //             connect: {
-//               id: financialStatement.id,
+//               id: createdStatement.id,
 //             },
 //           },
 //         });
 
-//         await debtFactory.create(debtParameter);
+//         await capitalExpenditureFactory.create(capitalExpenditureParameter);
 
-//         debt = await prismaService.debtStatements.findFirst({
+//         capitalExpenditure = await prismaService.capitalExpenditure.findFirst({
 //           where: {
-//             statementId: financialStatement.id,
+//             statementId: createdStatement.id,
 //           },
 //         });
-//       });
-//       it("指定した内容で登録されること", async () => {
-//         expect(debt?.interestBearingDebt.toString()).toBe(
-//           debtParameter.interestBearingDebt.toString()
-//         );
-//       });
-//     });
 
+//         if (!capitalExpenditure) {
+//           throw new Error("資本的支出が作成できませんでした");
+//         }
+//       });
+//       it("指定した内容で登録されること", () => {});
+//     });
 //     describe("パラメータがない時", () => {
 //       let company: Companies;
 //       let financialStatement: FinancialStatements;
-//       let debt: DebtStatements;
+//       let capitalExpenditure: CapitalExpenditure;
 
 //       beforeEach(async () => {
 //         company = await companyFactory.create({
@@ -90,7 +91,7 @@
 //           code: `${random.randomInt(1000, 9999)}`,
 //         });
 
-//         financialStatement = await financialStatementFactory.create({
+//         financialStatement = await financialStatementsFactory.create({
 //           company: {
 //             connect: {
 //               id: company.id,
@@ -98,7 +99,7 @@
 //           },
 //         });
 
-//         debt = await debtFactory.create({
+//         capitalExpenditure = await capitalExpenditureFactory.create({
 //           statement: {
 //             connect: {
 //               id: financialStatement.id,
@@ -106,9 +107,7 @@
 //           },
 //         });
 //       });
-//       it("ランダムな内容で登録されること", async () => {
-//         expect(debt?.interestBearingDebt.toString()).not.toBeNull();
-//       });
+//       it("ランダムな値で登録されること", () => {});
 //     });
 //   });
 // });
