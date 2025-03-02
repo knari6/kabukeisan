@@ -1,4 +1,12 @@
-import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from "vitest";
 import { DBHelper } from "../helper/db-helper";
 import { PrismaService } from "../../src/services/prisma.service";
 import { FinancialStatements, Prisma, Companies } from "@prisma/client";
@@ -9,19 +17,31 @@ import { Random } from "../../src/libs/random";
 describe("FinancialStatementFactory", () => {
   const prismaService = new PrismaService();
   const factory = new FinancialStatementFactory(prismaService);
-
-  describe("create", () => {
+  beforeEach(async () => {
+    await new DBHelper(prismaService).cleanUp();
+    await prismaService.onModuleDestroy();
+  });
+  afterAll(async () => {
+    await new DBHelper(prismaService).cleanUp();
+  });
+  describe("create", async () => {
     let financialStatement: FinancialStatements | null;
     let company: Companies;
-    afterEach(async () => {
-      await prismaService.onModuleDestroy();
-      await new DBHelper(prismaService).cleanUp();
-    });
-    describe("パラメータがあるとき", () => {
+
+    describe("パラメータがあるとき", async () => {
+      let company: Companies;
       let parameter: Prisma.FinancialStatementsCreateInput;
 
       beforeEach(async () => {
         company = await new CompanyFactory(prismaService).create({});
+        const createdCompany = await prismaService.companies.findFirst({
+          where: {
+            id: company.id,
+          },
+        });
+
+        console.log(createdCompany?.id);
+
         parameter = FinancialStatementFactory.build({
           company: {
             connect: {
@@ -29,11 +49,11 @@ describe("FinancialStatementFactory", () => {
             },
           },
         });
-        await factory.create(parameter);
-        financialStatement = await prismaService.financialStatements.findFirst({
-          where: {
-            fiscalYear: parameter.fiscalYear,
-            quarterType: parameter.quarterType,
+        financialStatement = await factory.create({
+          company: {
+            connect: {
+              id: company.id,
+            },
           },
         });
       });
@@ -46,11 +66,10 @@ describe("FinancialStatementFactory", () => {
       });
     });
 
-    describe("パラメータがないとき", () => {
+    describe("パラメータがないとき", async () => {
       beforeEach(async () => {
         const random = new Random();
         company = await new CompanyFactory(prismaService).create({
-          code: `${random.randomInt(1000, 9999)}`,
           name: "test",
         });
 

@@ -1,4 +1,4 @@
-import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, afterEach, beforeEach, describe, expect, it } from "vitest";
 import { PrismaService } from "../../src/services/prisma.service";
 import { CompanyFactory } from "./company-factory";
 import { Companies, Prisma } from "@prisma/client";
@@ -7,16 +7,17 @@ import { DBHelper } from "../helper/db-helper";
 describe("CompanyFactory", () => {
   const prismaService = new PrismaService();
   const factory = new CompanyFactory(prismaService);
-
-  afterAll(async () => {
+  beforeEach(async () => {
+    await new DBHelper(prismaService).cleanUp();
     await prismaService.onModuleDestroy();
+  });
+  afterAll(async () => {
     await new DBHelper(prismaService).cleanUp();
   });
-
   describe("create", () => {
     let company: Companies | null;
 
-    describe("パラメータがあるとき", () => {
+    describe("パラメータがあるとき", async () => {
       let parameter: Prisma.CompaniesCreateInput;
       beforeEach(async () => {
         parameter = CompanyFactory.build();
@@ -37,9 +38,9 @@ describe("CompanyFactory", () => {
         );
       });
     });
-    describe("パラメータがないとき", () => {
+    describe("パラメータがないとき", async () => {
       beforeEach(async () => {
-        await factory.create({});
+        await factory.create({ name: "company" });
         company = await prismaService.companies.findFirst({
           orderBy: { id: Prisma.SortOrder.desc },
         });

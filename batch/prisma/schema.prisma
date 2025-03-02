@@ -46,7 +46,7 @@ model ProfitLossStatements {
   ordinaryProfit  Decimal             @map("ordinary_profit") @db.Decimal(15, 2)
   profitBeforeTax Decimal             @map("profit_before_tax") @db.Decimal(15, 2)
   tax             Decimal             @map("tax") @db.Decimal(15, 2)
-  netProfit       Decimal             @map("net_profit") @db.Decimal(15, 2)
+  netIncome       Decimal             @map("net_income") @db.Decimal(15, 2)
   createdAt       DateTime            @map("created_at") @db.DateTime(0)
   updatedAt       DateTime            @map("updated_at") @db.DateTime(0)
   statement       FinancialStatements @relation(fields: [statementId], references: [id])

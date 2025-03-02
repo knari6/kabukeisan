@@ -9,14 +9,17 @@ export class FinancialStatementFactory {
   ): Prisma.FinancialStatementsCreateInput {
     const random = new Random();
     return {
-      fiscalYear: random.randomInt(2010, 2025).toString(),
-      quarterType: random.randomElement(["Q1", "Q2", "Q3", "Q4", "FY"]),
-      stockAmount: random.randomInt(1000000, 100000000),
-      createdAt: random.randomDate(),
-      updatedAt: random.randomDate(),
+      fiscalYear: "2023",
+      quarterType: "Q1",
+      stockAmount: new Prisma.Decimal(1000000),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       company: {
-        connect: {
-          id: random.randomInt(1, 1000),
+        create: {
+          name: `テスト会社${random.randomInt(1000, 9999)}`,
+          code: random.randomInt(1000, 9999).toString(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
         },
       },
       ...overrides,
