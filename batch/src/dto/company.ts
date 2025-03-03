@@ -9,11 +9,16 @@ type CompanyDtoType = {
 };
 
 export class CompanyDto {
-  public dto(data: FinancialData): CompanyDtoType {
+  private readonly financialData: FinancialData;
+  constructor(financialData: FinancialData) {
+    this.financialData = financialData;
+  }
+
+  public dto(): CompanyDtoType {
     return {
-      code: data.information.code,
-      name: data.information.companyName,
-      year: data.information.year,
+      code: this.financialData.information.code,
+      name: this.financialData.information.companyName,
+      year: this.financialData.information.year,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
