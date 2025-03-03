@@ -10,13 +10,11 @@ export class ProfitLossStatementRepository {
   }
 
   public async write(data: FinancialData) {
-    const profitLossStatementDto = new ProfitLossStatementDto(
-      this.prismaClient
-    );
+    const profitLossStatementDto = new ProfitLossStatementDto(data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
         companyId: Number(data.information.code),
-        year: data.information.year,
+        fiscalYear: data.information.year,
         quarterType: data.information.quarterType,
       },
       select: {
@@ -26,7 +24,7 @@ export class ProfitLossStatementRepository {
     if (!statement) {
       throw new Error("Statement not found");
     }
-    const profitLossStatement = profitLossStatementDto.dto(data, statement.id);
+    const profitLossStatement = profitLossStatementDto.dto(statement.id);
     await this.prismaClient.profitLossStatements.create({
       data: profitLossStatement,
     });

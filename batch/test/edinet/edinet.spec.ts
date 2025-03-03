@@ -63,7 +63,10 @@ describe("edinet", () => {
         data: mockResponse,
       });
       const edinet = new Api();
-      const result = await edinet.fetchList("2024-01-09");
+      const result = await edinet.fetchList(
+        "2024-01-09",
+        DOCUMENT_TYPE.DOCUMENT_DATA
+      );
       const url = "https://api.edinet-fsa.go.jp/api/v2/documents.json";
       const apiKey = process.env.EDINET_API_KEY;
       const params = {
@@ -72,7 +75,7 @@ describe("edinet", () => {
         "Subscription-Key": apiKey,
       };
 
-      await edinet.fetchList("2024-01-09");
+      await edinet.fetchList("2024-01-09", DOCUMENT_TYPE.DOCUMENT_DATA);
       expect(axios.get).toHaveBeenCalledWith(url, { params });
     });
   });

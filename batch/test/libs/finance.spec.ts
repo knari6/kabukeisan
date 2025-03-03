@@ -67,7 +67,7 @@ describe("Finance", () => {
         },
       },
       incomeStatement: {
-        netSales: random.randomInt(1000, 10000),
+        sales: random.randomInt(1000, 10000),
         costOfSales: random.randomInt(1000, 10000),
         operatingIncome: random.randomInt(1000, 10000),
         ordinaryIncome: random.randomInt(1000, 10000),
@@ -229,14 +229,14 @@ describe("Finance", () => {
 
   describe("粗利益率の計算", () => {
     it("値を返すこと", () => {
-      const netSales = mockFinanceStatement.incomeStatement.netSales;
+      const sales = mockFinanceStatement.incomeStatement.sales;
       const costOfSales = mockFinanceStatement.incomeStatement.costOfSales;
-      const expected = (netSales - costOfSales) / netSales;
+      const expected = (sales - costOfSales) / sales;
       const acutual = finance.calcGrossProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.netSales = 0;
+      mockFinanceStatement.incomeStatement.sales = 0;
       expect(() => finance.calcGrossProfitMargin(mockFinanceStatement)).toThrow(
         "売上高が0になったため計算できません"
       );
@@ -247,17 +247,17 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const operatingIncome =
         mockFinanceStatement.incomeStatement.operatingIncome;
-      mockFinanceStatement.incomeStatement.netSales = random.randomInt(
+      mockFinanceStatement.incomeStatement.sales = random.randomInt(
         1000,
         10000
       );
-      const netSales = mockFinanceStatement.incomeStatement.netSales;
-      const expected = operatingIncome / netSales;
+      const sales = mockFinanceStatement.incomeStatement.sales;
+      const expected = operatingIncome / sales;
       const acutual = finance.calcOperatingProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.netSales = 0;
+      mockFinanceStatement.incomeStatement.sales = 0;
       expect(() =>
         finance.calcOperatingProfitMargin(mockFinanceStatement)
       ).toThrow("売上高が0になったため計算できません");
@@ -268,17 +268,17 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const ordinaryIncome =
         mockFinanceStatement.incomeStatement.ordinaryIncome;
-      mockFinanceStatement.incomeStatement.netSales = random.randomInt(
+      mockFinanceStatement.incomeStatement.sales = random.randomInt(
         1000,
         10000
       );
-      const netSales = mockFinanceStatement.incomeStatement.netSales;
-      const expected = ordinaryIncome / netSales;
+      const sales = mockFinanceStatement.incomeStatement.sales;
+      const expected = ordinaryIncome / sales;
       const acutual = finance.calcOrdinaryProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.netSales = 0;
+      mockFinanceStatement.incomeStatement.sales = 0;
       expect(() =>
         finance.calcOrdinaryProfitMargin(mockFinanceStatement)
       ).toThrow("売上高が0になったため計算できません");
@@ -288,17 +288,17 @@ describe("Finance", () => {
   describe("当期純利益率の計算", () => {
     it("値を返すこと", () => {
       const profitLoss = mockFinanceStatement.incomeStatement.profitLoss;
-      mockFinanceStatement.incomeStatement.netSales = random.randomInt(
+      mockFinanceStatement.incomeStatement.sales = random.randomInt(
         1000,
         10000
       );
-      const netSales = mockFinanceStatement.incomeStatement.netSales;
-      const expected = profitLoss / netSales;
+      const sales = mockFinanceStatement.incomeStatement.sales;
+      const expected = profitLoss / sales;
       const acutual = finance.calcNetProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.netSales = 0;
+      mockFinanceStatement.incomeStatement.sales = 0;
       expect(() => finance.calcNetProfitMargin(mockFinanceStatement)).toThrow(
         "売上高が0になったため計算できません"
       );

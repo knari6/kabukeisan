@@ -26,6 +26,7 @@ export class Finance {
       information: {
         /** 証券コード */
         code: code.substring(0, 4),
+        year: fiscalYear.substring(0, 4),
         /** ファンド名 */
         companyName: this.extractValue(
           xmlData,
@@ -177,7 +178,7 @@ export class Finance {
       },
       incomeStatement: {
         /** 売上高 */
-        netSales: this.extractNumber(
+        sales: this.extractNumber(
           xmlData,
           "jppfs_cor:NetSales",
           durationContext
@@ -365,12 +366,12 @@ export class Finance {
    * @returns
    */
   public calcGrossProfitMargin(financialStatement: FinancialData): number {
-    const netSales = financialStatement.incomeStatement.netSales;
+    const sales = financialStatement.incomeStatement.sales;
     const costOfSales = financialStatement.incomeStatement.costOfSales;
-    if (netSales === 0) {
+    if (sales === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return (netSales - costOfSales) / netSales;
+    return (sales - costOfSales) / sales;
   }
 
   /**
@@ -380,11 +381,11 @@ export class Finance {
    */
   public calcOperatingProfitMargin(financialStatement: FinancialData): number {
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
-    const netSales = financialStatement.incomeStatement.netSales;
-    if (netSales === 0) {
+    const sales = financialStatement.incomeStatement.sales;
+    if (sales === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return operatingIncome / netSales;
+    return operatingIncome / sales;
   }
 
   /**
@@ -394,11 +395,11 @@ export class Finance {
    */
   public calcOrdinaryProfitMargin(financialStatement: FinancialData): number {
     const ordinaryIncome = financialStatement.incomeStatement.ordinaryIncome;
-    const netSales = financialStatement.incomeStatement.netSales;
-    if (netSales === 0) {
+    const sales = financialStatement.incomeStatement.sales;
+    if (sales === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return ordinaryIncome / netSales;
+    return ordinaryIncome / sales;
   }
 
   /**
@@ -408,11 +409,11 @@ export class Finance {
    */
   public calcNetProfitMargin(financialStatement: FinancialData): number {
     const profitLoss = financialStatement.incomeStatement.profitLoss;
-    const netSales = financialStatement.incomeStatement.netSales;
-    if (netSales === 0) {
+    const sales = financialStatement.incomeStatement.sales;
+    if (sales === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return profitLoss / netSales;
+    return profitLoss / sales;
   }
 
   /**

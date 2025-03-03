@@ -12,7 +12,7 @@ export class CashFlowRepository {
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
         companyId: Number(data.information.code),
-        year: data.information.year,
+        fiscalYear: data.information.year,
         quarterType: data.information.quarterType,
       },
       select: {
@@ -23,7 +23,7 @@ export class CashFlowRepository {
       throw new Error("Statement not found");
     }
     const cashFlow = cashFlowDto.dto(statement.id);
-    await this.prismaClient.cashFlows.create({
+    await this.prismaClient.cashFlowStatement.create({
       data: cashFlow,
     });
   }
