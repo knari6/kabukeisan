@@ -15,24 +15,24 @@ type ProfitLossStatementDtoType = {
 };
 
 export class ProfitLossStatementDto {
-  private readonly prismaClient: PrismaClient;
-  constructor(prismaClient: PrismaClient) {
-    this.prismaClient = prismaClient;
+  private readonly financialData: FinancialData;
+  constructor(financialData: FinancialData) {
+    this.financialData = financialData;
   }
 
-  public dto(
-    data: FinancialData,
-    statementId: number
-  ): ProfitLossStatementDtoType {
+  public dto(statementId: number): ProfitLossStatementDtoType {
     return {
       statementId: statementId,
-      sale: data.incomeStatement.netSales,
-      netSale: data.incomeStatement.netSales - data.incomeStatement.costOfSales,
-      operatingIncome: data.incomeStatement.operatingIncome,
-      ordinaryIncome: data.incomeStatement.ordinaryIncome,
-      profitBeforeTax: data.incomeStatement.incomeBeforeIncomeTaxes,
-      tax: data.incomeStatement.tax,
-      profit: data.incomeStatement.profitLoss,
+      sale: this.financialData.incomeStatement.sales,
+      netSale:
+        this.financialData.incomeStatement.sales -
+        this.financialData.incomeStatement.costOfSales,
+      operatingIncome: this.financialData.incomeStatement.operatingIncome,
+      ordinaryIncome: this.financialData.incomeStatement.ordinaryIncome,
+      profitBeforeTax:
+        this.financialData.incomeStatement.incomeBeforeIncomeTaxes,
+      tax: this.financialData.incomeStatement.tax,
+      profit: this.financialData.incomeStatement.profitLoss,
       updatedAt: new Date(),
       createdAt: new Date(),
     };

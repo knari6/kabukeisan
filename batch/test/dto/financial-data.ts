@@ -41,7 +41,7 @@ export const financialTestData = {
     },
   },
   incomeStatement: {
-    netSales: random.randomInt(1000000, 9999999),
+    sales: random.randomInt(1000000, 9999999),
     costOfSales: random.randomInt(1000000, 9999999),
     operatingIncome: random.randomInt(1000000, 9999999),
     ordinaryIncome: random.randomInt(1000000, 9999999),

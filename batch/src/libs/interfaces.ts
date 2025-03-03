@@ -273,7 +273,7 @@ export interface BalanceSheet {
 /** 損益計算書 */
 export interface IncomeStatement {
   /** 売上高 */
-  netSales: number;
+  sales: number;
   /** 売上原価 */
   costOfSales: number;
   /** 営業利益 */
