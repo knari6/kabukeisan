@@ -15,19 +15,25 @@ describe("ProfitLossStatementDto", () => {
       const dto = profitLossStatementDto.dto(statementId);
 
       expect(dto).toBeDefined();
-      expect(dto.statementId).toBe(statementId);
-      expect(dto.sale).toEqual(financialTestData.incomeStatement.sales);
-      expect(dto.netSale).toEqual(
+
+      expect(dto.sales).toEqual(financialTestData.incomeStatement.sales);
+      expect(dto.grossProfit).toEqual(
         financialTestData.incomeStatement.sales -
           financialTestData.incomeStatement.costOfSales
       );
-      expect(dto.operatingIncome).toEqual(
+      expect(dto.operatingProfit).toEqual(
         financialTestData.incomeStatement.operatingIncome
       );
-      expect(dto.ordinaryIncome).toEqual(
+      expect(dto.ordinaryProfit).toEqual(
         financialTestData.incomeStatement.ordinaryIncome
       );
-      expect(dto.profit).toEqual(financialTestData.incomeStatement.profitLoss);
+      expect(dto.netIncome).toEqual(
+        financialTestData.incomeStatement.profitLoss
+      );
+      expect(dto.profitBeforeTax).toEqual(
+        financialTestData.incomeStatement.incomeBeforeIncomeTaxes
+      );
+      expect(dto.tax).toEqual(financialTestData.incomeStatement.tax);
     });
   });
 });

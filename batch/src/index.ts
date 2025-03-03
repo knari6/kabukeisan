@@ -36,13 +36,12 @@ async function execute() {
       DateUtil.getYYYYMMDDWithHyphens(currentDate),
       apiKey
     );
-    console.log(results?.documentIdList);
+
     // if (results?.documentIdList) {
     //   for (const docID of results.documentIdList) {
     //     await parseXbrl(docID);
     //   }
     // }
-    console.log(currentDate);
     currentDate.setDate(currentDate.getDate() + 1);
   }
 }
@@ -54,15 +53,6 @@ async function parseXbrl(docID: string, apiKey: string) {
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
   // const data = await parse.xbrl(path);
   const financialStatements = finance.extractFinancialStatements(data, "2024");
-  console.log(
-    inspect(financialStatements, {
-      depth: null,
-      colors: true,
-      maxArrayLength: null,
-      compact: false,
-      breakLength: 80,
-    })
-  );
 }
 
 // const startTime = performance.now();

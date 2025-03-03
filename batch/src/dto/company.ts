@@ -1,12 +1,5 @@
+import { Prisma } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
-
-type CompanyDtoType = {
-  code: string;
-  name: string;
-  year: string;
-  createdAt: Date;
-  updatedAt: Date;
-};
 
 export class CompanyDto {
   private readonly financialData: FinancialData;
@@ -14,11 +7,10 @@ export class CompanyDto {
     this.financialData = financialData;
   }
 
-  public dto(): CompanyDtoType {
+  public dto(): Prisma.CompaniesCreateInput {
     return {
       code: this.financialData.information.code,
       name: this.financialData.information.companyName,
-      year: this.financialData.information.year,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

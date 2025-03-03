@@ -40,8 +40,6 @@ describe("FinancialStatementFactory", () => {
           },
         });
 
-        console.log(createdCompany?.id);
-
         parameter = FinancialStatementFactory.build({
           company: {
             connect: {

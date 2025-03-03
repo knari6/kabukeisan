@@ -111,17 +111,6 @@ async function parseXbrl(docID: string, fiscalYear: string, apiKey: string) {
     data,
     fiscalYear
   );
-
-  console.log(
-    inspect(financialStatements, {
-      depth: null,
-      colors: true,
-      maxArrayLength: null,
-      compact: false,
-      breakLength: 80,
-    })
-  );
-  console.log(financialStatements.information.code);
   // await companiesRepository.write(financialStatements);
   // await accountDataRepository.write(financialStatements);
 }

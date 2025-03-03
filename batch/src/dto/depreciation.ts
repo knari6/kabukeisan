@@ -1,16 +1,5 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
-
-type DepriciationDtoType = {
-  statementId: number;
-  depreciation: number;
-  amortization: number;
-  depreciationAndAmortization: number;
-  capitalExpenditure: number;
-  researchAndDevelopment: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
 
 export class Depriciation {
   private readonly prismaClient: PrismaClient;
@@ -20,7 +9,7 @@ export class Depriciation {
     this.prismaClient = prismaClient;
   }
 
-  public dto(statementId: number): DepriciationDtoType {
+  public dto(statementId: number) {
     return {
       statementId: statementId,
       depreciation: this.financialData.capitalAndRDExpenses.depreciation,

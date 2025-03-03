@@ -12,14 +12,20 @@ describe("CashFlowDto", () => {
     it("CashFlowDtoを作ること", () => {
       const dto = cashFlowDto.dto(2);
       expect(dto).toBeDefined();
-      expect(dto.operatingCf).toEqual(
+      expect(dto.operatingCashFlow).toEqual(
         financialTestData.cashFlowStatement.netCashProvidedByOperatingActivities
       );
-      expect(dto.investingCf).toEqual(
+      expect(dto.investingCashFlow).toEqual(
         financialTestData.cashFlowStatement.netCashProvidedByInvestingActivities
       );
-      expect(dto.financialCf).toEqual(
+      expect(dto.financingCashFlow).toEqual(
         financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
+      );
+      expect(dto.cashAndCashEquivalents).toEqual(
+        financialTestData.cashFlowStatement.cashAndCashEquivalents
+      );
+      expect(dto.devidendPaid).toEqual(
+        financialTestData.cashFlowStatement.dividendsPaid
       );
     });
   });

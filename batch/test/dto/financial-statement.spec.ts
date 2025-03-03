@@ -8,7 +8,7 @@ describe("FinancialStatementDto", () => {
   let financialStatementDto: FinancialStatementDto;
   const prismaService = new PrismaService();
   const year = "2023";
-  const quarterType: QuarterType = 4;
+  const quarterType: QuarterType = "Q4";
 
   beforeAll(() => {
     financialStatementDto = new FinancialStatementDto(
@@ -21,12 +21,10 @@ describe("FinancialStatementDto", () => {
 
   describe("dto", () => {
     it("FinancialStatementDtoを作ること", () => {
-      const dto = financialStatementDto.dto(financialTestData);
+      const dto = financialStatementDto.dto();
 
       expect(dto).toBeDefined();
-      expect(dto.companyId).toEqual(financialTestData.information.code);
-      expect(dto.name).toEqual(financialTestData.information.companyName);
-      expect(dto.year).toEqual(year);
+      expect(dto.fiscalYear).toEqual(year);
       expect(dto.quarterType).toEqual(quarterType);
       expect(dto.stockAmount).toEqual(financialTestData.stockInfo.stockAmount);
     });

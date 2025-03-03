@@ -14,7 +14,6 @@ describe("CompanyDto", () => {
       expect(dto).toBeDefined();
       expect(dto.code).toEqual(financialTestData.information.code);
       expect(dto.name).toEqual(financialTestData.information.companyName);
-      expect(dto.year).toEqual(financialTestData.information.year);
     });
   });
 });

@@ -1,14 +1,5 @@
+import { Prisma } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
-
-type CashFlowDtoType = {
-  statementId: number;
-  operatingCf: number;
-  investingCf: number;
-  financialCf: number;
-  dividendPaid: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
 
 export class CashFlowDto {
   private readonly financialData: FinancialData;
@@ -16,19 +7,25 @@ export class CashFlowDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): CashFlowDtoType {
+  public dto(statementId: number): Prisma.CashFlowStatementCreateInput {
     return {
-      statementId: statementId,
-      operatingCf:
+      statement: {
+        connect: {
+          id: statementId,
+        },
+      },
+      operatingCashFlow:
         this.financialData.cashFlowStatement
           .netCashProvidedByOperatingActivities,
-      investingCf:
+      investingCashFlow:
         this.financialData.cashFlowStatement
           .netCashProvidedByInvestingActivities,
-      financialCf:
+      financingCashFlow:
         this.financialData.cashFlowStatement
           .netCashProvidedByFinancingActivities,
-      dividendPaid: this.financialData.cashFlowStatement.dividendsPaid,
+      cashAndCashEquivalents:
+        this.financialData.cashFlowStatement.cashAndCashEquivalents,
+      devidendPaid: this.financialData.cashFlowStatement.dividendsPaid,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

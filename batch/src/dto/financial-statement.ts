@@ -1,15 +1,6 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData, QuarterType } from "../libs/interfaces";
 
-type FinancialStatementDtoType = {
-  companyId: string;
-  name: string;
-  year: string;
-  stockAmount: number;
-  createdAt: Date;
-  updatedAt: Date;
-  quarterType: QuarterType;
-};
 export class FinancialStatementDto {
   private readonly prismaClient: PrismaClient;
   private readonly financialData: FinancialData;
@@ -28,11 +19,14 @@ export class FinancialStatementDto {
   }
 
   /** FinancialStatementsに登録するデータのためのDTO */
-  public dto(data: FinancialData): FinancialStatementDtoType {
+  public dto(): Prisma.FinancialStatementsCreateInput {
     return {
-      companyId: this.financialData.information.code,
-      name: this.financialData.information.companyName,
-      year: this.year,
+      company: {
+        connect: {
+          code: this.financialData.information.code,
+        },
+      },
+      fiscalYear: this.year,
       quarterType: this.quarterType,
       stockAmount: this.financialData.stockInfo.stockAmount,
       createdAt: new Date(),
