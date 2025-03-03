@@ -68,11 +68,10 @@ describe("edinet", () => {
         DOCUMENT_TYPE.DOCUMENT_DATA
       );
       const url = "https://api.edinet-fsa.go.jp/api/v2/documents.json";
-      const apiKey = process.env.EDINET_API_KEY;
       const params = {
         date: "2024-01-09",
         type: DOCUMENT_TYPE.DOCUMENT_DATA,
-        "Subscription-Key": apiKey,
+        "Subscription-Key": "2",
       };
 
       await edinet.fetchList("2024-01-09", DOCUMENT_TYPE.DOCUMENT_DATA);
