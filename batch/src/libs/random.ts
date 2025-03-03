@@ -1,3 +1,5 @@
+import { QuarterType } from "./interfaces";
+
 export class Random {
   public randomInt(max: number, min: number) {
     if (max < 0 || min < 0) {
@@ -25,5 +27,9 @@ export class Random {
 
   public randomElement<T>(array: T[]): T {
     return array[this.randomInt(array.length - 1, 0)];
+  }
+
+  public randomQuarterType(): QuarterType {
+    return this.randomElement(["Q1", "Q2", "Q3", "Q4", "FY"]);
   }
 }

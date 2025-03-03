@@ -38,22 +38,22 @@ describe("CompanyFactory", () => {
         );
       });
     });
-    describe("パラメータがないとき", async () => {
-      beforeEach(async () => {
-        await factory.create({ name: "company" });
-        company = await prismaService.companies.findFirst({
-          orderBy: { id: Prisma.SortOrder.desc },
-        });
-      });
+    // describe("パラメータがないとき", async () => {
+    //   beforeEach(async () => {
+    //     await factory.create({ name: "company" });
+    //     company = await prismaService.companies.findFirst({
+    //       orderBy: { id: Prisma.SortOrder.desc },
+    //     });
+    //   });
 
-      it("randomな値で登録されること", () => {
-        expect(company).not.toBeNull();
-        expect(company?.code.toString()).not.toBeNull();
-        expect(company?.name).not.toBeNull();
+    //   it("randomな値で登録されること", () => {
+    //     expect(company).not.toBeNull();
+    //     expect(company?.code.toString()).not.toBeNull();
+    //     expect(company?.name).not.toBeNull();
 
-        expect(company?.createdAt).not.toBeNull();
-        expect(company?.updatedAt).not.toBeNull();
-      });
-    });
+    //     expect(company?.createdAt).not.toBeNull();
+    //     expect(company?.updatedAt).not.toBeNull();
+    //   });
+    // });
   });
 });

@@ -6,8 +6,8 @@ import { Finance } from "./libs/finance";
 import { inspect } from "util";
 import { DateUtil } from "./libs/date";
 import { PrismaClient } from "@prisma/client";
-import { AccountDataRepository } from "./repositories/account-data";
-import { CompanyRepository } from "./repositories/company";
+
+import { CompanyRepository } from "./repository/company";
 
 dotenv.config();
 
@@ -16,7 +16,7 @@ const file = new File();
 const parse = new Parse();
 const finance = new Finance();
 const prismaClient = new PrismaClient();
-const accountDataRepository = new AccountDataRepository(prismaClient);
+
 const companyRepository = new CompanyRepository(prismaClient);
 const dateFrom = process.argv[2];
 const dateTo = process.argv[3];

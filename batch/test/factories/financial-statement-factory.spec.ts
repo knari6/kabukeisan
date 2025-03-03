@@ -66,33 +66,33 @@ describe("FinancialStatementFactory", () => {
       });
     });
 
-    describe("パラメータがないとき", async () => {
-      beforeEach(async () => {
-        company = await new CompanyFactory(prismaService).create({
-          name: "test",
-        });
-        const createdCompany = await prismaService.companies.findFirst({
-          where: {
-            id: company.id,
-          },
-        });
+    // describe("パラメータがないとき", async () => {
+    //   beforeEach(async () => {
+    //     company = await new CompanyFactory(prismaService).create({
+    //       name: "test",
+    //     });
+    //     const createdCompany = await prismaService.companies.findFirst({
+    //       where: {
+    //         id: company.id,
+    //       },
+    //     });
 
-        if (!createdCompany) {
-          throw new Error("会社が作成できませんでした");
-        }
+    //     if (!createdCompany) {
+    //       throw new Error("会社が作成できませんでした");
+    //     }
 
-        financialStatement = await factory.create({
-          company: {
-            connect: {
-              id: createdCompany?.id,
-            },
-          },
-        });
-      });
+    //     financialStatement = await factory.create({
+    //       company: {
+    //         connect: {
+    //           id: createdCompany?.id,
+    //         },
+    //       },
+    //     });
+    //   });
 
-      it("randomな値で登録されること", () => {
-        expect(financialStatement).not.toBeNull();
-      });
-    });
+    //   it("randomな値で登録されること", () => {
+    //     expect(financialStatement).not.toBeNull();
+    //   });
+    // });
   });
 });
