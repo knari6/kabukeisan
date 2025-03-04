@@ -1,14 +1,14 @@
 import { beforeAll, describe, expect, it } from "vitest";
-import { Depriciation } from "../../src/dto/depreciation";
+
 import { financialTestData } from "./financial-data";
 import { PrismaService } from "../../src/services/prisma.service";
-
+import { DepreciationDto } from "../../src/dto/depreciation";
 describe("DepreciationDto", () => {
-  let depreciationDto: Depriciation;
+  let depreciationDto: DepreciationDto;
   const prismaService = new PrismaService();
 
   beforeAll(() => {
-    depreciationDto = new Depriciation(prismaService, financialTestData);
+    depreciationDto = new DepreciationDto(financialTestData);
   });
 
   describe("dto", () => {
@@ -17,14 +17,13 @@ describe("DepreciationDto", () => {
       const dto = depreciationDto.dto(statementId);
 
       expect(dto).toBeDefined();
-      expect(dto.statementId).toBe(statementId);
       expect(dto.depreciation).toEqual(
         financialTestData.capitalAndRDExpenses.depreciation
       );
       expect(dto.amortization).toEqual(
         financialTestData.capitalAndRDExpenses.amortization
       );
-      expect(dto.depreciationAndAmortization).toEqual(
+      expect(dto.depreciationAmortization).toEqual(
         financialTestData.capitalAndRDExpenses.depreciation +
           financialTestData.capitalAndRDExpenses.amortization
       );

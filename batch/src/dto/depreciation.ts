@@ -1,7 +1,7 @@
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
-export class DepriciationDto {
+export class DepreciationDto {
   private readonly financialData: FinancialData;
   constructor(financialData: FinancialData) {
     this.financialData = financialData;

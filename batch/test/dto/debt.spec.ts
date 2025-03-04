@@ -1,14 +1,12 @@
 import { beforeAll, describe, expect, it } from "vitest";
 import { DebtDto } from "../../src/dto/debt";
 import { financialTestData } from "./financial-data";
-import { PrismaService } from "../../src/services/prisma.service";
 
 describe("DebtDto", () => {
   let debtDto: DebtDto;
-  const prismaService = new PrismaService();
 
   beforeAll(() => {
-    debtDto = new DebtDto(prismaService, financialTestData);
+    debtDto = new DebtDto(financialTestData);
   });
 
   describe("dto", () => {
