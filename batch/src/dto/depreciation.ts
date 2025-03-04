@@ -1,20 +1,22 @@
 import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
-export class Depriciation {
-  private readonly prismaClient: PrismaClient;
+export class DepriciationDto {
   private readonly financialData: FinancialData;
-  constructor(prismaClient: PrismaClient, financialData: FinancialData) {
+  constructor(financialData: FinancialData) {
     this.financialData = financialData;
-    this.prismaClient = prismaClient;
   }
 
-  public dto(statementId: number) {
+  public dto(statementId: number): Prisma.CapitalExpenditureCreateInput {
     return {
-      statementId: statementId,
+      statement: {
+        connect: {
+          id: statementId,
+        },
+      },
       depreciation: this.financialData.capitalAndRDExpenses.depreciation,
       amortization: this.financialData.capitalAndRDExpenses.amortization,
-      depreciationAndAmortization:
+      depreciationAmortization:
         this.financialData.capitalAndRDExpenses.depreciation +
         this.financialData.capitalAndRDExpenses.amortization,
       capitalExpenditure:

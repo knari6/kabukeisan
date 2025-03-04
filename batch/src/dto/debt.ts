@@ -8,10 +8,8 @@ type DebtDtoType = {
   updatedAt: Date;
 };
 export class DebtDto {
-  private readonly prismaClient: PrismaClient;
   private readonly financialData: FinancialData;
-  constructor(prismaClient: PrismaClient, financialData: FinancialData) {
-    this.prismaClient = prismaClient;
+  constructor(financialData: FinancialData) {
     this.financialData = financialData;
   }
 

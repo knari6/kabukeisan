@@ -5,10 +5,10 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "test": "vitest",
+    "test": "vitest run",
     "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
-    "test:debug": "vitest --silent=false"
+    "test:coverage": "vitest run --coverage",
+    "test:debug": "vitest run --silent=false"
   },
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.714.0",
