@@ -1,20 +1,22 @@
 import { PrismaClient } from "@prisma/client";
-import { DepriciationDto } from "../dto/depreciation";
 import { FinancialData } from "../libs/interfaces";
+import { DepreciationDto } from "../dto/depreciation";
 
 export class DepriciationRepository {
   private readonly prismaClient: PrismaClient;
-  constructor(prismaClient: PrismaClient) {
+  private readonly data: FinancialData;
+  constructor(prismaClient: PrismaClient, data: FinancialData) {
     this.prismaClient = prismaClient;
+    this.data = data;
   }
 
-  public async write(data: FinancialData) {
-    const depreciataionDto = new DepriciationDto(data);
+  public async write() {
+    const depreciataionDto = new DepreciationDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
-        companyId: Number(data.information.code),
-        fiscalYear: data.information.year,
-        quarterType: data.information.quarterType,
+        companyId: Number(this.data.information.code),
+        fiscalYear: this.data.information.year,
+        quarterType: this.data.information.quarterType,
       },
       select: {
         id: true,

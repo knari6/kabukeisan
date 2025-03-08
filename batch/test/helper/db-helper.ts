@@ -1,8 +1,14 @@
 import { PrismaService } from "../../src/services/prisma.service";
 
+export type TableName =
+  | "profitLossStatements"
+  | "balanceSheet"
+  | "cashFlowStatement"
+  | "capitalExpenditure"
+  | "debtStatements";
 export class DBHelper {
   public constructor(private readonly prisma: PrismaService) {}
-  public async cleanUp(tableName: string) {
+  public async cleanUp(tableName: TableName) {
     await this.prisma.$transaction(async (tx) => {
       switch (tableName) {
         case "profitLossStatements":

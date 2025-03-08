@@ -8,7 +8,7 @@ export const financialTestData = {
     filingDate: random.randomInt(1000000, 9999999).toString(),
     fiscalPeriod: random.randomInt(1000000, 9999999).toString(),
     quarterType: random.randomQuarterType(),
-    year: random.randomInt(1000000, 9999999).toString(),
+    year: random.randomInt(2000, 2025).toString(),
   },
   balanceSheet: {
     assets: {

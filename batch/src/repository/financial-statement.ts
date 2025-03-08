@@ -4,24 +4,31 @@ import { FinancialStatementDto } from "../dto/financial-statement";
 
 export class FinancialStatementRpository {
   private readonly prismaClient: PrismaClient;
-  constructor(prismaClient: PrismaClient) {
-    this.prismaClient = prismaClient;
-  }
-
-  public async write(
+  private readonly data: FinancialData;
+  private readonly year: string;
+  private readonly quarterType: QuarterType;
+  constructor(
+    prismaClient: PrismaClient,
     data: FinancialData,
     year: string,
     quarterType: QuarterType
   ) {
+    this.prismaClient = prismaClient;
+    this.data = data;
+    this.year = year;
+    this.quarterType = quarterType;
+  }
+
+  public async write() {
     const financialStatementDto = new FinancialStatementDto(
       this.prismaClient,
-      data,
-      year,
-      quarterType
+      this.data,
+      this.year,
+      this.quarterType
     );
     const company = await this.prismaClient.companies.findFirst({
       where: {
-        code: data.information.code,
+        code: this.data.information.code,
       },
       select: {
         id: true,
