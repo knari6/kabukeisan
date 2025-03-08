@@ -8,7 +8,7 @@ export type TableName =
   | "debtStatements";
 export class DBHelper {
   public constructor(private readonly prisma: PrismaService) {}
-  public async cleanUp(tableName: TableName) {
+  public async cleanUp(tableName?: TableName) {
     await this.prisma.$transaction(async (tx) => {
       switch (tableName) {
         case "profitLossStatements":
