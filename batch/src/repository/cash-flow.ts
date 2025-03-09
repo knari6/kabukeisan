@@ -4,16 +4,20 @@ import { FinancialData } from "../libs/interfaces";
 
 export class CashFlowRepository {
   private readonly prismaClient: PrismaClient;
-  public constructor(prismaClient: PrismaClient) {
+  private readonly data: FinancialData;
+  public constructor(prismaClient: PrismaClient, data: FinancialData) {
     this.prismaClient = prismaClient;
+    this.data = data;
   }
-  public async write(data: FinancialData) {
-    const cashFlowDto = new CashFlowDto(data);
+  public async write() {
+    const cashFlowDto = new CashFlowDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
-        companyId: Number(data.information.code),
-        fiscalYear: data.information.year,
-        quarterType: data.information.quarterType,
+        company: {
+          code: this.data.information.code,
+        },
+        fiscalYear: this.data.information.year,
+        quarterType: this.data.information.quarterType,
       },
       select: {
         id: true,
