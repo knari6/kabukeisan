@@ -28,10 +28,10 @@ describe.sequential("CashFlowRepository", () => {
     devidendPaid: Decimal;
   } | null;
 
-  // beforeEach(async () => {
-  //   prismaService = new PrismaService();
-  //   await new DBHelper(prismaService).cleanUp("cashFlowStatement");
-  // });
+  beforeEach(async () => {
+    prismaService = new PrismaService();
+    await new DBHelper(prismaService).cleanUp("cashFlowStatement");
+  });
   afterEach(async () => {
     prismaService = new PrismaService();
     await new DBHelper(prismaService).cleanUp("cashFlowStatement");
