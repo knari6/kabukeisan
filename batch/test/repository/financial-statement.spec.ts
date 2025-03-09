@@ -22,13 +22,8 @@ describe.sequential("FinancialStatementRepository", () => {
     updatedAt: Date;
   } | null;
 
-  beforeEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp();
-  });
   afterEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp();
+    await prismaClient.$disconnect();
   });
   describe.sequential("write", async () => {
     beforeEach(async () => {
@@ -37,14 +32,14 @@ describe.sequential("FinancialStatementRepository", () => {
         prismaClient,
         financialTestData
       );
-      await companyRepository.write();
-      prismaClient = new PrismaClient();
       financialStatementRepository = new FinancialStatementRpository(
         prismaClient,
         financialTestData,
         financialTestData.information.year,
         financialTestData.information.quarterType
       );
+
+      await companyRepository.write();
       await financialStatementRepository.write();
 
       financialStatement = await prismaClient.financialStatements.findFirst({

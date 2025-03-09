@@ -1,5 +1,12 @@
 import { PrismaClient } from "@prisma/client";
-import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import {
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  test,
+} from "vitest";
 import { CompanyRepository } from "../../src/repository/company";
 import { PrismaService } from "../../src/services/prisma.service";
 import { DBHelper } from "../helper/db-helper";
@@ -11,13 +18,8 @@ describe.sequential("CompanyRepository", () => {
   let companyRepository: CompanyRepository;
   let company: { name: string; code: string } | null;
 
-  beforeEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp();
-  });
   afterEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp();
+    await prismaClient.$disconnect();
   });
   describe.sequential("write", async () => {
     prismaClient = new PrismaClient();

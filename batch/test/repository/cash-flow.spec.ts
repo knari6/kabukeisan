@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect, afterEach, test } from "vitest";
+import { afterAll, beforeEach, describe, expect, test } from "vitest";
 import { CashFlowRepository } from "../../src/repository/cash-flow";
 import { PrismaClient } from "@prisma/client";
 import { financialTestData } from "../dto/financial-data";
@@ -28,33 +28,28 @@ describe.sequential("CashFlowRepository", () => {
     devidendPaid: Decimal;
   } | null;
 
-  beforeEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp("cashFlowStatement");
-  });
-  afterEach(async () => {
-    prismaService = new PrismaService();
-    await new DBHelper(prismaService).cleanUp("cashFlowStatement");
+  afterAll(async () => {
+    await prismaClient.$disconnect();
   });
   describe.sequential("write", async () => {
     beforeEach(async () => {
       prismaClient = new PrismaClient();
-      cashFlowRepository = new CashFlowRepository(
-        prismaClient,
-        financialTestData
-      );
+
       companyRepository = new CompanyRepository(
         prismaClient,
         financialTestData
       );
-      await companyRepository.write();
       financialStatementRepository = new FinancialStatementRpository(
         prismaClient,
         financialTestData,
         financialTestData.information.year,
         financialTestData.information.quarterType
       );
-
+      cashFlowRepository = new CashFlowRepository(
+        prismaClient,
+        financialTestData
+      );
+      await companyRepository.write();
       await financialStatementRepository.write();
 
       statement = await prismaClient.financialStatements.findFirst({

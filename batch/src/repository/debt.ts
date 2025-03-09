@@ -14,7 +14,9 @@ export class DebtRepository {
     const debtDto = new DebtDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
-        companyId: Number(this.data.information.code),
+        company: {
+          code: this.data.information.code,
+        },
         fiscalYear: this.data.information.year,
         quarterType: this.data.information.quarterType,
       },

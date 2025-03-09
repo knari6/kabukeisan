@@ -47,6 +47,13 @@ export class DBHelper {
           });
           break;
         default:
+          await tx.profitLossStatements.deleteMany();
+          await tx.balanceSheet.deleteMany();
+          await tx.cashFlowStatement.deleteMany();
+          await tx.capitalExpenditure.deleteMany();
+          await tx.debtStatements.deleteMany();
+          await tx.companies.deleteMany();
+          await tx.financialStatements.deleteMany();
           break;
       }
     });

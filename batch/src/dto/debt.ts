@@ -1,21 +1,19 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
-type DebtDtoType = {
-  statementId: number;
-  interestBearingDebt: number;
-  createdAt: Date;
-  updatedAt: Date;
-};
 export class DebtDto {
   private readonly financialData: FinancialData;
   constructor(financialData: FinancialData) {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): DebtDtoType {
+  public dto(statementId: number): Prisma.DebtStatementsCreateInput {
     return {
-      statementId: statementId,
+      statement: {
+        connect: {
+          id: statementId,
+        },
+      },
       interestBearingDebt: this.financialData.balanceSheet.liabilities.debt,
       createdAt: new Date(),
       updatedAt: new Date(),
