@@ -21,20 +21,25 @@ export class ProfitLossStatementRepository {
   }
 
   public async write() {
+    console.log("this is profit loss");
     const profitLossStatementDto = new ProfitLossStatementDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
-        companyId: Number(this.data.information.code),
-        fiscalYear: this.data.information.year,
-        quarterType: this.data.information.quarterType,
+        company: {
+          code: this.data.information.code,
+        },
+        fiscalYear: this.year,
+        quarterType: this.quarterType,
       },
       select: {
         id: true,
       },
     });
+    console.log(statement);
     if (!statement) {
       throw new Error("Statement not found");
     }
+
     const profitLossStatement = profitLossStatementDto.dto(statement.id);
     await this.prismaClient.profitLossStatements.create({
       data: profitLossStatement,

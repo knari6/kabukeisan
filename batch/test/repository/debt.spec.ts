@@ -9,7 +9,6 @@ import { Decimal } from "@prisma/client/runtime/library";
 
 describe.sequential("DebtRepository", () => {
   let prismaClient: PrismaClient;
-  let prismaService: PrismaService;
   let companyRepository: CompanyRepository;
   let financialStatementRepository: FinancialStatementRpository;
   let debtRepository: DebtRepository;
@@ -19,7 +18,6 @@ describe.sequential("DebtRepository", () => {
   beforeEach(async () => {
     // 新しいPrismaClientインスタンスを作成
     prismaClient = new PrismaClient();
-    prismaService = new PrismaService();
 
     // リポジトリの初期化
     companyRepository = new CompanyRepository(prismaClient, financialTestData);
@@ -34,7 +32,6 @@ describe.sequential("DebtRepository", () => {
 
   afterAll(async () => {
     await prismaClient.$disconnect();
-    await prismaService.$disconnect();
   });
 
   describe("write", () => {
