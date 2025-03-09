@@ -1,24 +1,14 @@
 import { PrismaClient } from "@prisma/client";
-import {
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  test,
-} from "vitest";
+import { afterAll, describe, expect, test } from "vitest";
 import { CompanyRepository } from "../../src/repository/company";
-import { PrismaService } from "../../src/services/prisma.service";
-import { DBHelper } from "../helper/db-helper";
 import { financialTestData } from "../dto/financial-data";
 
 describe.sequential("CompanyRepository", () => {
   let prismaClient: PrismaClient;
-  let prismaService: PrismaService;
   let companyRepository: CompanyRepository;
   let company: { name: string; code: string } | null;
 
-  afterEach(async () => {
+  afterAll(async () => {
     await prismaClient.$disconnect();
   });
   describe.sequential("write", async () => {

@@ -4,7 +4,6 @@ import { PrismaService } from "../../src/services/prisma.service";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
 import { DebtRepository } from "../../src/repository/debt";
-import { DBHelper } from "../helper/db-helper";
 import { financialTestData } from "../dto/financial-data";
 import { Decimal } from "@prisma/client/runtime/library";
 

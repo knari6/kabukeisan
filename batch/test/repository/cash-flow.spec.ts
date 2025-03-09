@@ -4,8 +4,6 @@ import { PrismaClient } from "@prisma/client";
 import { financialTestData } from "../dto/financial-data";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
-
-import { DBHelper } from "../helper/db-helper";
 import { PrismaService } from "../../src/services/prisma.service";
 import { Decimal } from "@prisma/client/runtime/library";
 
@@ -28,8 +26,12 @@ describe.sequential("CashFlowRepository", () => {
     devidendPaid: Decimal;
   } | null;
 
+  beforeEach(async () => {
+    prismaService = new PrismaService();
+  });
   afterAll(async () => {
     await prismaClient.$disconnect();
+    await prismaService.$disconnect();
   });
   describe.sequential("write", async () => {
     beforeEach(async () => {
