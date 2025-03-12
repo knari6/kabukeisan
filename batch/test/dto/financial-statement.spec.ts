@@ -26,10 +26,7 @@ describe("FinancialStatementDto", () => {
       expect(dto).toBeDefined();
       expect(dto.fiscalYear).toEqual(year);
       expect(dto.quarterType).toEqual(quarterType);
-      expect(dto.stockAmount).toEqual(financialTestData.stockInfo.stockAmount);
+      expect(dto.stockAmounts).toEqual(financialTestData.stockInfo.stockAmount);
     });
   });
 });
-
-
-

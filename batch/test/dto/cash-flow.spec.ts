@@ -21,10 +21,10 @@ describe("CashFlowDto", () => {
       expect(dto.financingCashFlow).toEqual(
         financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
       );
-      expect(dto.cashAndCashEquivalents).toEqual(
+      expect(dto.cashAndCashEquivalent).toEqual(
         financialTestData.cashFlowStatement.cashAndCashEquivalents
       );
-      expect(dto.devidendPaid).toEqual(
+      expect(dto.dividendPaid).toEqual(
         financialTestData.cashFlowStatement.dividendsPaid
       );
     });

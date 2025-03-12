@@ -27,7 +27,7 @@ export class CashFlowRepository {
       throw new Error("Statement not found");
     }
     const cashFlow = cashFlowDto.dto(statement.id);
-    await this.prismaClient.cashFlowStatement.create({
+    await this.prismaClient.cashFlowStatements.create({
       data: cashFlow,
     });
   }

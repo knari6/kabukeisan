@@ -1,7 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import {
   afterAll,
-  afterEach,
   beforeAll,
   beforeEach,
   describe,
@@ -22,7 +21,7 @@ describe("FinancialStatementRepository", () => {
     companyId: number;
     fiscalYear: string;
     quarterType: string;
-    stockAmount: Decimal;
+    stockAmounts: Decimal;
     createdAt: Date;
     updatedAt: Date;
   } | null;
@@ -64,7 +63,7 @@ describe("FinancialStatementRepository", () => {
       expect(financialStatement?.quarterType).toBe(
         financialTestData.information.quarterType
       );
-      expect(Number(financialStatement?.stockAmount)).toBe(
+      expect(Number(financialStatement?.stockAmounts)).toBe(
         financialTestData.stockInfo.stockAmount
       );
     });

@@ -7,9 +7,9 @@ export class CashFlowDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.CashFlowStatementCreateInput {
+  public dto(statementId: number): Prisma.CashFlowStatementsCreateInput {
     return {
-      statement: {
+      statements: {
         connect: {
           id: statementId,
         },
@@ -23,9 +23,9 @@ export class CashFlowDto {
       financingCashFlow:
         this.financialData.cashFlowStatement
           .netCashProvidedByFinancingActivities,
-      cashAndCashEquivalents:
+      cashAndCashEquivalent:
         this.financialData.cashFlowStatement.cashAndCashEquivalents,
-      devidendPaid: this.financialData.cashFlowStatement.dividendsPaid,
+      dividendPaid: this.financialData.cashFlowStatement.dividendsPaid,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

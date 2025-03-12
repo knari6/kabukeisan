@@ -15,7 +15,7 @@ describe("DebtDto", () => {
       const dto = debtDto.dto(statementId);
 
       expect(dto).toBeDefined();
-      expect(dto.statement.connect?.id).toBe(statementId);
+      expect(dto.statements.connect?.id).toBe(statementId);
       expect(dto.interestBearingDebt).toEqual(
         financialTestData.balanceSheet.liabilities.debt
       );

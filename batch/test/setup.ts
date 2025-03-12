@@ -6,7 +6,7 @@ process.on("beforeExit", async () => {
   try {
     await prisma
       .$transaction([
-        prisma.cashFlowStatement.deleteMany(),
+        prisma.cashFlowStatements.deleteMany(),
         prisma.debtStatements.deleteMany(),
         prisma.profitLossStatements.deleteMany(),
       ])

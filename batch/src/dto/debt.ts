@@ -9,7 +9,7 @@ export class DebtDto {
 
   public dto(statementId: number): Prisma.DebtStatementsCreateInput {
     return {
-      statement: {
+      statements: {
         connect: {
           id: statementId,
         },

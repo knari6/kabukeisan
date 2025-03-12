@@ -7,9 +7,9 @@ export class CapitalExpenditureDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.CapitalExpenditureCreateInput {
+  public dto(statementId: number): Prisma.CapitalExpendituresCreateInput {
     return {
-      statement: {
+      statements: {
         connect: {
           id: statementId,
         },

@@ -250,6 +250,8 @@ export interface BalanceSheet {
   liabilities: {
     /** 流動負債 */
     currentLiabilities: number;
+    /** 買掛金 */
+    accountsPayable: number;
     /** 借入債務 */
     debt: number;
     /** その他流動負債 */

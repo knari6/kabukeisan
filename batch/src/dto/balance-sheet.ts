@@ -9,31 +9,41 @@ export class BalanceSheetDto {
 
   public dto(statementId: number): Prisma.BalanceSheetCreateInput {
     return {
-      statement: {
+      statements: {
         connect: {
           id: statementId,
         },
       },
-      assets: this.financialData.balanceSheet.assets.asset,
-      currentAssets: this.financialData.balanceSheet.assets.currentAssets,
-      cashAndDeposits: this.financialData.balanceSheet.assets.cashAndDeposits,
+      asset: this.financialData.balanceSheet.assets.asset,
+      currentAsset: this.financialData.balanceSheet.assets.currentAssets,
+      cashAndDeposit: this.financialData.balanceSheet.assets.cashAndDeposits,
       accountsReceivable:
         this.financialData.balanceSheet.assets.accountsReceivable,
-      merchandiseAndFinishedGoods:
+      merchandiseAndFinishedGood:
         this.financialData.balanceSheet.assets.merchandiseAndFinishedGoods,
-      securities: this.financialData.balanceSheet.assets.securities,
+      security: this.financialData.balanceSheet.assets.securities,
       inventory: this.financialData.balanceSheet.assets.inventory,
-      otherCurrentAssets:
+      otherCurrentAsset:
         this.financialData.balanceSheet.assets.otherCurrentAssets,
-      fixedAssets: this.financialData.balanceSheet.assets.fixedAssets,
-      tangibleFixedAssets:
+      fixedAsset: this.financialData.balanceSheet.assets.fixedAssets,
+      tangibleFixedAsset:
         this.financialData.balanceSheet.assets.tangibleFixedAssets,
       land: this.financialData.balanceSheet.assets.land,
-      intangibleFixedAssets:
+      intangibleFixedAsset:
         this.financialData.balanceSheet.assets.intangibleFixedAssets,
-      investmentSecurities:
+      investmentSecurity:
         this.financialData.balanceSheet.assets.investmentSecurities,
-      other: this.financialData.balanceSheet.assets.other,
+      otherAsset: this.financialData.balanceSheet.assets.other,
+      liability: this.financialData.balanceSheet.liabilities.liability,
+      currentLiability:
+        this.financialData.balanceSheet.liabilities.currentLiabilities,
+      accountsPayable:
+        this.financialData.balanceSheet.liabilities.accountsPayable,
+      otherCurrentLiability:
+        this.financialData.balanceSheet.liabilities.otherCurrentLiabilities,
+      otherLiability: this.financialData.balanceSheet.liabilities.other,
+      netAsset: this.financialData.balanceSheet.netAssets.total,
+      equity: this.financialData.balanceSheet.netAssets.equity,
 
       updatedAt: new Date(),
       createdAt: new Date(),

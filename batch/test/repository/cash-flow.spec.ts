@@ -16,12 +16,12 @@ describe.sequential("CashFlowRepository", () => {
     id: number;
     createdAt: Date;
     updatedAt: Date;
-    statementId: number;
+    statementsId: number;
     operatingCashFlow: Decimal;
     investingCashFlow: Decimal;
     financingCashFlow: Decimal;
-    cashAndCashEquivalents: Decimal;
-    devidendPaid: Decimal;
+    cashAndCashEquivalent: Decimal;
+    dividendPaid: Decimal;
   } | null;
 
   beforeEach(async () => {
@@ -69,9 +69,9 @@ describe.sequential("CashFlowRepository", () => {
       });
       await cashFlowRepository.write();
 
-      cashFlow = await prismaClient.cashFlowStatement.findFirst({
+      cashFlow = await prismaClient.cashFlowStatements.findFirst({
         where: {
-          statement: {
+          statements: {
             company: {
               code: financialTestData.information.code,
             },
@@ -93,10 +93,10 @@ describe.sequential("CashFlowRepository", () => {
       expect(Number(cashFlow?.financingCashFlow)).toBe(
         financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
       );
-      expect(Number(cashFlow?.devidendPaid)).toBe(
+      expect(Number(cashFlow?.dividendPaid)).toBe(
         financialTestData.cashFlowStatement.dividendsPaid
       );
-      expect(Number(cashFlow?.cashAndCashEquivalents)).toBe(
+      expect(Number(cashFlow?.cashAndCashEquivalent)).toBe(
         financialTestData.cashFlowStatement.cashAndCashEquivalents
       );
     });

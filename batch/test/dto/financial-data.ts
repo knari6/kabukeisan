@@ -29,6 +29,7 @@ export const financialTestData = {
     },
     liabilities: {
       currentLiabilities: random.randomInt(1000000, 9999999),
+      accountsPayable: random.randomInt(1000000, 9999999),
       debt: random.randomInt(1000000, 9999999),
       otherCurrentLiabilities: random.randomInt(1000000, 9999999),
       fixedLiabilities: random.randomInt(1000000, 9999999),

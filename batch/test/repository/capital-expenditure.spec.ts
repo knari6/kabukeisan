@@ -1,7 +1,7 @@
 import {
   FinancialStatements,
   PrismaClient,
-  CapitalExpenditure,
+  CapitalExpenditures,
 } from "@prisma/client";
 import {
   describe,
@@ -22,7 +22,7 @@ describe("CapitalExpenditureRepository", () => {
   let financialStatementRepository: FinancialStatementRpository;
   let depreciationRepository: CapitalExpenditureRepository;
   let financialStatement: Partial<FinancialStatements> | null;
-  let depreciation: Partial<CapitalExpenditure> | null;
+  let depreciation: Partial<CapitalExpenditures> | null;
 
   beforeAll(() => {
     prismaClient = new PrismaClient();
@@ -78,9 +78,9 @@ describe("CapitalExpenditureRepository", () => {
       });
       await depreciationRepository.write();
 
-      depreciation = await prismaClient.capitalExpenditure.findFirst({
+      depreciation = await prismaClient.capitalExpenditures.findFirst({
         where: {
-          statement: {
+          statements: {
             company: {
               code: financialTestData.information.code,
             },

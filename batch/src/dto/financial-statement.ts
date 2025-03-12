@@ -28,7 +28,7 @@ export class FinancialStatementDto {
       },
       fiscalYear: this.year,
       quarterType: this.quarterType,
-      stockAmount: this.financialData.stockInfo.stockAmount,
+      stockAmounts: this.financialData.stockInfo.stockAmount,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

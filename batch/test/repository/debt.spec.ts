@@ -70,7 +70,7 @@ describe.sequential("DebtRepository", () => {
 
       // 作成された負債情報を取得
       debt = await prismaClient.debtStatements.findFirst({
-        where: { statementId: financialStatement.id },
+        where: { statementsId: financialStatement.id },
         select: { id: true, interestBearingDebt: true },
       });
     });
