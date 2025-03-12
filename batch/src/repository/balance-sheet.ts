@@ -27,7 +27,7 @@ export class BalanceSheetRepository {
       throw new Error("Statement not found");
     }
     const balanceSheet = balanceSheetDto.dto(statement.id);
-    await this.prismaClient.balanceSheetStatement.create({
+    await this.prismaClient.balanceSheet.create({
       data: balanceSheet,
     });
   }

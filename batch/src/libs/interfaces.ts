@@ -202,7 +202,7 @@ export interface FinancialData {
   /** キャッシュフロー計算書 */
   cashFlowStatement: CashFlowStatement;
   /** 設備投資・減価償却費・研究開発費 */
-  capitalAndRDExpenses: CapitalAndRDExpenses;
+  capitalExpenditure: CapitalExpenditure;
   /** 株式情報 */
   stockInfo: StockInfo;
 }
@@ -303,7 +303,7 @@ export interface CashFlowStatement {
 }
 
 /** 設備投資・減価償却費・研究開発費 */
-export interface CapitalAndRDExpenses {
+export interface CapitalExpenditure {
   /** 減価償却費 */
   depreciation: number;
   /** 無形固定資産の償却 */

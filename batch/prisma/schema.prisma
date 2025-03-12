@@ -23,7 +23,8 @@ model FinancialStatements {
   profitLossStatement ProfitLossStatements?
 
   @@unique([companyId, fiscalYear, quarterType], name: "financial_statement_unique")
-  @@map("FinancialStatements")
+  @@map("financial_statements")
+  @@index([fiscalYear, quarterType])
 }
 
 model Companies {
@@ -34,7 +35,8 @@ model Companies {
   updatedAt           DateTime              @map("updated_at") @db.DateTime(0)
   financialStatements FinancialStatements[]
 
-  @@map("Companies")
+  @@map("companies")
+  @@index([code])
 }
 
 model ProfitLossStatements {
@@ -63,19 +65,26 @@ model BalanceSheet {
   accountsReceivable          Decimal             @map("accounts_receivable") @db.Decimal(15, 2)
   merchandiseAndFinishedGoods Decimal             @map("merchandise_and_finished_goods") @db.Decimal(15, 2)
   securities                  Decimal             @map("securities") @db.Decimal(15, 2)
-  inventory                   Decimal             @map("inventory") @db.Decimal(15, 2)
+  inventories                 Decimal             @map("inventories") @db.Decimal(15, 2)
   otherCurrentAssets          Decimal             @map("other_current_assets") @db.Decimal(15, 2)
   fixedAssets                 Decimal             @map("fixed_assets") @db.Decimal(15, 2)
   tangibleFixedAssets         Decimal             @map("tangible_fixed_assets") @db.Decimal(15, 2)
-  land                        Decimal             @map("land") @db.Decimal(15, 2)
+  lands                       Decimal             @map("lands") @db.Decimal(15, 2)
   intangibleFixedAssets       Decimal             @map("intangible_fixed_assets") @db.Decimal(15, 2)
   investmentSecurities        Decimal             @map("investment_securities") @db.Decimal(15, 2)
-  other                       Decimal             @map("other") @db.Decimal(15, 2)
+  otherAssets                 Decimal             @map("other_assets") @db.Decimal(15, 2)
+  liabilities                 Decimal             @map("liabilities") @db.Decimal(15, 2)
+  currentLiabilities          Decimal             @map("current_liabilities") @db.Decimal(15, 2)
+  accountsPayables            Decimal             @map("accounts_payables") @db.Decimal(15, 2)
+  otherCurrentLiabilities     Decimal             @map("other_current_liabilities") @db.Decimal(15, 2)
+  otherLiabilities            Decimal             @map("other_liabilities") @db.Decimal(15, 2)
+  netAssets                   Decimal             @map("net_assets") @db.Decimal(15, 2)
+  equity                      Decimal             @map("equity") @db.Decimal(15, 2)  
   createdAt                   DateTime            @map("created_at") @db.DateTime(0)
   updatedAt                   DateTime            @map("updated_at") @db.DateTime(0)
   statement                   FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("BalanceSheet")
+  @@map("balance_sheet")
 }
 
 model CashFlowStatement {
@@ -90,7 +99,7 @@ model CashFlowStatement {
   updatedAt              DateTime            @map("updated_at") @db.DateTime(0)
   statement              FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("CashFlowStatement")
+  @@map("cash_flow_statement")
 }
 
 model CapitalExpenditure {
@@ -105,7 +114,7 @@ model CapitalExpenditure {
   updatedAt                DateTime            @map("updated_at") @db.DateTime(0)
   statement                FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("Depreciation")
+  @@map("capital_expenditure")
 }
 
 model DebtStatements {
@@ -116,5 +125,5 @@ model DebtStatements {
   updatedAt           DateTime            @map("updated_at") @db.DateTime(0)
   statement           FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("DebtStatements")
+  @@map("debt_statements")
 }

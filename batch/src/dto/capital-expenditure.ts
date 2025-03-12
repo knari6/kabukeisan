@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 
-export class DepreciationDto {
+export class CapitalExpenditureDto {
   private readonly financialData: FinancialData;
   constructor(financialData: FinancialData) {
     this.financialData = financialData;
@@ -14,15 +14,15 @@ export class DepreciationDto {
           id: statementId,
         },
       },
-      depreciation: this.financialData.capitalAndRDExpenses.depreciation,
-      amortization: this.financialData.capitalAndRDExpenses.amortization,
+      depreciation: this.financialData.capitalExpenditure.depreciation,
+      amortization: this.financialData.capitalExpenditure.amortization,
       depreciationAmortization:
-        this.financialData.capitalAndRDExpenses.depreciation +
-        this.financialData.capitalAndRDExpenses.amortization,
+        this.financialData.capitalExpenditure.depreciation +
+        this.financialData.capitalExpenditure.amortization,
       capitalExpenditure:
-        this.financialData.capitalAndRDExpenses.equipmentInvestment,
+        this.financialData.capitalExpenditure.equipmentInvestment,
       researchAndDevelopment:
-        this.financialData.capitalAndRDExpenses.researchAndDevelopmentExpenses,
+        this.financialData.capitalExpenditure.researchAndDevelopmentExpenses,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

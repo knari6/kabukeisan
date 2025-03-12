@@ -56,7 +56,7 @@ export const financialTestData = {
     cashAndCashEquivalents: random.randomInt(1000000, 9999999),
     dividendsPaid: random.randomInt(1000000, 9999999),
   },
-  capitalAndRDExpenses: {
+  capitalExpenditure: {
     depreciation: random.randomInt(1000000, 9999999),
     amortization: random.randomInt(1000000, 9999999),
     equipmentInvestment: random.randomInt(1000000, 9999999),

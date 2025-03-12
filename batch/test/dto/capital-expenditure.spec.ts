@@ -2,13 +2,13 @@ import { beforeAll, describe, expect, it } from "vitest";
 
 import { financialTestData } from "./financial-data";
 import { PrismaService } from "../../src/services/prisma.service";
-import { DepreciationDto } from "../../src/dto/depreciation";
+import { CapitalExpenditureDto } from "../../src/dto/capital-expenditure";
 describe("DepreciationDto", () => {
-  let depreciationDto: DepreciationDto;
+  let depreciationDto: CapitalExpenditureDto;
   const prismaService = new PrismaService();
 
   beforeAll(() => {
-    depreciationDto = new DepreciationDto(financialTestData);
+    depreciationDto = new CapitalExpenditureDto(financialTestData);
   });
 
   describe("dto", () => {
@@ -18,20 +18,20 @@ describe("DepreciationDto", () => {
 
       expect(dto).toBeDefined();
       expect(dto.depreciation).toEqual(
-        financialTestData.capitalAndRDExpenses.depreciation
+        financialTestData.capitalExpenditure.depreciation
       );
       expect(dto.amortization).toEqual(
-        financialTestData.capitalAndRDExpenses.amortization
+        financialTestData.capitalExpenditure.amortization
       );
       expect(dto.depreciationAmortization).toEqual(
-        financialTestData.capitalAndRDExpenses.depreciation +
-          financialTestData.capitalAndRDExpenses.amortization
+        financialTestData.capitalExpenditure.depreciation +
+          financialTestData.capitalExpenditure.amortization
       );
       expect(dto.capitalExpenditure).toEqual(
-        financialTestData.capitalAndRDExpenses.equipmentInvestment
+        financialTestData.capitalExpenditure.equipmentInvestment
       );
       expect(dto.researchAndDevelopment).toEqual(
-        financialTestData.capitalAndRDExpenses.researchAndDevelopmentExpenses
+        financialTestData.capitalExpenditure.researchAndDevelopmentExpenses
       );
     });
   });

@@ -13,14 +13,14 @@ import {
 } from "vitest";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
-import { DepreciationRepository } from "../../src/repository/depreciation";
+import { CapitalExpenditureRepository } from "../../src/repository/capital-expenditure";
 import { financialTestData } from "../dto/financial-data";
 
-describe("DepreciationRepository", () => {
+describe("CapitalExpenditureRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
   let financialStatementRepository: FinancialStatementRpository;
-  let depreciationRepository: DepreciationRepository;
+  let depreciationRepository: CapitalExpenditureRepository;
   let financialStatement: Partial<FinancialStatements> | null;
   let depreciation: Partial<CapitalExpenditure> | null;
 
@@ -54,7 +54,7 @@ describe("DepreciationRepository", () => {
         financialTestData.information.quarterType
       );
 
-      depreciationRepository = new DepreciationRepository(
+      depreciationRepository = new CapitalExpenditureRepository(
         prismaClient,
         financialTestData
       );

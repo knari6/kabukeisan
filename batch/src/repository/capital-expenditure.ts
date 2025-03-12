@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
-import { DepreciationDto } from "../dto/depreciation";
+import { CapitalExpenditureDto } from "../dto/capital-expenditure";
 
-export class DepreciationRepository {
+export class CapitalExpenditureRepository {
   private readonly prismaClient: PrismaClient;
   private readonly data: FinancialData;
   constructor(prismaClient: PrismaClient, data: FinancialData) {
@@ -11,7 +11,7 @@ export class DepreciationRepository {
   }
 
   public async write() {
-    const depreciationDto = new DepreciationDto(this.data);
+    const capitalExpenditureDto = new CapitalExpenditureDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
         company: {
@@ -27,9 +27,9 @@ export class DepreciationRepository {
     if (!statement) {
       throw new Error("Statement not found");
     }
-    const depreciation = depreciationDto.dto(statement.id);
+    const capitalExpenditure = capitalExpenditureDto.dto(statement.id);
     await this.prismaClient.capitalExpenditure.create({
-      data: depreciation,
+      data: capitalExpenditure,
     });
   }
 }
