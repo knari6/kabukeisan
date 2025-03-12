@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 import { DepreciationDto } from "../dto/depreciation";
 
-export class DepriciationRepository {
+export class DepreciationRepository {
   private readonly prismaClient: PrismaClient;
   private readonly data: FinancialData;
   constructor(prismaClient: PrismaClient, data: FinancialData) {
@@ -11,10 +11,12 @@ export class DepriciationRepository {
   }
 
   public async write() {
-    const depreciataionDto = new DepreciationDto(this.data);
+    const depreciationDto = new DepreciationDto(this.data);
     const statement = await this.prismaClient.financialStatements.findFirst({
       where: {
-        companyId: Number(this.data.information.code),
+        company: {
+          code: this.data.information.code,
+        },
         fiscalYear: this.data.information.year,
         quarterType: this.data.information.quarterType,
       },
@@ -25,7 +27,7 @@ export class DepriciationRepository {
     if (!statement) {
       throw new Error("Statement not found");
     }
-    const depreciation = depreciataionDto.dto(statement.id);
+    const depreciation = depreciationDto.dto(statement.id);
     await this.prismaClient.capitalExpenditure.create({
       data: depreciation,
     });

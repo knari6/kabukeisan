@@ -1,57 +1,66 @@
-import { afterAll, beforeEach, describe, expect, test } from "vitest";
-import { CashFlowRepository } from "../../src/repository/cash-flow";
-import { PrismaClient } from "@prisma/client";
-import { financialTestData } from "../dto/financial-data";
+import {
+  FinancialStatements,
+  PrismaClient,
+  CapitalExpenditure,
+} from "@prisma/client";
+import {
+  describe,
+  expect,
+  beforeAll,
+  beforeEach,
+  afterAll,
+  test,
+} from "vitest";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
-import { Decimal } from "@prisma/client/runtime/library";
+import { DepreciationRepository } from "../../src/repository/depreciation";
+import { financialTestData } from "../dto/financial-data";
 
-describe.sequential("CashFlowRepository", () => {
+describe("DepreciationRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
   let financialStatementRepository: FinancialStatementRpository;
-  let cashFlowRepository: CashFlowRepository;
-  let statement: { id: number } | null;
-  let cashFlow: {
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-    statementId: number;
-    operatingCashFlow: Decimal;
-    investingCashFlow: Decimal;
-    financingCashFlow: Decimal;
-    cashAndCashEquivalents: Decimal;
-    devidendPaid: Decimal;
-  } | null;
+  let depreciationRepository: DepreciationRepository;
+  let financialStatement: Partial<FinancialStatements> | null;
+  let depreciation: Partial<CapitalExpenditure> | null;
 
-  beforeEach(async () => {
+  beforeAll(() => {
     prismaClient = new PrismaClient();
+    companyRepository = new CompanyRepository(prismaClient, financialTestData);
+    financialStatementRepository = new FinancialStatementRpository(
+      prismaClient,
+      financialTestData,
+      financialTestData.information.year,
+      financialTestData.information.quarterType
+    );
   });
+
   afterAll(async () => {
     await prismaClient.$disconnect();
   });
+
   describe.sequential("write", async () => {
     beforeEach(async () => {
       prismaClient = new PrismaClient();
-
       companyRepository = new CompanyRepository(
         prismaClient,
         financialTestData
       );
+
       financialStatementRepository = new FinancialStatementRpository(
         prismaClient,
         financialTestData,
         financialTestData.information.year,
         financialTestData.information.quarterType
       );
-      cashFlowRepository = new CashFlowRepository(
+
+      depreciationRepository = new DepreciationRepository(
         prismaClient,
         financialTestData
       );
       await companyRepository.write();
       await financialStatementRepository.write();
-
-      statement = await prismaClient.financialStatements.findFirst({
+      financialStatement = await prismaClient.financialStatements.findFirst({
         where: {
           company: {
             code: financialTestData.information.code,
@@ -67,9 +76,9 @@ describe.sequential("CashFlowRepository", () => {
           company: true,
         },
       });
-      await cashFlowRepository.write();
+      await depreciationRepository.write();
 
-      cashFlow = await prismaClient.cashFlowStatement.findFirst({
+      depreciation = await prismaClient.capitalExpenditure.findFirst({
         where: {
           statement: {
             company: {
@@ -80,25 +89,11 @@ describe.sequential("CashFlowRepository", () => {
           },
         },
       });
+      console.log(depreciation);
     });
 
     test.sequential("DBにデータを登録できること", async () => {
-      expect(cashFlow).not.toBeNull();
-      expect(Number(cashFlow?.operatingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivities
-      );
-      expect(Number(cashFlow?.investingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivities
-      );
-      expect(Number(cashFlow?.financingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
-      );
-      expect(Number(cashFlow?.devidendPaid)).toBe(
-        financialTestData.cashFlowStatement.dividendsPaid
-      );
-      expect(Number(cashFlow?.cashAndCashEquivalents)).toBe(
-        financialTestData.cashFlowStatement.cashAndCashEquivalents
-      );
+      expect(depreciation).not.toBeNull();
     });
   });
 });
