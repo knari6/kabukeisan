@@ -132,6 +132,13 @@ export class Finance {
             "jppfs_cor:CurrentLiabilities",
             context
           ),
+          /** 買入債務 */
+          accountsPayable: this.extractNumber(
+            xmlData,
+            "jppfs_cor:AccountsPayableOperatingSpecific",
+            context
+          ),
+
           /** 債務 */
           debt: this.extractNumber(
             xmlData,
@@ -252,7 +259,7 @@ export class Finance {
           "CurrentYearDuration"
         ),
       },
-      capitalAndRDExpenses: {
+      capitalExpenditure: {
         /** 減価償却費 */
         depreciation: this.extractNumber(
           xmlData,
@@ -464,8 +471,8 @@ export class Finance {
    * @returns
    */
   public calcNonCashExpenses(financialStatement: FinancialData): number {
-    const amortization = financialStatement.capitalAndRDExpenses.amortization;
-    const depreciation = financialStatement.capitalAndRDExpenses.depreciation;
+    const amortization = financialStatement.capitalExpenditure.amortization;
+    const depreciation = financialStatement.capitalExpenditure.depreciation;
     return amortization + depreciation;
   }
 

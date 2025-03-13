@@ -55,6 +55,7 @@ describe("Finance", () => {
         },
         liabilities: {
           currentLiabilities: random.randomInt(1000, 10000),
+          accountsPayable: random.randomInt(1000, 10000),
           debt: random.randomInt(1000, 10000),
           otherCurrentLiabilities: random.randomInt(1000, 10000),
           fixedLiabilities: random.randomInt(1000, 10000),
@@ -82,7 +83,7 @@ describe("Finance", () => {
         cashAndCashEquivalents: random.randomInt(1000, 10000),
         dividendsPaid: random.randomInt(1000, 10000),
       },
-      capitalAndRDExpenses: {
+      capitalExpenditure: {
         depreciation: random.randomInt(1000, 10000),
         amortization: random.randomInt(1000, 10000),
         equipmentInvestment: random.randomInt(1000, 10000),
@@ -353,10 +354,8 @@ describe("Finance", () => {
 
   describe("非現金支出の計算", () => {
     it("値を返すこと", () => {
-      const depreciation =
-        mockFinanceStatement.capitalAndRDExpenses.depreciation;
-      const amortization =
-        mockFinanceStatement.capitalAndRDExpenses.amortization;
+      const depreciation = mockFinanceStatement.capitalExpenditure.depreciation;
+      const amortization = mockFinanceStatement.capitalExpenditure.amortization;
       const expected = depreciation + amortization;
       const acutual = finance.calcNonCashExpenses(mockFinanceStatement);
       expect(acutual).toBe(expected);

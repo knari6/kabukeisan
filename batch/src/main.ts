@@ -3,11 +3,16 @@ import { Parse } from "./libs/parse";
 import { Api } from "./edinet/api";
 import dotenv from "dotenv";
 import { Finance } from "./libs/finance";
-import { inspect } from "util";
 import { DateUtil } from "./libs/date";
 import { PrismaClient } from "@prisma/client";
-
+import { FinancialData } from "./libs/interfaces";
 import { CompanyRepository } from "./repository/company";
+import { FinancialStatementRpository } from "./repository/financial-statement";
+import { BalanceSheetRepository } from "./repository/balance-sheet";
+import { ProfitLossStatementRepository } from "./repository/profit-loss-statement";
+import { CashFlowRepository } from "./repository/cash-flow";
+import { CapitalExpenditureRepository } from "./repository/capital-expenditure";
+import { DebtRepository } from "./repository/debt";
 
 dotenv.config();
 
@@ -17,7 +22,6 @@ const parse = new Parse();
 const finance = new Finance();
 const prismaClient = new PrismaClient();
 
-const companyRepository = new CompanyRepository(prismaClient);
 const dateFrom = process.argv[2];
 const dateTo = process.argv[3];
 
@@ -41,22 +45,18 @@ async function execute() {
       apiKey
     )) {
       if (!fiscalYear) {
+        console.log("fiscalYear not found");
         continue;
       }
       try {
-        await parseXbrl(docID, fiscalYear, apiKey);
+        const financialData = await parseXbrl(docID, fiscalYear, apiKey);
+        await writeFinancialData(financialData);
       } catch (error) {
         console.error(error);
         continue;
       }
     }
   }
-  // console.log("--------------quarterly-----------------------------------");
-  // for await (const currentDate of dateRange(startDate, endDate)) {
-  //   for await (const docID of getQuarterlyDocumentIds(currentDate)) {
-  //     console.log(docID);
-  //   }
-  // }
 }
 
 async function* dateRange(startDate: Date, endDate: Date) {
@@ -77,6 +77,7 @@ async function* getDocumentIds(date: Date, apiKey: string) {
     DateUtil.getYYYYMMDDWithHyphens(date),
     apiKey
   );
+
   if (results?.documentIdList) {
     for (const docID of results.documentIdList) {
       yield docID;
@@ -100,19 +101,62 @@ async function* getQuarterlyDocumentIds(date: Date, apiKey: string) {
     }
   }
 }
+async function fetchDocument(docID: string, apiKey: string) {
+  const xbrlFileData = await edinet.fetchDocument(docID, apiKey);
+  file.zipFile(xbrlFileData, docID);
+  file.unzipFile(docID);
+}
 
-async function parseXbrl(docID: string, fiscalYear: string, apiKey: string) {
+async function parseXbrl(
+  docID: string,
+  fiscalYear: string,
+  apiKey: string
+): Promise<FinancialData> {
   const xbrlFileData = await edinet.fetchDocument(docID, apiKey);
   file.zipFile(xbrlFileData, docID);
   file.unzipFile(docID);
   const data = await parse.xbrl(docID + "/XBRL/PublicDoc");
 
-  const financialStatements = finance.extractFinancialStatements(
-    data,
-    fiscalYear
+  return finance.extractFinancialStatements(data, fiscalYear);
+}
+
+async function writeFinancialData(financialData: FinancialData) {
+  const companyRepository = new CompanyRepository(prismaClient, financialData);
+  const financialStatementRepository = new FinancialStatementRpository(
+    prismaClient,
+    financialData,
+    financialData.information.year,
+    financialData.information.quarterType
   );
-  // await companiesRepository.write(financialStatements);
-  // await accountDataRepository.write(financialStatements);
+  const balanceSheetRepository = new BalanceSheetRepository(
+    prismaClient,
+    financialData
+  );
+  const profitLossStatementRepository = new ProfitLossStatementRepository(
+    prismaClient,
+    financialData,
+    financialData.information.year,
+    financialData.information.quarterType
+  );
+  const cashFlowRepository = new CashFlowRepository(
+    prismaClient,
+    financialData
+  );
+  const capitalExpenditureRepository = new CapitalExpenditureRepository(
+    prismaClient,
+    financialData
+  );
+  const debtRepository = new DebtRepository(prismaClient, financialData);
+
+  await companyRepository.write().then(async () => {
+    await financialStatementRepository.write().then(async () => {
+      await balanceSheetRepository.write();
+      await profitLossStatementRepository.write();
+      await cashFlowRepository.write();
+      await capitalExpenditureRepository.write();
+      await debtRepository.write();
+    });
+  });
 }
 
 execute();

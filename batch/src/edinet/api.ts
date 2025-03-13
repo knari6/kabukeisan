@@ -23,6 +23,7 @@ export class Api {
     date: string,
     apiKey: string
   ): Promise<DocumentIdList | void> {
+    console.log("fetchList", date, apiKey);
     const param: DocumentListRequest = {
       date,
       type: DOCUMENT_TYPE.DOCUMENT_DATA,
