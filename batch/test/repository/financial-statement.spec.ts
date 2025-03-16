@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { FinancialStatements, PrismaClient } from "@prisma/client";
 import {
   afterAll,
   beforeAll,
@@ -16,15 +16,7 @@ describe("FinancialStatementRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
   let financialStatementRepository: FinancialStatementRpository;
-  let financialStatement: {
-    id: number;
-    companyId: number;
-    fiscalYear: string;
-    quarterType: string;
-    stockAmounts: Decimal;
-    createdAt: Date;
-    updatedAt: Date;
-  } | null;
+  let financialStatement: Partial<FinancialStatements> | null;
   beforeAll(() => {
     prismaClient = new PrismaClient();
     companyRepository = new CompanyRepository(prismaClient, financialTestData);
@@ -63,7 +55,7 @@ describe("FinancialStatementRepository", () => {
       expect(financialStatement?.quarterType).toBe(
         financialTestData.information.quarterType
       );
-      expect(Number(financialStatement?.stockAmounts)).toBe(
+      expect(Number(financialStatement?.stockAmount)).toBe(
         financialTestData.stockInfo.stockAmount
       );
     });

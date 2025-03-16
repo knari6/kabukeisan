@@ -28,8 +28,15 @@ export class CapitalExpenditureRepository {
       throw new Error("Statement not found");
     }
     const capitalExpenditure = capitalExpenditureDto.dto(statement.id);
-    await this.prismaClient.capitalExpenditures.create({
-      data: capitalExpenditure,
-    });
+    try {
+      await this.prismaClient.capitalExpenditures.create({
+        data: capitalExpenditure,
+      });
+    } catch (error) {
+      throw {
+        code: this.data.information.code,
+        error: error,
+      };
+    }
   }
 }

@@ -14,7 +14,7 @@ export class ProfitLossStatementDto {
           id: statementId,
         },
       },
-      sales: this.financialData.incomeStatement.sales,
+      sale: this.financialData.incomeStatement.sales,
       grossProfit:
         this.financialData.incomeStatement.sales -
         this.financialData.incomeStatement.costOfSales,

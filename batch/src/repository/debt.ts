@@ -28,8 +28,15 @@ export class DebtRepository {
       throw new Error("Statement not found");
     }
     const debt = debtDto.dto(statement.id);
-    await this.prismaClient.debtStatements.create({
-      data: debt,
-    });
+    try {
+      await this.prismaClient.debtStatements.create({
+        data: debt,
+      });
+    } catch (error) {
+      throw {
+        code: this.data.information.code,
+        error: error,
+      };
+    }
   }
 }

@@ -1,6 +1,6 @@
 import { afterAll, beforeEach, describe, expect, test } from "vitest";
 import { CashFlowRepository } from "../../src/repository/cash-flow";
-import { PrismaClient } from "@prisma/client";
+import { CashFlowStatements, PrismaClient } from "@prisma/client";
 import { financialTestData } from "../dto/financial-data";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
@@ -12,17 +12,7 @@ describe.sequential("CashFlowRepository", () => {
   let financialStatementRepository: FinancialStatementRpository;
   let cashFlowRepository: CashFlowRepository;
   let statement: { id: number } | null;
-  let cashFlow: {
-    id: number;
-    createdAt: Date;
-    updatedAt: Date;
-    statementsId: number;
-    operatingCashFlow: Decimal;
-    investingCashFlow: Decimal;
-    financingCashFlow: Decimal;
-    cashAndCashEquivalent: Decimal;
-    dividendPaid: Decimal;
-  } | null;
+  let cashFlow: Partial<CashFlowStatements> | null;
 
   beforeEach(async () => {
     prismaClient = new PrismaClient();

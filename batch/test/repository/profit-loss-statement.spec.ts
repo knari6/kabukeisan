@@ -90,7 +90,7 @@ describe("ProfitLossStatementRepository", () => {
         financialTestData.incomeStatement.sales -
           financialTestData.incomeStatement.costOfSales
       );
-      expect(Number(profitLossStatement?.sales)).toBe(
+      expect(Number(profitLossStatement?.sale)).toBe(
         financialTestData.incomeStatement.sales
       );
       expect(Number(profitLossStatement?.operatingProfit)).toBe(

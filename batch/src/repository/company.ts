@@ -14,8 +14,16 @@ export class CompanyRepository {
   public async write() {
     const companyDto = new CompanyDto(this.data);
     const company = companyDto.dto();
-    await this.prismaClient.companies.create({
-      data: company,
-    });
+    try {
+      await this.prismaClient.companies.create({
+        data: company,
+      });
+    } catch (error) {
+      throw {
+        code: this.data.information.code,
+        fiscalYear: this.data.information.year,
+        error: error,
+      };
+    }
   }
 }

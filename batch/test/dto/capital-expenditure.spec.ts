@@ -5,7 +5,6 @@ import { PrismaService } from "../../src/services/prisma.service";
 import { CapitalExpenditureDto } from "../../src/dto/capital-expenditure";
 describe("DepreciationDto", () => {
   let depreciationDto: CapitalExpenditureDto;
-  const prismaService = new PrismaService();
 
   beforeAll(() => {
     depreciationDto = new CapitalExpenditureDto(financialTestData);

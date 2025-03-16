@@ -38,15 +38,22 @@ export class FinancialStatementRpository {
       throw new Error("Company not found");
     }
     const financialStatement = financialStatementDto.dto();
-    await this.prismaClient.financialStatements.create({
-      data: {
-        ...financialStatement,
-        company: {
-          connect: {
-            id: company.id,
+    try {
+      await this.prismaClient.financialStatements.create({
+        data: {
+          ...financialStatement,
+          company: {
+            connect: {
+              id: company.id,
+            },
           },
         },
-      },
-    });
+      });
+    } catch (error) {
+      throw {
+        code: this.data.information.code,
+        error: error,
+      };
+    }
   }
 }

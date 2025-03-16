@@ -1,3 +1,4 @@
+import { File } from "./file";
 import { FinancialData, QuarterType } from "./interfaces";
 
 export class Finance {
@@ -9,7 +10,8 @@ export class Finance {
    */
   public extractFinancialStatements(
     xmlData: any,
-    fiscalYear: string
+    fiscalYear: string,
+    docID: string
   ): FinancialData {
     const context = "CurrentYearInstant_NonConsolidatedMember";
     const durationContext = "CurrentYearDuration_NonConsolidatedMember";
@@ -19,7 +21,9 @@ export class Finance {
       "jpdei_cor:SecurityCodeDEI",
       informationContext
     );
+    const file = new File();
     if (!code) {
+      file.deleteFile(docID);
       throw "証券コードがありません";
     }
     return {

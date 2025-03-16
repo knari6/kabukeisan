@@ -23,12 +23,15 @@ export class FinancialStatementDto {
     return {
       company: {
         connect: {
-          code: this.financialData.information.code,
+          code_fiscalYear: {
+            code: this.financialData.information.code,
+            fiscalYear: this.year,
+          },
         },
       },
       fiscalYear: this.year,
       quarterType: this.quarterType,
-      stockAmounts: this.financialData.stockInfo.stockAmount,
+      stockAmount: this.financialData.stockInfo.stockAmount,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

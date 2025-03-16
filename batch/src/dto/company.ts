@@ -11,6 +11,7 @@ export class CompanyDto {
     return {
       code: this.financialData.information.code,
       name: this.financialData.information.companyName,
+      fiscalYear: this.financialData.information.year,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

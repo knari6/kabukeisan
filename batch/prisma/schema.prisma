@@ -12,7 +12,7 @@ model FinancialStatements {
   companyId           Int                   @map("company_id")
   fiscalYear          String                @map("fiscal_year") @db.VarChar(4)
   quarterType         String                @map("quarter_type")
-  stockAmounts         Decimal               @map("stock_amounts") @db.Decimal(15, 2)
+  stockAmount         Decimal               @map("stock_amount") @db.Decimal(15, 2)
   createdAt           DateTime              @map("created_at") @db.DateTime(0)
   updatedAt           DateTime              @map("updated_at") @db.DateTime(0)
   balanceSheet        BalanceSheet?
@@ -30,19 +30,21 @@ model FinancialStatements {
 model Companies {
   id                  Int                   @id @default(autoincrement()) @map("id")
   name                String                @map("name") @db.VarChar(255)
-  code                String                @unique @map("code") @db.VarChar(50)
+  code                String                @map("code") @db.VarChar(50)
+  fiscalYear          String                @map("fiscal_year") @db.VarChar(4)
   createdAt           DateTime              @map("created_at") @db.DateTime(0)
   updatedAt           DateTime              @map("updated_at") @db.DateTime(0)
   financialStatements FinancialStatements[]
 
   @@map("companies")
-  @@index([code])
+  @@unique([code, fiscalYear])
+  @@index([code, fiscalYear])
 }
 
 model ProfitLossStatements {
   id              Int                 @id @default(autoincrement()) @map("id")
-  statementsId     Int                 @unique @map("statements_id")
-  sales           Decimal             @map("sales") @db.Decimal(15, 2)
+  statementId     Int                 @unique @map("statement_id")
+  sale           Decimal             @map("sale") @db.Decimal(15, 2)
   grossProfit   Decimal             @map("gross_profit") @db.Decimal(15, 2)
   operatingProfit Decimal             @map("operating_profit") @db.Decimal(15, 2)
   ordinaryProfit  Decimal             @map("ordinary_profit") @db.Decimal(15, 2)
@@ -51,14 +53,14 @@ model ProfitLossStatements {
   netIncome      Decimal             @map("net_income") @db.Decimal(15, 2)
   createdAt       DateTime            @map("created_at") @db.DateTime(0)
   updatedAt       DateTime            @map("updated_at") @db.DateTime(0)
-  statement       FinancialStatements @relation(fields: [statementsId], references: [id])
+  statement       FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("ProfitLossStatement")
+  @@map("profit_loss_statements")
 }
 
 model BalanceSheet {
   id                          Int                 @id @default(autoincrement()) @map("id")
-  statementsId                 Int                 @unique @map("statements_id")
+  statementId                 Int                 @unique @map("statement_id")
   asset                      Decimal             @map("asset") @db.Decimal(15, 2)
   currentAsset               Decimal             @map("current_asset") @db.Decimal(15, 2)
   cashAndDeposit             Decimal             @map("cash_and_deposit") @db.Decimal(15, 2)
@@ -82,14 +84,14 @@ model BalanceSheet {
   equity                      Decimal             @map("equity") @db.Decimal(15, 2)  
   createdAt                   DateTime            @map("created_at") @db.DateTime(0)
   updatedAt                   DateTime            @map("updated_at") @db.DateTime(0)
-  statements                  FinancialStatements @relation(fields: [statementsId], references: [id])
+  statements                  FinancialStatements @relation(fields: [statementId], references: [id])
 
-  @@map("balance_sheet")
+  @@map("balance_sheets")
 }
 
 model CashFlowStatements {
   id                     Int                 @id @default(autoincrement()) @map("id")
-  statementsId            Int                 @unique @map("statement_id")
+  statementId            Int                 @unique @map("statement_id")
   operatingCashFlow      Decimal             @map("operating_cash_flow") @db.Decimal(15, 2)
   investingCashFlow      Decimal             @map("investing_cash_flow") @db.Decimal(15, 2)
   financingCashFlow      Decimal             @map("financing_cash_flow") @db.Decimal(15, 2)
@@ -97,14 +99,14 @@ model CashFlowStatements {
   dividendPaid           Decimal             @map("dividend_paid") @db.Decimal(15, 2)
   createdAt              DateTime            @map("created_at") @db.DateTime(0)
   updatedAt              DateTime            @map("updated_at") @db.DateTime(0)
-  statements             FinancialStatements @relation(fields: [statementsId], references: [id])
+  statements             FinancialStatements @relation(fields: [statementId], references: [id])
 
   @@map("cash_flow_statements")
 }
 
 model CapitalExpenditures {
   id                       Int                 @id @default(autoincrement()) @map("id")
-  statementsId              Int                 @unique @map("statement_id")
+  statementId              Int                 @unique @map("statement_id")
   depreciation             Decimal             @map("depreciation") @db.Decimal(15, 2)
   amortization            Decimal             @map("amortization") @db.Decimal(15, 2)
   depreciationAmortization Decimal             @map("depreciation_amortization") @db.Decimal(15, 2)
@@ -112,18 +114,18 @@ model CapitalExpenditures {
   researchAndDevelopment   Decimal             @map("research_and_development") @db.Decimal(15, 2)
   createdAt                DateTime            @map("created_at") @db.DateTime(0)
   updatedAt                DateTime            @map("updated_at") @db.DateTime(0)
-  statements               FinancialStatements @relation(fields: [statementsId], references: [id])
+  statements               FinancialStatements @relation(fields: [statementId], references: [id])
 
   @@map("capital_expenditures")
 }
 
 model DebtStatements {
   id                  Int                 @id @default(autoincrement()) @map("id")
-  statementsId         Int                 @unique @map("statement_id")
+  statementId         Int                 @unique @map("statement_id")
   interestBearingDebt Decimal             @map("interest_bearing_debt") @db.Decimal(15, 2)
   createdAt           DateTime            @map("created_at") @db.DateTime(0)
   updatedAt           DateTime            @map("updated_at") @db.DateTime(0)
-  statements          FinancialStatements @relation(fields: [statementsId], references: [id])
+  statements          FinancialStatements @relation(fields: [statementId], references: [id])
 
   @@map("debt_statements")
 }

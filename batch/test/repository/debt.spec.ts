@@ -1,19 +1,21 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
-import { PrismaClient } from "@prisma/client";
-import { PrismaService } from "../../src/services/prisma.service";
+import {
+  DebtStatements,
+  FinancialStatements,
+  PrismaClient,
+} from "@prisma/client";
 import { CompanyRepository } from "../../src/repository/company";
 import { FinancialStatementRpository } from "../../src/repository/financial-statement";
 import { DebtRepository } from "../../src/repository/debt";
 import { financialTestData } from "../dto/financial-data";
-import { Decimal } from "@prisma/client/runtime/library";
 
 describe.sequential("DebtRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
   let financialStatementRepository: FinancialStatementRpository;
   let debtRepository: DebtRepository;
-  let financialStatement: { id: number } | null;
-  let debt: { id: number; interestBearingDebt: Decimal } | null;
+  let financialStatement: Partial<FinancialStatements> | null;
+  let debt: Partial<DebtStatements> | null;
 
   beforeEach(async () => {
     // 新しいPrismaClientインスタンスを作成
@@ -70,7 +72,7 @@ describe.sequential("DebtRepository", () => {
 
       // 作成された負債情報を取得
       debt = await prismaClient.debtStatements.findFirst({
-        where: { statementsId: financialStatement.id },
+        where: { statementId: financialStatement.id },
         select: { id: true, interestBearingDebt: true },
       });
     });
