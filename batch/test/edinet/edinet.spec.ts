@@ -2,7 +2,7 @@ import { describe, it, expect, vi } from "vitest";
 import axios from "axios";
 import { DocumentListResponse } from "../../src/libs/interfaces";
 import { DOCUMENT_TYPE } from "../../src/libs/constants";
-import { Api } from "../../src/edinet/api";
+import { Api } from "../../src/libs/api";
 import dotenv from "dotenv";
 
 dotenv.config();

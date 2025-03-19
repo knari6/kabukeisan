@@ -1,8 +1,4 @@
-import {
-  FinancialStatements,
-  PrismaClient,
-  CapitalExpenditures,
-} from "@prisma/client";
+import { CapitalExpenditure, PrismaClient } from "@prisma/client";
 import {
   describe,
   expect,
@@ -12,27 +8,19 @@ import {
   test,
 } from "vitest";
 import { CompanyRepository } from "../../src/repository/company";
-import { FinancialStatementRpository } from "../../src/repository/financial-statement";
 import { CapitalExpenditureRepository } from "../../src/repository/capital-expenditure";
 import { financialTestData } from "../dto/financial-data";
 
 describe("CapitalExpenditureRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
-  let financialStatementRepository: FinancialStatementRpository;
   let depreciationRepository: CapitalExpenditureRepository;
-  let financialStatement: Partial<FinancialStatements> | null;
-  let depreciation: Partial<CapitalExpenditures> | null;
+
+  let depreciation: Partial<CapitalExpenditure> | null;
 
   beforeAll(() => {
     prismaClient = new PrismaClient();
     companyRepository = new CompanyRepository(prismaClient, financialTestData);
-    financialStatementRepository = new FinancialStatementRpository(
-      prismaClient,
-      financialTestData,
-      financialTestData.information.year,
-      financialTestData.information.quarterType
-    );
   });
 
   afterAll(async () => {
@@ -47,43 +35,16 @@ describe("CapitalExpenditureRepository", () => {
         financialTestData
       );
 
-      financialStatementRepository = new FinancialStatementRpository(
-        prismaClient,
-        financialTestData,
-        financialTestData.information.year,
-        financialTestData.information.quarterType
-      );
-
       depreciationRepository = new CapitalExpenditureRepository(
         prismaClient,
         financialTestData
       );
       await companyRepository.write();
-      await financialStatementRepository.write();
-      financialStatement = await prismaClient.financialStatements.findFirst({
+      await depreciationRepository.write();
+      depreciation = await prismaClient.capitalExpenditure.findFirst({
         where: {
           company: {
             code: financialTestData.information.code,
-          },
-          fiscalYear: financialTestData.information.year,
-          quarterType: financialTestData.information.quarterType,
-        },
-        select: {
-          id: true,
-          fiscalYear: true,
-          quarterType: true,
-          companyId: true,
-          company: true,
-        },
-      });
-      await depreciationRepository.write();
-
-      depreciation = await prismaClient.capitalExpenditures.findFirst({
-        where: {
-          statements: {
-            company: {
-              code: financialTestData.information.code,
-            },
             fiscalYear: financialTestData.information.year,
             quarterType: financialTestData.information.quarterType,
           },

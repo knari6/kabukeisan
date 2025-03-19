@@ -1,10 +1,10 @@
 import axios from "axios";
-import { DOCUMENT_TYPE } from "../libs/constants";
+import { DOCUMENT_TYPE } from "./constants";
 import {
   DocumentIdList,
   DocumentListRequest,
   DocumentListResponseResult,
-} from "../libs/interfaces";
+} from "./interfaces";
 
 /**
  * EDINET APIを呼び出すだけのクラス

@@ -1,18 +1,17 @@
 import { afterAll, beforeEach, describe, expect, test } from "vitest";
 import { CashFlowRepository } from "../../src/repository/cash-flow";
-import { CashFlowStatements, PrismaClient } from "@prisma/client";
+import { CashFlow, PrismaClient } from "@prisma/client";
 import { financialTestData } from "../dto/financial-data";
 import { CompanyRepository } from "../../src/repository/company";
-import { FinancialStatementRpository } from "../../src/repository/financial-statement";
+
 import { Decimal } from "@prisma/client/runtime/library";
 
 describe.sequential("CashFlowRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
-  let financialStatementRepository: FinancialStatementRpository;
   let cashFlowRepository: CashFlowRepository;
   let statement: { id: number } | null;
-  let cashFlow: Partial<CashFlowStatements> | null;
+  let cashFlow: Partial<CashFlow> | null;
 
   beforeEach(async () => {
     prismaClient = new PrismaClient();
@@ -28,24 +27,15 @@ describe.sequential("CashFlowRepository", () => {
         prismaClient,
         financialTestData
       );
-      financialStatementRepository = new FinancialStatementRpository(
-        prismaClient,
-        financialTestData,
-        financialTestData.information.year,
-        financialTestData.information.quarterType
-      );
       cashFlowRepository = new CashFlowRepository(
         prismaClient,
         financialTestData
       );
       await companyRepository.write();
-      await financialStatementRepository.write();
 
-      statement = await prismaClient.financialStatements.findFirst({
+      statement = await prismaClient.companies.findFirst({
         where: {
-          company: {
-            code: financialTestData.information.code,
-          },
+          code: financialTestData.information.code,
           fiscalYear: financialTestData.information.year,
           quarterType: financialTestData.information.quarterType,
         },
@@ -53,18 +43,14 @@ describe.sequential("CashFlowRepository", () => {
           id: true,
           fiscalYear: true,
           quarterType: true,
-          companyId: true,
-          company: true,
         },
       });
       await cashFlowRepository.write();
 
-      cashFlow = await prismaClient.cashFlowStatements.findFirst({
+      cashFlow = await prismaClient.cashFlow.findFirst({
         where: {
-          statements: {
-            company: {
-              code: financialTestData.information.code,
-            },
+          company: {
+            code: financialTestData.information.code,
             fiscalYear: financialTestData.information.year,
             quarterType: financialTestData.information.quarterType,
           },

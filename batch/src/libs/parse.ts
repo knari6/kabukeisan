@@ -34,31 +34,4 @@ export class Parse {
       throw error;
     }
   }
-
-  // /**
-  //  * csvファイルをパースする
-  //  * @param csv
-  //  * @returns
-  //  */
-  // public csv(csv: string) {
-  //   return csv;
-  // }
-
-  // /**
-  //  * jsonファイルをパースする
-  //  * @param json
-  //  * @returns
-  //  */
-  // public json(json: string) {
-  //   return json;
-  // }
-
-  // /**
-  //  * pdfファイルをパースする
-  //  * @param pdf
-  //  * @returns
-  //  */
-  // public pdf(pdf: string) {
-  //   return pdf;
-  // }
 }

@@ -7,11 +7,11 @@ export class ProfitLossStatementDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.ProfitLossStatementsCreateInput {
+  public dto(companyId: number): Prisma.ProfitLossCreateInput {
     return {
-      statement: {
+      company: {
         connect: {
-          id: statementId,
+          id: companyId,
         },
       },
       sale: this.financialData.incomeStatement.sales,

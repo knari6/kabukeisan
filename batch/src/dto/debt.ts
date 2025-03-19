@@ -7,11 +7,11 @@ export class DebtDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.DebtStatementsCreateInput {
+  public dto(comapnyId: number): Prisma.DebtCreateInput {
     return {
-      statements: {
+      company: {
         connect: {
-          id: statementId,
+          id: comapnyId,
         },
       },
       interestBearingDebt: this.financialData.balanceSheet.liabilities.debt,

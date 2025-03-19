@@ -46,4 +46,18 @@ export class DateUtil {
       parseInt(arg.substring(6, 8), 10)
     );
   }
+
+  /**
+   * 毎日日付を指定するため
+   * @param startDate
+   * @param endDate
+   */
+
+  public static *dateRange(startDate: Date, endDate: Date) {
+    const currentDate = new Date(startDate);
+    while (currentDate <= endDate) {
+      yield currentDate;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+  }
 }

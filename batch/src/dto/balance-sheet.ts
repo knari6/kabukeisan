@@ -7,11 +7,11 @@ export class BalanceSheetDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.BalanceSheetCreateInput {
+  public dto(companyId: number): Prisma.BalanceSheetCreateInput {
     return {
-      statements: {
+      company: {
         connect: {
-          id: statementId,
+          id: companyId,
         },
       },
       asset: this.financialData.balanceSheet.assets.asset,

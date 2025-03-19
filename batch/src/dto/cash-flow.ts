@@ -7,11 +7,11 @@ export class CashFlowDto {
     this.financialData = financialData;
   }
 
-  public dto(statementId: number): Prisma.CashFlowStatementsCreateInput {
+  public dto(companyId: number): Prisma.CashFlowCreateInput {
     return {
-      statements: {
+      company: {
         connect: {
-          id: statementId,
+          id: companyId,
         },
       },
       operatingCashFlow:

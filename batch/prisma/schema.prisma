@@ -15,7 +15,7 @@ model Companies {
   updatedAt          DateTime            @updatedAt @map("updated_at") @db.DateTime(0)
   quarterType        String              @map("quarter_type") @db.VarChar(2)
   stockAmount        Int                 @map("stock_amount")
-  fiscalYear         Int                 @map("year")
+  fiscalYear         String              @map("year")
   balanceSheet       BalanceSheet?
   capitalExpenditure CapitalExpenditure?
   cashFlow           CashFlow?

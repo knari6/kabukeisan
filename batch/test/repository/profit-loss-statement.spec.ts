@@ -1,12 +1,6 @@
 import { describe, it, expect, beforeAll, beforeEach, afterAll } from "vitest";
-import {
-  Companies,
-  FinancialStatements,
-  PrismaClient,
-  ProfitLossStatements,
-} from "@prisma/client";
+import { Companies, PrismaClient, ProfitLoss } from "@prisma/client";
 import { CompanyRepository } from "../../src/repository/company";
-import { FinancialStatementRpository } from "../../src/repository/financial-statement";
 import { ProfitLossStatementRepository } from "../../src/repository/profit-loss-statement";
 
 import { financialTestData } from "../dto/financial-data";
@@ -14,11 +8,9 @@ import { financialTestData } from "../dto/financial-data";
 describe("ProfitLossStatementRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
-  let financialStatementRepository: FinancialStatementRpository;
   let profitLossStatementRepository: ProfitLossStatementRepository;
   let company: Partial<Companies> | null;
-  let financialStatement: Partial<FinancialStatements> | null;
-  let profitLossStatement: Partial<ProfitLossStatements> | null;
+  let profitLossStatement: Partial<ProfitLoss> | null;
 
   beforeAll(async () => {
     prismaClient = new PrismaClient();
@@ -26,12 +18,6 @@ describe("ProfitLossStatementRepository", () => {
 
   beforeEach(() => {
     companyRepository = new CompanyRepository(prismaClient, financialTestData);
-    financialStatementRepository = new FinancialStatementRpository(
-      prismaClient,
-      financialTestData,
-      financialTestData.information.year,
-      financialTestData.information.quarterType
-    );
     profitLossStatementRepository = new ProfitLossStatementRepository(
       prismaClient,
       financialTestData,
@@ -53,30 +39,16 @@ describe("ProfitLossStatementRepository", () => {
       });
       if (!company) throw new Error("Company not created");
 
-      // 財務諸表を作成
-      await financialStatementRepository.write();
-      // 財務諸表が作成されたことを確認
-      financialStatement = await prismaClient.financialStatements.findFirst({
-        where: {
-          company: { code: financialTestData.information.code },
-          fiscalYear: financialTestData.information.year,
-          quarterType: financialTestData.information.quarterType,
-        },
-      });
-      if (!financialStatement)
-        throw new Error("Financial statement not created");
       // 損益情報を作成
       await profitLossStatementRepository.write();
 
       // 損益情報を取得
-      profitLossStatement = await prismaClient.profitLossStatements.findFirst({
+      profitLossStatement = await prismaClient.profitLoss.findFirst({
         where: {
-          statement: {
-            company: {
-              id: financialStatement.companyId,
-            },
-            // fiscalYear: financialTestData.information.year,
-            // quarterType: financialTestData.information.quarterType,
+          company: {
+            code: financialTestData.information.code,
+            fiscalYear: financialTestData.information.year,
+            quarterType: financialTestData.information.quarterType,
           },
         },
       });

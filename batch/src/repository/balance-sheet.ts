@@ -11,11 +11,9 @@ export class BalanceSheetRepository {
   }
   public async write() {
     const balanceSheetDto = new BalanceSheetDto(this.data);
-    const statement = await this.prismaClient.financialStatements.findFirst({
+    const statement = await this.prismaClient.companies.findFirst({
       where: {
-        company: {
-          code: this.data.information.code,
-        },
+        code: this.data.information.code,
         fiscalYear: this.data.information.year,
         quarterType: this.data.information.quarterType,
       },
