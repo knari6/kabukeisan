@@ -40,6 +40,7 @@ async function execute() {
       if (!fiscalYear) {
         console.log(`${docID}のデータがありません`);
         console.log("fiscalYear not found");
+        deleteDir(docID);
         continue;
       }
       try {
@@ -48,6 +49,7 @@ async function execute() {
         await deleteDir(docID);
       } catch (error) {
         console.error(error);
+        deleteDir(docID);
         continue;
       }
     }
@@ -168,12 +170,6 @@ async function writeFinancialData(
   const isExist = await prismaClient.companies.findFirst({
     where: {
       code: financialData.information.code,
-      financialStatements: {
-        some: {
-          fiscalYear: financialData.information.year,
-          quarterType: financialData.information.quarterType,
-        },
-      },
     },
   });
   if (isExist) {
@@ -208,11 +204,16 @@ async function writeFinancialData(
       console.log(`銘柄コード:${financialData.information.code}`);
       console.log(`会社名:${financialData.information.companyName}`);
       console.error("データを保存できませんでした");
+      deleteDir(docID);
       console.error(error);
       fs.appendFileSync(
         "failed-code.txt",
-        `${financialData.information.code}:${financialData.information.companyName}:${financialData.information.year}:${financialData.information.quarterType}\n`
+        "----------------------\n" +
+          `${financialData.information.code}:${financialData.information.companyName}:${financialData.information.year}:${financialData.information.quarterType}\n` +
+          `${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}` +
+          "\n----------------------\n"
       );
+
       console.log("--------------------------------------");
     });
 }
