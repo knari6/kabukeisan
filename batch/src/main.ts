@@ -14,6 +14,7 @@ import { CapitalExpenditureRepository } from "./repository/capital-expenditure";
 import { DebtRepository } from "./repository/debt";
 import fs from "fs";
 import { XbrlClient } from "./libs/xbrl";
+import { LogClient } from "./libs/log";
 dotenv.config();
 
 const dateFrom = process.argv[2];
@@ -25,6 +26,7 @@ const file = new File();
 const parse = new Parse();
 const finance = new Finance();
 const prismaClient = new PrismaClient();
+const log = new LogClient();
 const xbrl = new XbrlClient(file, api, parse, finance);
 
 async function execute() {
@@ -104,6 +106,10 @@ async function writeFinancialData(
   financialData: FinancialData,
   docID: string
 ): Promise<void> {
+  const logContents = {
+    銘柄コード: financialData.information.code,
+    会社名: financialData.information.companyName,
+  };
   const companyRepository = new CompanyRepository(prismaClient, financialData);
   const balanceSheetRepository = new BalanceSheetRepository(
     prismaClient,
@@ -131,12 +137,7 @@ async function writeFinancialData(
     },
   });
   if (isExist) {
-    console.log("--------------------------------------");
-    console.log(`データはすでに登録済みです`);
-    console.log(
-      `銘柄コード:${financialData.information.code}\n会社名:${financialData.information.companyName}\n`
-    );
-    console.log("--------------------------------------");
+    log.info("データはすでに登録済みです。", logContents);
     return;
   }
   await companyRepository
@@ -149,20 +150,11 @@ async function writeFinancialData(
       await debtRepository.write();
     })
     .then(async () => {
-      console.log("--------------------------------------");
-      console.log("データを保存しました");
-      console.log(
-        `銘柄コード:${financialData.information.code}\n会社名:${financialData.information.companyName}\n`
-      );
-      console.log("--------------------------------------");
+      log.info("データを保存しました。", logContents);
     })
     .catch((error) => {
-      console.log("--------------------------------------");
-      console.log(`銘柄コード:${financialData.information.code}`);
-      console.log(`会社名:${financialData.information.companyName}`);
-      console.error("データを保存できませんでした");
+      log.error("データを保存できませんでした", logContents, error);
       deleteDir(docID);
-      console.error(error);
       fs.appendFileSync(
         "failed-code.txt",
         "----------------------\n" +
@@ -170,7 +162,6 @@ async function writeFinancialData(
           `${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}` +
           "\n----------------------\n"
       );
-
       console.log("--------------------------------------");
     });
 }
