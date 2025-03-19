@@ -38,4 +38,12 @@ export class DateUtil {
   public static getDate(dateString: string): Date {
     return new Date(dateString);
   }
+
+  public static argToDate(arg: string): Date {
+    return new Date(
+      parseInt(arg.substring(0, 4), 10),
+      parseInt(arg.substring(4, 6), 10) - 1,
+      parseInt(arg.substring(6, 8), 10)
+    );
+  }
 }

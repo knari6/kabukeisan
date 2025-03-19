@@ -29,16 +29,8 @@ async function execute() {
   // .envファイルの読み込みを確認
   console.log("DATABASE_URL:", process.env.DATABASE_URL);
   const apiKey = process.argv[4];
-  const startDate = new Date(
-    parseInt(dateFrom.substring(0, 4), 10),
-    parseInt(dateFrom.substring(4, 6), 10) - 1,
-    parseInt(dateFrom.substring(6, 8), 10)
-  );
-  const endDate = new Date(
-    parseInt(dateTo.substring(0, 4), 10),
-    parseInt(dateTo.substring(4, 6), 10) - 1,
-    parseInt(dateTo.substring(6, 8), 10)
-  );
+  const startDate = DateUtil.argToDate(dateFrom);
+  const endDate = DateUtil.argToDate(dateTo);
 
   for await (const currentDate of dateRange(startDate, endDate)) {
     for await (const { docID, fiscalYear } of getDocumentIds(
