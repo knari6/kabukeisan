@@ -5,11 +5,10 @@ const prisma = new PrismaClient();
 process.on("beforeExit", async () => {
   try {
     await prisma.$transaction([
-      prisma.cashFlowStatements.deleteMany(),
-      prisma.debtStatements.deleteMany(),
-      prisma.profitLossStatements.deleteMany(),
-      prisma.capitalExpenditures.deleteMany(),
-      prisma.financialStatements.deleteMany(),
+      prisma.cashFlow.deleteMany(),
+      prisma.debt.deleteMany(),
+      prisma.profitLoss.deleteMany(),
+      prisma.capitalExpenditure.deleteMany(),
       prisma.companies.deleteMany(),
     ]);
 

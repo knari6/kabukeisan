@@ -10,14 +10,11 @@ describe("DebtDto", () => {
   });
 
   describe("dto", () => {
-    it("DebtDtoを作ること", () => {
-      const statementId = 1;
-      const dto = debtDto.dto(statementId);
-
+    it("DebtDtoを作ること", async () => {
+      const dto = debtDto.dto(1);
       expect(dto).toBeDefined();
-      expect(dto.statements.connect?.id).toBe(statementId);
       expect(dto.interestBearingDebt).toEqual(
-        financialTestData.balanceSheet.liabilities.debt
+        financialTestData.interestBearingDebt.debt
       );
     });
   });

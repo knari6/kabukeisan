@@ -1,5 +1,5 @@
-import { PrismaClient } from "@prisma/client";
-import { FinancialData } from "../libs/interfaces";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { FinancialData, QuarterType } from "../libs/interfaces";
 import { CompanyDto } from "../dto/company";
 
 export class CompanyRepository {
@@ -24,6 +24,16 @@ export class CompanyRepository {
         fiscalYear: this.data.information.year,
         error: error,
       };
+    }
+  }
+
+  public async findFirst(companyWhereInput: Prisma.CompaniesWhereInput) {
+    try {
+      return this.prismaClient.companies.findFirst({
+        where: companyWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

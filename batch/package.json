@@ -5,10 +5,13 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "test": "vitest run",
+    "test": "dotenv -e .env.test -- vitest run",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest run --coverage",
-    "test:debug": "vitest run --silent=false"
+    "test:debug": "vitest run --silent=false",
+    "dev": "dotenv -e .env -- prisma generate && ts-node src/main.ts",
+    "migrate:dev": "dotenv -e .env -- prisma migrate dev",
+    "migrate:test": "dotenv -e .env.test -- prisma migrate dev"
   },
   "dependencies": {
     "@aws-sdk/s3-request-presigner": "^3.714.0",
@@ -30,6 +33,7 @@
     "@types/adm-zip": "^0.5.7",
     "@types/node": "^22.13.0",
     "@vitest/coverage-v8": "2.1.8",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9.21.0",
     "globals": "^16.0.0",
     "prisma": "^6.4.1",

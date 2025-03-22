@@ -61,4 +61,9 @@ export class File {
       console.error("ファイルの削除中にエラーが発生しました");
     }
   }
+
+  /** 解凍したフォルダの削除 */
+  public deleteDir(docID: string) {
+    fs.rmSync(docID, { recursive: true, force: true });
+  }
 }

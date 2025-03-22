@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { CashFlowDto } from "../dto/cash-flow";
 import { FinancialData } from "../libs/interfaces";
 
@@ -35,6 +35,16 @@ export class CashFlowRepository {
         code: this.data.information.code,
         error: error,
       };
+    }
+  }
+
+  public async findFirst(cashFlowWhereInput: Prisma.CashFlowWhereInput) {
+    try {
+      return this.prismaClient.cashFlow.findFirst({
+        where: cashFlowWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

@@ -203,6 +203,9 @@ export interface FinancialData {
   cashFlowStatement: CashFlowStatement;
   /** 設備投資・減価償却費・研究開発費 */
   capitalExpenditure: CapitalExpenditure;
+  /** 有利子負債 */
+  interestBearingDebt: InterestBearingLiabilities;
+
   /** 株式情報 */
   stockInfo: StockInfo;
 }
@@ -319,8 +322,10 @@ export interface CapitalExpenditure {
 /** 有利子負債など */
 export interface InterestBearingLiabilities {
   /** 総資産 */
+
   /** 自己資本 */
   /** 有利子負債 */
+  debt: number;
 }
 
 export interface Information {

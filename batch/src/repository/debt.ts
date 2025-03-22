@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 import { DebtDto } from "../dto/debt";
 
@@ -35,6 +35,15 @@ export class DebtRepository {
         code: this.data.information.code,
         error: error,
       };
+    }
+  }
+  public async findFirst(debtWhereInput: Prisma.DebtWhereInput) {
+    try {
+      return this.prismaClient.debt.findFirst({
+        where: debtWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

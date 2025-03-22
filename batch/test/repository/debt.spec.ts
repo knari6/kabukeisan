@@ -51,7 +51,7 @@ describe.sequential("DebtRepository", () => {
     it("DBにデータを登録できること", () => {
       expect(debt).not.toBeNull();
       expect(Number(debt?.interestBearingDebt)).toBe(
-        financialTestData.balanceSheet.liabilities.debt
+        financialTestData.interestBearingDebt.debt
       );
     });
   });

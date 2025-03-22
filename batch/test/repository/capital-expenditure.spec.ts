@@ -50,7 +50,6 @@ describe("CapitalExpenditureRepository", () => {
           },
         },
       });
-      console.log(depreciation);
     });
 
     test.sequential("DBにデータを登録できること", async () => {

@@ -109,4 +109,38 @@ describe("DateUtil", () => {
       expect(result).toBe(expected);
     });
   });
+
+  describe("isYYYYMMDD", () => {
+    it("YYYYMMDDの形式であること", () => {
+      const result = dateUtil.isYYYYMMDD("20250131");
+      expect(result).toBe(true);
+    });
+
+    it("YYYYMMDDの形式でないこと", () => {
+      const result = dateUtil.isYYYYMMDD("田中");
+      expect(result).toBe(false);
+    });
+
+    it("YYYYMMDDの形式でないこと", () => {
+      const result = dateUtil.isYYYYMMDD("2025-01-31");
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("isYYYYMMDDWithHyphen", () => {
+    it("YYYYMMDDの形式であること", () => {
+      const result = dateUtil.isYYYYMMDDWithHyphen("2025-01-31");
+      expect(result).toBe(true);
+    });
+
+    it("YYYYMMDDの形式でないこと", () => {
+      const result = dateUtil.isYYYYMMDDWithHyphen("田中");
+      expect(result).toBe(false);
+    });
+
+    it("YYYYMMDDの形式でないこと", () => {
+      const result = dateUtil.isYYYYMMDDWithHyphen("20250131");
+      expect(result).toBe(false);
+    });
+  });
 });

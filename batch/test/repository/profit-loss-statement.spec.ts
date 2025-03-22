@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeAll, beforeEach, afterAll } from "vitest";
 import { Companies, PrismaClient, ProfitLoss } from "@prisma/client";
 import { CompanyRepository } from "../../src/repository/company";
-import { ProfitLossStatementRepository } from "../../src/repository/profit-loss-statement";
+import { ProfitLossRepository } from "../../src/repository/profit-loss-statement";
 
 import { financialTestData } from "../dto/financial-data";
 
 describe("ProfitLossStatementRepository", () => {
   let prismaClient: PrismaClient;
   let companyRepository: CompanyRepository;
-  let profitLossStatementRepository: ProfitLossStatementRepository;
+  let profitLossStatementRepository: ProfitLossRepository;
   let company: Partial<Companies> | null;
   let profitLossStatement: Partial<ProfitLoss> | null;
 
@@ -18,7 +18,7 @@ describe("ProfitLossStatementRepository", () => {
 
   beforeEach(() => {
     companyRepository = new CompanyRepository(prismaClient, financialTestData);
-    profitLossStatementRepository = new ProfitLossStatementRepository(
+    profitLossStatementRepository = new ProfitLossRepository(
       prismaClient,
       financialTestData,
       financialTestData.information.year,
@@ -52,10 +52,8 @@ describe("ProfitLossStatementRepository", () => {
           },
         },
       });
-      // console.log(await prismaClient.profitLossStatements.findMany());
       if (!profitLossStatement)
         throw new Error("Profit loss statement not created");
-      console.log("profitLossStatement", profitLossStatement);
     });
     it("should be defined", () => {
       expect(Number(profitLossStatement?.grossProfit)).toBe(

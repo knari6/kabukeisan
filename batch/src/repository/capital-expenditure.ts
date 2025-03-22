@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 import { CapitalExpenditureDto } from "../dto/capital-expenditure";
 
@@ -36,6 +36,18 @@ export class CapitalExpenditureRepository {
         code: this.data.information.code,
         error: error,
       };
+    }
+  }
+
+  public async findFirst(
+    capitalExpenditureWhereInput: Prisma.CapitalExpenditureWhereInput
+  ) {
+    try {
+      return this.prismaClient.capitalExpenditure.findFirst({
+        where: capitalExpenditureWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

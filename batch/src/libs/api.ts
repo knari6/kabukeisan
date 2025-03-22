@@ -5,6 +5,7 @@ import {
   DocumentListRequest,
   DocumentListResponseResult,
 } from "./interfaces";
+import { DateUtil } from "./date";
 
 /**
  * EDINET APIを呼び出すだけのクラス
@@ -81,6 +82,25 @@ export class Api {
     } catch (error) {
       console.error(error);
       throw error;
+    }
+  }
+
+  /**
+   * 通期の報告書のIDと決算期のリストを取得する
+   * @param date
+   * @param apiKey
+   * return { docID: string; fiscalYear: string;}
+   */
+  public async *getDocumentIds(date: Date, apiKey: string) {
+    const results = await this.fetchList(
+      DateUtil.getYYYYMMDDWithHyphens(date),
+      apiKey
+    );
+
+    if (results?.documentIdList) {
+      for (const docID of results.documentIdList) {
+        yield docID;
+      }
     }
   }
 

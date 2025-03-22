@@ -1,8 +1,8 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData, QuarterType } from "../libs/interfaces";
 import { ProfitLossStatementDto } from "../dto/profit-loss-statement";
 
-export class ProfitLossStatementRepository {
+export class ProfitLossRepository {
   private readonly prismaClient: PrismaClient;
   private readonly data: FinancialData;
   private readonly year: string;
@@ -46,6 +46,16 @@ export class ProfitLossStatementRepository {
         code: this.data.information.code,
         error: error,
       };
+    }
+  }
+
+  public async findFirst(profitLossWhereInput: Prisma.ProfitLossWhereInput) {
+    try {
+      return this.prismaClient.profitLoss.findFirst({
+        where: profitLossWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

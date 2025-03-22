@@ -27,6 +27,7 @@ describe("CompanyRepository", () => {
         select: {
           name: true,
           code: true,
+          fiscalYear: true,
         },
       });
     });

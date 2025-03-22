@@ -1,9 +1,10 @@
+import { FinancialData } from "../../src/libs/interfaces";
 import { Random } from "../../src/libs/random";
 
 const random = new Random();
-export const financialTestData = {
+export const financialTestData: FinancialData = {
   information: {
-    code: random.randomInt(1000000, 9999999).toString(),
+    code: random.randomInt(1000, 9999).toString(),
     companyName: random.randomInt(1000000, 9999999).toString(),
     filingDate: random.randomInt(1000000, 9999999).toString(),
     fiscalPeriod: random.randomInt(1000000, 9999999).toString(),
@@ -62,6 +63,9 @@ export const financialTestData = {
     amortization: random.randomInt(1000000, 9999999),
     equipmentInvestment: random.randomInt(1000000, 9999999),
     researchAndDevelopmentExpenses: random.randomInt(1000000, 9999999),
+  },
+  interestBearingDebt: {
+    debt: random.randomInt(100000, 99999),
   },
   stockInfo: {
     stockAmount: random.randomInt(1000000, 9999999),

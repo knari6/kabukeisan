@@ -7,7 +7,7 @@ export class LogClient {
     console.log("--------------------------------------");
   }
 
-  public error<T>(message: string, content: T, error: Error): void {
+  public error<T>(message: string, content: T, error?: Error | unknown): void {
     console.log("--------------------------------------");
     console.error(message);
     console.log(content);

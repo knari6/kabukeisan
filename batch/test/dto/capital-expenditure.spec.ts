@@ -12,8 +12,8 @@ describe("DepreciationDto", () => {
 
   describe("dto", () => {
     it("DepreciationDtoを作ること", () => {
-      const statementId = 1;
-      const dto = depreciationDto.dto(statementId);
+      const dto = depreciationDto.dto(1);
+      console.log(dto);
 
       expect(dto).toBeDefined();
       expect(dto.depreciation).toEqual(

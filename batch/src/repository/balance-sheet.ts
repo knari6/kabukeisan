@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import { FinancialData } from "../libs/interfaces";
 import { BalanceSheetDto } from "../dto/balance-sheet";
 
@@ -34,6 +34,17 @@ export class BalanceSheetRepository {
         code: this.data.information.code,
         error: error,
       };
+    }
+  }
+  public async findFirst(
+    balanceSheetWhereInput: Prisma.BalanceSheetWhereInput
+  ) {
+    try {
+      return this.prismaClient.balanceSheet.findFirst({
+        where: balanceSheetWhereInput,
+      });
+    } catch (error) {
+      throw `${error}会社情報の取得に失敗しました。`;
     }
   }
 }

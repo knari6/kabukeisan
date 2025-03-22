@@ -109,13 +109,14 @@ export class Finance {
             context
           ),
           /** 土地 */
-          land: this.extractNumber(xmlData, "jppfs_cor:Land", context),
+          land: this.extractNumber(xmlData, "jppfs_cor:Land", context) && 0,
           /** 無形固定資産 */
-          intangibleFixedAssets: this.extractNumber(
-            xmlData,
-            "jppfs_cor:IntangibleAssets",
-            context
-          ),
+          intangibleFixedAssets:
+            this.extractNumber(
+              xmlData,
+              "jppfs_cor:IntangibleAssets",
+              context
+            ) && 0,
           /** 投資その他有価証券 */
           investmentSecurities: this.extractNumber(
             xmlData,
@@ -271,11 +272,12 @@ export class Finance {
           "CurrentYearDuration"
         ),
         /** 無形固定資産の償却 */
-        amortization: this.extractNumber(
-          xmlData,
-          "jppfs_cor:AmortizationOfGoodwillOpeCF",
-          "CurrentYearDuration"
-        ),
+        amortization:
+          this.extractNumber(
+            xmlData,
+            "jppfs_cor:AmortizationOfGoodwillOpeCF",
+            "CurrentYearInstant"
+          ) && 0,
         /** 設備投資 */
         equipmentInvestment: this.extractNumber(
           xmlData,
@@ -288,6 +290,19 @@ export class Finance {
           "jpcrp_cor:ResearchAndDevelopmentExpensesResearchAndDevelopmentActivities",
           "CurrentYearDuration"
         ),
+      },
+      interestBearingDebt: {
+        debt:
+          this.extractNumber(
+            xmlData,
+            "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+            "CurrentYearInstant_NonConsolidatedMember"
+          ) +
+          this.extractNumber(
+            xmlData,
+            "jppfs_cor:LongTermLoansPayable",
+            "CurrentYearInstant_NonConsolidatedMember"
+          ),
       },
       stockInfo: {
         /** 株式発行総数 */

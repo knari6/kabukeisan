@@ -14,7 +14,7 @@ export class DebtDto {
           id: comapnyId,
         },
       },
-      interestBearingDebt: this.financialData.balanceSheet.liabilities.debt,
+      interestBearingDebt: this.financialData.interestBearingDebt.debt,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

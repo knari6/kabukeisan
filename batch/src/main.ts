@@ -5,16 +5,8 @@ import dotenv from "dotenv";
 import { Finance } from "./libs/finance";
 import { DateUtil } from "./libs/date";
 import { PrismaClient } from "@prisma/client";
-import { FinancialData } from "./libs/interfaces";
-import { CompanyRepository } from "./repository/company";
-import { BalanceSheetRepository } from "./repository/balance-sheet";
-import { ProfitLossStatementRepository } from "./repository/profit-loss-statement";
-import { CashFlowRepository } from "./repository/cash-flow";
-import { CapitalExpenditureRepository } from "./repository/capital-expenditure";
-import { DebtRepository } from "./repository/debt";
-import fs from "fs";
-import { XbrlClient } from "./libs/xbrl";
 import { LogClient } from "./libs/log";
+import { FinanceService } from "./services/finance.service";
 dotenv.config();
 
 const dateFrom = process.argv[2];
@@ -27,143 +19,42 @@ const parse = new Parse();
 const finance = new Finance();
 const prismaClient = new PrismaClient();
 const log = new LogClient();
-const xbrl = new XbrlClient(file, api, parse, finance);
 
 async function execute() {
   const startDate = DateUtil.argToDate(dateFrom);
   const endDate = DateUtil.argToDate(dateTo);
 
   for await (const currentDate of DateUtil.dateRange(startDate, endDate)) {
-    for await (const { docID, fiscalYear } of getDocumentIds(
+    for await (const { docID, fiscalYear } of api.getDocumentIds(
       currentDate,
       apiKey
     )) {
       if (!fiscalYear) {
         console.log(`${docID}のデータがありません`);
-        deleteDir(docID);
+        file.deleteDir(docID);
         continue;
       }
       try {
-        const financialData = await xbrl.parseXbrl(docID, fiscalYear, apiKey);
-        await writeFinancialData(financialData, docID);
-        await deleteDir(docID);
+        const bufferData = await api.fetchDocument(docID, apiKey);
+        file.zipFile(bufferData, docID);
+        file.unzipFile(docID);
+        const parsedData = await parse.xbrl(docID + "/XBRL/PublicDoc");
+
+        const financialData = finance.extractFinancialStatements(
+          parsedData,
+          fiscalYear,
+          docID
+        );
+        const financeService = new FinanceService(prismaClient, financialData);
+        await financeService.create();
+        await file.deleteDir(docID);
       } catch (error) {
         console.error(error);
-        deleteDir(docID);
+        file.deleteDir(docID);
         continue;
       }
     }
   }
-}
-
-/**
- * 通期の報告書のIDと決算期のリストを取得する
- * @param date
- * @param apiKey
- */
-async function* getDocumentIds(date: Date, apiKey: string) {
-  const results = await api.fetchList(
-    DateUtil.getYYYYMMDDWithHyphens(date),
-    apiKey
-  );
-
-  if (results?.documentIdList) {
-    for (const docID of results.documentIdList) {
-      yield docID;
-    }
-  }
-}
-
-/**
- * 四半期報告書のIDと決算期のリストを取得する
- * @param date
- * @param apiKey
- */
-async function* getQuarterlyDocumentIds(date: Date, apiKey: string) {
-  const results = await api.fetchList(
-    DateUtil.getYYYYMMDDWithHyphens(date),
-    apiKey
-  );
-  if (results?.quarterlyDocumentIdList) {
-    for (const docID of results.quarterlyDocumentIdList) {
-      yield docID;
-    }
-  }
-}
-
-async function fetchDocument(docID: string, apiKey: string) {
-  const xbrlFileData = await api.fetchDocument(docID, apiKey);
-  file.zipFile(xbrlFileData, docID);
-  file.unzipFile(docID);
-}
-
-/** 解凍したフォルダの削除 */
-async function deleteDir(docID: string) {
-  fs.rmSync(docID, { recursive: true, force: true });
-}
-
-async function writeFinancialData(
-  financialData: FinancialData,
-  docID: string
-): Promise<void> {
-  const logContents = {
-    銘柄コード: financialData.information.code,
-    会社名: financialData.information.companyName,
-  };
-  const companyRepository = new CompanyRepository(prismaClient, financialData);
-  const balanceSheetRepository = new BalanceSheetRepository(
-    prismaClient,
-    financialData
-  );
-  const profitLossStatementRepository = new ProfitLossStatementRepository(
-    prismaClient,
-    financialData,
-    financialData.information.year,
-    financialData.information.quarterType
-  );
-  const cashFlowRepository = new CashFlowRepository(
-    prismaClient,
-    financialData
-  );
-  const capitalExpenditureRepository = new CapitalExpenditureRepository(
-    prismaClient,
-    financialData
-  );
-  const debtRepository = new DebtRepository(prismaClient, financialData);
-
-  const isExist = await prismaClient.companies.findFirst({
-    where: {
-      code: financialData.information.code,
-    },
-  });
-  if (isExist) {
-    log.info("データはすでに登録済みです。", logContents);
-    return;
-  }
-  await companyRepository
-    .write()
-    .then(async () => {
-      await balanceSheetRepository.write();
-      await profitLossStatementRepository.write();
-      await cashFlowRepository.write();
-      await capitalExpenditureRepository.write();
-      await debtRepository.write();
-    })
-    .then(async () => {
-      log.info("データを保存しました。", logContents);
-    })
-    .catch((error) => {
-      log.error("データを保存できませんでした", logContents, error);
-      deleteDir(docID);
-      fs.appendFileSync(
-        "failed-code.txt",
-        "----------------------\n" +
-          `${financialData.information.code}:${financialData.information.companyName}:${financialData.information.year}:${financialData.information.quarterType}\n` +
-          `${JSON.stringify(error, Object.getOwnPropertyNames(error), 2)}` +
-          "\n----------------------\n"
-      );
-      console.log("--------------------------------------");
-    });
 }
 
 execute();
