@@ -57,11 +57,11 @@ describe("ProfitLossStatementRepository", () => {
     });
     it("should be defined", () => {
       expect(Number(profitLossStatement?.grossProfit)).toBe(
-        financialTestData.incomeStatement.sales -
-          financialTestData.incomeStatement.costOfSales
+        financialTestData.incomeStatement.sale -
+          financialTestData.incomeStatement.costOfSale
       );
       expect(Number(profitLossStatement?.sale)).toBe(
-        financialTestData.incomeStatement.sales
+        financialTestData.incomeStatement.sale
       );
       expect(Number(profitLossStatement?.operatingProfit)).toBe(
         financialTestData.incomeStatement.operatingIncome
@@ -70,7 +70,7 @@ describe("ProfitLossStatementRepository", () => {
         financialTestData.incomeStatement.ordinaryIncome
       );
       expect(Number(profitLossStatement?.profitBeforeTax)).toBe(
-        financialTestData.incomeStatement.incomeBeforeIncomeTaxes
+        financialTestData.incomeStatement.incomeBeforeIncomeTax
       );
       expect(Number(profitLossStatement?.tax)).toBe(
         financialTestData.incomeStatement.tax

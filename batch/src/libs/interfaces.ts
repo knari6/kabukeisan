@@ -220,44 +220,44 @@ export interface StockInfo {
 export interface BalanceSheet {
   /** 資産 */
   /** 流動資産 */
-  currentAssets: number;
+  currentAsset: number;
   /** 現金預金 */
-  cashAndDeposits: number;
+  cashAndDeposit: number;
   /** 売上債権 */
   accountsReceivable: number;
   /** 製品 */
-  merchandiseAndFinishedGoods: number;
+  merchandiseAndFinishedGood: number;
   /** 有価証券 */
-  securities: number;
+  security: number;
   /** 棚卸資産 */
   inventory: number;
   /** その他 */
-  otherCurrentAssets: number;
+  otherCurrentAsset: number;
   /** 固定資産 */
-  fixedAssets: number;
+  fixedAsset: number;
   /** 有形固定資産 */
-  tangibleFixedAssets: number;
+  tangibleFixedAsset: number;
   /** 土地 */
   land: number;
   /** 無形固定資産 */
-  intangibleFixedAssets: number;
+  intangibleFixedAsset: number;
   /** 投資その他有価証券 */
-  investmentSecurities: number;
+  investmentSecurity: number;
   /** その他 */
   otherAsset: number;
   /** 資産合計 */
   asset: number;
 
   /** 流動負債 */
-  currentLiabilities: number;
+  currentLiability: number;
   /** 買掛金 */
   accountsPayable: number;
   /** 借入債務 */
   debt: number;
   /** その他流動負債 */
-  otherCurrentLiabilities: number;
+  otherCurrentLiability: number;
   /** 固定負債 */
-  fixedLiabilities: number;
+  fixedLiability: number;
   /** その他 */
   otherLiability: number;
   /** 負債合計 */
@@ -272,15 +272,15 @@ export interface BalanceSheet {
 /** 損益計算書 */
 export interface IncomeStatement {
   /** 売上高 */
-  sales: number;
+  sale: number;
   /** 売上原価 */
-  costOfSales: number;
+  costOfSale: number;
   /** 営業利益 */
   operatingIncome: number;
   /** 経常利益 */
   ordinaryIncome: number;
   /** 税引前利益 */
-  incomeBeforeIncomeTaxes: number;
+  incomeBeforeIncomeTax: number;
   /** 法人税等合計 */
   tax: number;
   /** 当期純利益 */
@@ -290,13 +290,13 @@ export interface IncomeStatement {
 /** キャッシュフロー計算書 */
 export interface CashFlowStatement {
   /** 営業活動によるキャッシュの流入 */
-  netCashProvidedByOperatingActivities: number;
+  netCashProvidedByOperatingActivity: number;
   /** 投資活動によるキャッシュの流入 */
-  netCashProvidedByInvestingActivities: number;
+  netCashProvidedByInvestingActivity: number;
   /** 財務活動によるキャッシュの流入 */
-  netCashProvidedByFinancingActivities: number;
+  netCashProvidedByFinancingActivity: number;
   /** 現金同等物 */
-  cashAndCashEquivalents: number;
+  cashAndCashEquivalent: number;
   /** 配当支払い */
   dividendsPaid: number;
 }
@@ -310,7 +310,7 @@ export interface CapitalExpenditure {
   /** 設備投資 */
   equipmentInvestment: number;
   /** 研究開発費 */
-  researchAndDevelopmentExpenses: number;
+  researchAndDevelopmentExpense: number;
 }
 
 /** 有利子負債など */

@@ -16,10 +16,10 @@ describe("ProfitLossStatementDto", () => {
 
       expect(dto).toBeDefined();
 
-      expect(dto.sale).toEqual(financialTestData.incomeStatement.sales);
+      expect(dto.sale).toEqual(financialTestData.incomeStatement.sale);
       expect(dto.grossProfit).toEqual(
-        financialTestData.incomeStatement.sales -
-          financialTestData.incomeStatement.costOfSales
+        financialTestData.incomeStatement.sale -
+          financialTestData.incomeStatement.costOfSale
       );
       expect(dto.operatingProfit).toEqual(
         financialTestData.incomeStatement.operatingIncome
@@ -31,7 +31,7 @@ describe("ProfitLossStatementDto", () => {
         financialTestData.incomeStatement.profitLoss
       );
       expect(dto.profitBeforeTax).toEqual(
-        financialTestData.incomeStatement.incomeBeforeIncomeTaxes
+        financialTestData.incomeStatement.incomeBeforeIncomeTax
       );
       expect(dto.tax).toEqual(financialTestData.incomeStatement.tax);
     });

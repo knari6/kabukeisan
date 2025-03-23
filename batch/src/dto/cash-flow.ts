@@ -15,16 +15,13 @@ export class CashFlowDto {
         },
       },
       operatingCashFlow:
-        this.financialData.cashFlowStatement
-          .netCashProvidedByOperatingActivities,
+        this.financialData.cashFlowStatement.netCashProvidedByOperatingActivity,
       investingCashFlow:
-        this.financialData.cashFlowStatement
-          .netCashProvidedByInvestingActivities,
+        this.financialData.cashFlowStatement.netCashProvidedByInvestingActivity,
       financingCashFlow:
-        this.financialData.cashFlowStatement
-          .netCashProvidedByFinancingActivities,
+        this.financialData.cashFlowStatement.netCashProvidedByFinancingActivity,
       cashAndCashEquivalent:
-        this.financialData.cashFlowStatement.cashAndCashEquivalents,
+        this.financialData.cashFlowStatement.cashAndCashEquivalent,
       dividendPaid: this.financialData.cashFlowStatement.dividendsPaid,
       createdAt: new Date(),
       updatedAt: new Date(),

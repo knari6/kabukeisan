@@ -61,19 +61,19 @@ describe.sequential("CashFlowRepository", () => {
     test.sequential("DBにデータを登録できること", async () => {
       expect(cashFlow).not.toBeNull();
       expect(Number(cashFlow?.operatingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivity
       );
       expect(Number(cashFlow?.investingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivity
       );
       expect(Number(cashFlow?.financingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivity
       );
       expect(Number(cashFlow?.dividendPaid)).toBe(
         financialTestData.cashFlowStatement.dividendsPaid
       );
       expect(Number(cashFlow?.cashAndCashEquivalent)).toBe(
-        financialTestData.cashFlowStatement.cashAndCashEquivalents
+        financialTestData.cashFlowStatement.cashAndCashEquivalent
       );
     });
   });

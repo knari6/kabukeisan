@@ -37,51 +37,51 @@ describe("Finance", () => {
         year: "2024",
       },
       balanceSheet: {
-        currentAssets: random.randomInt(10000, 100000),
-        cashAndDeposits: random.randomInt(1000, 10000),
+        currentAsset: random.randomInt(10000, 100000),
+        cashAndDeposit: random.randomInt(1000, 10000),
         accountsReceivable: random.randomInt(1000, 10000),
-        merchandiseAndFinishedGoods: random.randomInt(1000, 10000),
-        securities: random.randomInt(1000, 10000),
+        merchandiseAndFinishedGood: random.randomInt(1000, 10000),
+        security: random.randomInt(1000, 10000),
         inventory: random.randomInt(1000, 10000),
-        otherCurrentAssets: random.randomInt(1000, 10000),
-        fixedAssets: random.randomInt(1000, 10000),
-        tangibleFixedAssets: random.randomInt(1000, 10000),
+        otherCurrentAsset: random.randomInt(1000, 10000),
+        fixedAsset: random.randomInt(1000, 10000),
+        tangibleFixedAsset: random.randomInt(1000, 10000),
         land: random.randomInt(1000, 10000),
-        intangibleFixedAssets: random.randomInt(1000, 10000),
-        investmentSecurities: random.randomInt(1000, 10000),
+        intangibleFixedAsset: random.randomInt(1000, 10000),
+        investmentSecurity: random.randomInt(1000, 10000),
         otherAsset: random.randomInt(1000, 10000),
         asset: random.randomInt(1000, 10000),
-        currentLiabilities: random.randomInt(1000, 10000),
+        currentLiability: random.randomInt(1000, 10000),
         accountsPayable: random.randomInt(1000, 10000),
         debt: random.randomInt(1000, 10000),
-        otherCurrentLiabilities: random.randomInt(1000, 10000),
-        fixedLiabilities: random.randomInt(1000, 10000),
+        otherCurrentLiability: random.randomInt(1000, 10000),
+        fixedLiability: random.randomInt(1000, 10000),
         liability: random.randomInt(1000, 10000),
         otherLiability: random.randomInt(1000, 10000),
         equity: random.randomInt(1000, 10000),
         netAsset: random.randomInt(1000, 10000),
       },
       incomeStatement: {
-        sales: random.randomInt(1000, 10000),
-        costOfSales: random.randomInt(1000, 10000),
+        sale: random.randomInt(1000, 10000),
+        costOfSale: random.randomInt(1000, 10000),
         operatingIncome: random.randomInt(1000, 10000),
         ordinaryIncome: random.randomInt(1000, 10000),
-        incomeBeforeIncomeTaxes: random.randomInt(1000, 10000),
+        incomeBeforeIncomeTax: random.randomInt(1000, 10000),
         tax: random.randomInt(1000, 10000),
         profitLoss: random.randomInt(1000, 10000),
       },
       cashFlowStatement: {
-        netCashProvidedByOperatingActivities: random.randomInt(1000, 10000),
-        netCashProvidedByInvestingActivities: random.randomInt(1000, 10000),
-        netCashProvidedByFinancingActivities: random.randomInt(1000, 10000),
-        cashAndCashEquivalents: random.randomInt(1000, 10000),
+        netCashProvidedByOperatingActivity: random.randomInt(1000, 10000),
+        netCashProvidedByInvestingActivity: random.randomInt(1000, 10000),
+        netCashProvidedByFinancingActivity: random.randomInt(1000, 10000),
+        cashAndCashEquivalent: random.randomInt(1000, 10000),
         dividendsPaid: random.randomInt(1000, 10000),
       },
       capitalExpenditure: {
         depreciation: random.randomInt(1000, 10000),
         amortization: random.randomInt(1000, 10000),
         equipmentInvestment: random.randomInt(1000, 10000),
-        researchAndDevelopmentExpenses: random.randomInt(1000, 10000),
+        researchAndDevelopmentExpense: random.randomInt(1000, 10000),
       },
       interestBearingDebt: {
         debt: random.randomInt(1000, 10000),
@@ -133,11 +133,10 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const equity = mockFinanceStatement.balanceSheet.equity;
       const debt = mockFinanceStatement.balanceSheet.debt;
-      const { operatingIncome, tax, incomeBeforeIncomeTaxes } =
+      const { operatingIncome, tax, incomeBeforeIncomeTax } =
         mockFinanceStatement.incomeStatement;
       const expected =
-        (operatingIncome * (1 - tax / incomeBeforeIncomeTaxes)) /
-        (equity + debt);
+        (operatingIncome * (1 - tax / incomeBeforeIncomeTax)) / (equity + debt);
       const acutual = finance.calcROIC(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
@@ -151,7 +150,7 @@ describe("Finance", () => {
     it("税引き前利益がマイナスの場合法人税率を30%として計算すること", () => {
       mockFinanceStatement.balanceSheet.equity = random.randomInt(1000, 10000);
       mockFinanceStatement.balanceSheet.debt = random.randomInt(1000, 10000);
-      mockFinanceStatement.incomeStatement.incomeBeforeIncomeTaxes = -1000;
+      mockFinanceStatement.incomeStatement.incomeBeforeIncomeTax = -1000;
 
       const equity = mockFinanceStatement.balanceSheet.equity;
       const debt = mockFinanceStatement.balanceSheet.debt;
@@ -222,14 +221,14 @@ describe("Finance", () => {
 
   describe("粗利益率の計算", () => {
     it("値を返すこと", () => {
-      const sale = mockFinanceStatement.incomeStatement.sales;
-      const costOfSale = mockFinanceStatement.incomeStatement.costOfSales;
+      const sale = mockFinanceStatement.incomeStatement.sale;
+      const costOfSale = mockFinanceStatement.incomeStatement.costOfSale;
       const expected = (sale - costOfSale) / sale;
       const acutual = finance.calcGrossProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.sales = 0;
+      mockFinanceStatement.incomeStatement.sale = 0;
       expect(() => finance.calcGrossProfitMargin(mockFinanceStatement)).toThrow(
         "売上高が0になったため計算できません"
       );
@@ -240,17 +239,14 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const operatingIncome =
         mockFinanceStatement.incomeStatement.operatingIncome;
-      mockFinanceStatement.incomeStatement.sales = random.randomInt(
-        1000,
-        10000
-      );
-      const sales = mockFinanceStatement.incomeStatement.sales;
-      const expected = operatingIncome / sales;
+      mockFinanceStatement.incomeStatement.sale = random.randomInt(1000, 10000);
+      const sale = mockFinanceStatement.incomeStatement.sale;
+      const expected = operatingIncome / sale;
       const acutual = finance.calcOperatingProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.sales = 0;
+      mockFinanceStatement.incomeStatement.sale = 0;
       expect(() =>
         finance.calcOperatingProfitMargin(mockFinanceStatement)
       ).toThrow("売上高が0になったため計算できません");
@@ -261,17 +257,14 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const ordinaryIncome =
         mockFinanceStatement.incomeStatement.ordinaryIncome;
-      mockFinanceStatement.incomeStatement.sales = random.randomInt(
-        1000,
-        10000
-      );
-      const sales = mockFinanceStatement.incomeStatement.sales;
-      const expected = ordinaryIncome / sales;
+      mockFinanceStatement.incomeStatement.sale = random.randomInt(1000, 10000);
+      const sale = mockFinanceStatement.incomeStatement.sale;
+      const expected = ordinaryIncome / sale;
       const acutual = finance.calcOrdinaryProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.sales = 0;
+      mockFinanceStatement.incomeStatement.sale = 0;
       expect(() =>
         finance.calcOrdinaryProfitMargin(mockFinanceStatement)
       ).toThrow("売上高が0になったため計算できません");
@@ -281,17 +274,14 @@ describe("Finance", () => {
   describe("当期純利益率の計算", () => {
     it("値を返すこと", () => {
       const profitLoss = mockFinanceStatement.incomeStatement.profitLoss;
-      mockFinanceStatement.incomeStatement.sales = random.randomInt(
-        1000,
-        10000
-      );
-      const sales = mockFinanceStatement.incomeStatement.sales;
-      const expected = profitLoss / sales;
+      mockFinanceStatement.incomeStatement.sale = random.randomInt(1000, 10000);
+      const sale = mockFinanceStatement.incomeStatement.sale;
+      const expected = profitLoss / sale;
       const acutual = finance.calcNetProfitMargin(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
     it("売上高が0の場合エラーを返すこと", () => {
-      mockFinanceStatement.incomeStatement.sales = 0;
+      mockFinanceStatement.incomeStatement.sale = 0;
       expect(() => finance.calcNetProfitMargin(mockFinanceStatement)).toThrow(
         "売上高が0になったため計算できません"
       );
@@ -300,14 +290,13 @@ describe("Finance", () => {
 
   describe("正味流動資産の計算", () => {
     it("値を返すこと", () => {
-      const cash =
-        mockFinanceStatement.cashFlowStatement.cashAndCashEquivalents;
+      const cash = mockFinanceStatement.cashFlowStatement.cashAndCashEquivalent;
       const accountsReceivable =
         mockFinanceStatement.balanceSheet.accountsReceivable;
-      const securities = mockFinanceStatement.balanceSheet.securities;
+      const securities = mockFinanceStatement.balanceSheet.security;
       const land = mockFinanceStatement.balanceSheet.land;
       const investmentSecurities =
-        mockFinanceStatement.balanceSheet.investmentSecurities;
+        mockFinanceStatement.balanceSheet.investmentSecurity;
       const liabilities = mockFinanceStatement.balanceSheet.liability;
       const expected =
         ((cash +

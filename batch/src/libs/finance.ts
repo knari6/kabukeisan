@@ -54,13 +54,13 @@ export class Finance {
         /** 資産 */
 
         /** 流動資産 */
-        currentAssets: this.extractNumber(
+        currentAsset: this.extractNumber(
           xmlData,
           "jppfs_cor:CurrentAssets",
           context
         ),
         /** 現金預金 */
-        cashAndDeposits: this.extractNumber(
+        cashAndDeposit: this.extractNumber(
           xmlData,
           "jppfs_cor:CashAndDeposits",
           context
@@ -72,34 +72,30 @@ export class Finance {
           context
         ),
         /** 製品 */
-        merchandiseAndFinishedGoods: this.extractNumber(
+        merchandiseAndFinishedGood: this.extractNumber(
           xmlData,
           "jppfs_cor:MerchandiseAndFinishedGoods",
           context
         ),
         /** 有価証券 */
-        securities: this.extractNumber(
-          xmlData,
-          "jppfs_cor:Securities",
-          context
-        ),
+        security: this.extractNumber(xmlData, "jppfs_cor:Securities", context),
         /** 棚卸資産 */
         inventory: this.extractNumber(xmlData, "jppfs_cor:Inventory", context),
         /** その他 */
-        otherCurrentAssets: this.extractNumber(
+        otherCurrentAsset: this.extractNumber(
           xmlData,
           "jppfs_cor:OtherCA",
           context
         ),
 
         /** 固定資産 */
-        fixedAssets: this.extractNumber(
+        fixedAsset: this.extractNumber(
           xmlData,
           "jppfs_cor:NoncurrentAssets",
           context
         ),
         /** 有形固定資産 */
-        tangibleFixedAssets: this.extractNumber(
+        tangibleFixedAsset: this.extractNumber(
           xmlData,
           "jppfs_cor:PropertyPlantAndEquipment",
           context
@@ -107,11 +103,11 @@ export class Finance {
         /** 土地 */
         land: this.extractNumber(xmlData, "jppfs_cor:Land", context) && 0,
         /** 無形固定資産 */
-        intangibleFixedAssets:
+        intangibleFixedAsset:
           this.extractNumber(xmlData, "jppfs_cor:IntangibleAssets", context) &&
           0,
         /** 投資その他有価証券 */
-        investmentSecurities: this.extractNumber(
+        investmentSecurity: this.extractNumber(
           xmlData,
           "jppfs_cor:InvestmentsAndOtherAssets",
           "CurrentYearInstant"
@@ -127,7 +123,7 @@ export class Finance {
         asset: this.extractNumber(xmlData, "jppfs_cor:Assets", context),
 
         /** 流動負債合計 */
-        currentLiabilities: this.extractNumber(
+        currentLiability: this.extractNumber(
           xmlData,
           "jppfs_cor:CurrentLiabilities",
           context
@@ -147,14 +143,14 @@ export class Finance {
         ),
 
         /** その他 */
-        otherCurrentLiabilities: this.extractNumber(
+        otherCurrentLiability: this.extractNumber(
           xmlData,
           "jppfs_cor:OtherCL",
           context
         ),
 
         /** 固定負債 */
-        fixedLiabilities: this.extractNumber(
+        fixedLiability: this.extractNumber(
           xmlData,
           "jppfs_cor:FixedLiabilities",
           context
@@ -183,13 +179,13 @@ export class Finance {
       },
       incomeStatement: {
         /** 売上高 */
-        sales: this.extractNumber(
+        sale: this.extractNumber(
           xmlData,
           "jppfs_cor:NetSales",
           durationContext
         ),
         /** 売上原価 */
-        costOfSales: this.extractNumber(
+        costOfSale: this.extractNumber(
           xmlData,
           "jppfs_cor:CostOfSales",
           durationContext
@@ -207,7 +203,7 @@ export class Finance {
           durationContext
         ),
         /** 税引前利益 */
-        incomeBeforeIncomeTaxes: this.extractNumber(
+        incomeBeforeIncomeTax: this.extractNumber(
           xmlData,
           "jppfs_cor:IncomeBeforeIncomeTaxes",
           durationContext
@@ -227,25 +223,25 @@ export class Finance {
       },
       cashFlowStatement: {
         /** 営業キャッシュフロー */
-        netCashProvidedByOperatingActivities: this.extractNumber(
+        netCashProvidedByOperatingActivity: this.extractNumber(
           xmlData,
           "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
           "CurrentYearDuration"
         ),
         /** 投資キャッシュフロー */
-        netCashProvidedByInvestingActivities: this.extractNumber(
+        netCashProvidedByInvestingActivity: this.extractNumber(
           xmlData,
           "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
           "CurrentYearDuration"
         ),
         /** 財務キャッシュフロー */
-        netCashProvidedByFinancingActivities: this.extractNumber(
+        netCashProvidedByFinancingActivity: this.extractNumber(
           xmlData,
           "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
           "CurrentYearDuration"
         ),
         /** 現金及び現金同等物 */
-        cashAndCashEquivalents: this.extractNumber(
+        cashAndCashEquivalent: this.extractNumber(
           xmlData,
           "jppfs_cor:CashAndCashEquivalents",
           "CurrentYearInstant"
@@ -278,7 +274,7 @@ export class Finance {
           "CurrentYearDuration"
         ),
         /** 研究開発費 */
-        researchAndDevelopmentExpenses: this.extractNumber(
+        researchAndDevelopmentExpense: this.extractNumber(
           xmlData,
           "jpcrp_cor:ResearchAndDevelopmentExpensesResearchAndDevelopmentActivities",
           "CurrentYearDuration"
@@ -318,13 +314,13 @@ export class Finance {
     const debt = financialStatement.balanceSheet.debt;
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
     const tax = financialStatement.incomeStatement.tax;
-    const incomeBeforeIncomeTaxes =
-      financialStatement.incomeStatement.incomeBeforeIncomeTaxes;
+    const incomeBeforeIncomeTax =
+      financialStatement.incomeStatement.incomeBeforeIncomeTax;
     if (equity + debt === 0) {
       throw "自己資本と有利子負債の合計が0になったため計算できません";
     }
-    if (incomeBeforeIncomeTaxes > 0) {
-      const taxRate = tax / incomeBeforeIncomeTaxes;
+    if (incomeBeforeIncomeTax > 0) {
+      const taxRate = tax / incomeBeforeIncomeTax;
       return (operatingIncome * (1 - taxRate)) / (equity + debt);
     }
     return (operatingIncome * 0.7) / (equity + debt);
@@ -385,12 +381,12 @@ export class Finance {
    * @returns
    */
   public calcGrossProfitMargin(financialStatement: FinancialData): number {
-    const sales = financialStatement.incomeStatement.sales;
-    const costOfSales = financialStatement.incomeStatement.costOfSales;
-    if (sales === 0) {
+    const sale = financialStatement.incomeStatement.sale;
+    const costOfSale = financialStatement.incomeStatement.costOfSale;
+    if (sale === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return (sales - costOfSales) / sales;
+    return (sale - costOfSale) / sale;
   }
 
   /**
@@ -400,11 +396,11 @@ export class Finance {
    */
   public calcOperatingProfitMargin(financialStatement: FinancialData): number {
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
-    const sales = financialStatement.incomeStatement.sales;
-    if (sales === 0) {
+    const sale = financialStatement.incomeStatement.sale;
+    if (sale === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return operatingIncome / sales;
+    return operatingIncome / sale;
   }
 
   /**
@@ -414,11 +410,11 @@ export class Finance {
    */
   public calcOrdinaryProfitMargin(financialStatement: FinancialData): number {
     const ordinaryIncome = financialStatement.incomeStatement.ordinaryIncome;
-    const sales = financialStatement.incomeStatement.sales;
-    if (sales === 0) {
+    const sale = financialStatement.incomeStatement.sale;
+    if (sale === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return ordinaryIncome / sales;
+    return ordinaryIncome / sale;
   }
 
   /**
@@ -428,11 +424,11 @@ export class Finance {
    */
   public calcNetProfitMargin(financialStatement: FinancialData): number {
     const profitLoss = financialStatement.incomeStatement.profitLoss;
-    const sales = financialStatement.incomeStatement.sales;
-    if (sales === 0) {
+    const sale = financialStatement.incomeStatement.sale;
+    if (sale === 0) {
       throw "売上高が0になったため計算できません";
     }
-    return profitLoss / sales;
+    return profitLoss / sale;
   }
 
   /**
@@ -441,13 +437,13 @@ export class Finance {
    * @returns
    */
   public calcNetCurrentAssets(financialStatement: FinancialData): number {
-    const cash = financialStatement.cashFlowStatement.cashAndCashEquivalents;
+    const cash = financialStatement.cashFlowStatement.cashAndCashEquivalent;
     const accountsReceivable =
       financialStatement.balanceSheet.accountsReceivable;
-    const securities = financialStatement.balanceSheet.securities;
+    const securities = financialStatement.balanceSheet.security;
     const land = financialStatement.balanceSheet.land;
     const investmentSecurities =
-      financialStatement.balanceSheet.investmentSecurities;
+      financialStatement.balanceSheet.investmentSecurity;
     const liabilities = financialStatement.balanceSheet.liability;
     try {
       return (

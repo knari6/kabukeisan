@@ -14,15 +14,14 @@ export class ProfitLossStatementDto {
           id: companyId,
         },
       },
-      sale: this.financialData.incomeStatement.sales,
+      sale: this.financialData.incomeStatement.sale,
       grossProfit:
-        this.financialData.incomeStatement.sales -
-        this.financialData.incomeStatement.costOfSales,
+        this.financialData.incomeStatement.sale -
+        this.financialData.incomeStatement.costOfSale,
       operatingProfit: this.financialData.incomeStatement.operatingIncome,
       ordinaryProfit: this.financialData.incomeStatement.ordinaryIncome,
       netIncome: this.financialData.incomeStatement.profitLoss,
-      profitBeforeTax:
-        this.financialData.incomeStatement.incomeBeforeIncomeTaxes,
+      profitBeforeTax: this.financialData.incomeStatement.incomeBeforeIncomeTax,
       tax: this.financialData.incomeStatement.tax,
       updatedAt: new Date(),
       createdAt: new Date(),

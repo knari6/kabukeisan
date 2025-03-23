@@ -13,16 +13,16 @@ describe("CashFlowDto", () => {
       const dto = cashFlowDto.dto(2);
       expect(dto).toBeDefined();
       expect(dto.operatingCashFlow).toEqual(
-        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivity
       );
       expect(dto.investingCashFlow).toEqual(
-        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivity
       );
       expect(dto.financingCashFlow).toEqual(
-        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivities
+        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivity
       );
       expect(dto.cashAndCashEquivalent).toEqual(
-        financialTestData.cashFlowStatement.cashAndCashEquivalents
+        financialTestData.cashFlowStatement.cashAndCashEquivalent
       );
       expect(dto.dividendPaid).toEqual(
         financialTestData.cashFlowStatement.dividendsPaid

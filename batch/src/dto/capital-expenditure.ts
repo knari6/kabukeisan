@@ -22,7 +22,7 @@ export class CapitalExpenditureDto {
       capitalExpenditure:
         this.financialData.capitalExpenditure.equipmentInvestment,
       researchAndDevelopment:
-        this.financialData.capitalExpenditure.researchAndDevelopmentExpenses,
+        this.financialData.capitalExpenditure.researchAndDevelopmentExpense,
       createdAt: new Date(),
       updatedAt: new Date(),
     };

@@ -30,7 +30,7 @@ describe("DepreciationDto", () => {
         financialTestData.capitalExpenditure.equipmentInvestment
       );
       expect(dto.researchAndDevelopment).toEqual(
-        financialTestData.capitalExpenditure.researchAndDevelopmentExpenses
+        financialTestData.capitalExpenditure.researchAndDevelopmentExpense
       );
     });
   });
