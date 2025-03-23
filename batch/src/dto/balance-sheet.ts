@@ -14,36 +14,29 @@ export class BalanceSheetDto {
           id: companyId,
         },
       },
-      asset: this.financialData.balanceSheet.assets.asset,
-      currentAsset: this.financialData.balanceSheet.assets.currentAssets,
-      cashAndDeposit: this.financialData.balanceSheet.assets.cashAndDeposits,
-      accountsReceivable:
-        this.financialData.balanceSheet.assets.accountsReceivable,
-      merchandiseAndFinishedGood:
-        this.financialData.balanceSheet.assets.merchandiseAndFinishedGoods,
-      security: this.financialData.balanceSheet.assets.securities,
-      inventory: this.financialData.balanceSheet.assets.inventory,
-      otherCurrentAsset:
-        this.financialData.balanceSheet.assets.otherCurrentAssets,
-      fixedAsset: this.financialData.balanceSheet.assets.fixedAssets,
-      tangibleFixedAsset:
-        this.financialData.balanceSheet.assets.tangibleFixedAssets,
-      land: this.financialData.balanceSheet.assets.land,
+      asset: this.financialData.balanceSheet.asset,
+      currentAsset: this.financialData.balanceSheet.currentAsset,
+      cashAndDeposit: this.financialData.balanceSheet.cashAndDeposit,
+      accountsReceivable: this.financialData.balanceSheet.accountsReceivable,
+      good: this.financialData.balanceSheet.merchandiseAndFinishedGood,
+      security: this.financialData.balanceSheet.security,
+      inventory: this.financialData.balanceSheet.inventory,
+      otherCurrentAsset: this.financialData.balanceSheet.otherCurrentAsset,
+      fixedAsset: this.financialData.balanceSheet.fixedAsset,
+      tangibleFixedAsset: this.financialData.balanceSheet.tangibleFixedAsset,
+      land: this.financialData.balanceSheet.land,
       intangibleFixedAsset:
-        this.financialData.balanceSheet.assets.intangibleFixedAssets,
-      investmentSecurity:
-        this.financialData.balanceSheet.assets.investmentSecurities,
-      otherAsset: this.financialData.balanceSheet.assets.other,
-      liability: this.financialData.balanceSheet.liabilities.liability,
-      currentLiability:
-        this.financialData.balanceSheet.liabilities.currentLiabilities,
-      accountsPayable:
-        this.financialData.balanceSheet.liabilities.accountsPayable,
+        this.financialData.balanceSheet.intangibleFixedAsset,
+      investmentSecurity: this.financialData.balanceSheet.investmentSecurity,
+      otherAsset: this.financialData.balanceSheet.otherAsset,
+      liability: this.financialData.balanceSheet.liability,
+      currentLiability: this.financialData.balanceSheet.currentLiability,
+      accountsPayable: this.financialData.balanceSheet.accountsPayable,
       otherCurrentLiability:
-        this.financialData.balanceSheet.liabilities.otherCurrentLiabilities,
-      otherLiability: this.financialData.balanceSheet.liabilities.other,
-      netAsset: this.financialData.balanceSheet.netAssets.total,
-      equity: this.financialData.balanceSheet.netAssets.equity,
+        this.financialData.balanceSheet.otherCurrentLiability,
+      otherLiability: this.financialData.balanceSheet.otherLiability,
+      netAsset: this.financialData.balanceSheet.netAsset,
+      equity: this.financialData.balanceSheet.equity,
 
       updatedAt: new Date(),
       createdAt: new Date(),
