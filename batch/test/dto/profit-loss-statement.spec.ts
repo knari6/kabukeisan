@@ -31,7 +31,7 @@ describe("ProfitLossStatementDto", () => {
         financialTestData.incomeStatement.profitLoss
       );
       expect(dto.profitBeforeTax).toEqual(
-        financialTestData.incomeStatement.incomeBeforeIncomeTax
+        financialTestData.incomeStatement.incomeBeforeTax
       );
       expect(dto.tax).toEqual(financialTestData.incomeStatement.tax);
     });

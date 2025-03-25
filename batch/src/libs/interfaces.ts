@@ -280,7 +280,7 @@ export interface IncomeStatement {
   /** 経常利益 */
   ordinaryIncome: number;
   /** 税引前利益 */
-  incomeBeforeIncomeTax: number;
+  incomeBeforeTax: number;
   /** 法人税等合計 */
   tax: number;
   /** 当期純利益 */
@@ -290,11 +290,11 @@ export interface IncomeStatement {
 /** キャッシュフロー計算書 */
 export interface CashFlowStatement {
   /** 営業活動によるキャッシュの流入 */
-  netCashProvidedByOperatingActivity: number;
+  operatingCF: number;
   /** 投資活動によるキャッシュの流入 */
-  netCashProvidedByInvestingActivity: number;
+  investingCF: number;
   /** 財務活動によるキャッシュの流入 */
-  netCashProvidedByFinancingActivity: number;
+  financeCF: number;
   /** 現金同等物 */
   cashAndCashEquivalent: number;
   /** 配当支払い */
@@ -310,7 +310,7 @@ export interface CapitalExpenditure {
   /** 設備投資 */
   equipmentInvestment: number;
   /** 研究開発費 */
-  researchAndDevelopmentExpense: number;
+  researchAndDevelopment: number;
 }
 
 /** 有利子負債など */

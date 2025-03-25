@@ -21,7 +21,7 @@ export class ProfitLossStatementDto {
       operatingProfit: this.financialData.incomeStatement.operatingIncome,
       ordinaryProfit: this.financialData.incomeStatement.ordinaryIncome,
       netIncome: this.financialData.incomeStatement.profitLoss,
-      profitBeforeTax: this.financialData.incomeStatement.incomeBeforeIncomeTax,
+      profitBeforeTax: this.financialData.incomeStatement.incomeBeforeTax,
       tax: this.financialData.incomeStatement.tax,
       updatedAt: new Date(),
       createdAt: new Date(),

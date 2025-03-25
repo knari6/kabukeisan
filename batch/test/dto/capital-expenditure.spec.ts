@@ -1,7 +1,5 @@
 import { beforeAll, describe, expect, it } from "vitest";
-
 import { financialTestData } from "./financial-data";
-import { PrismaService } from "../../src/services/prisma.service";
 import { CapitalExpenditureDto } from "../../src/dto/capital-expenditure";
 describe("DepreciationDto", () => {
   let depreciationDto: CapitalExpenditureDto;
@@ -13,8 +11,6 @@ describe("DepreciationDto", () => {
   describe("dto", () => {
     it("DepreciationDtoを作ること", () => {
       const dto = depreciationDto.dto(1);
-      console.log(dto);
-
       expect(dto).toBeDefined();
       expect(dto.depreciation).toEqual(
         financialTestData.capitalExpenditure.depreciation
@@ -30,7 +26,7 @@ describe("DepreciationDto", () => {
         financialTestData.capitalExpenditure.equipmentInvestment
       );
       expect(dto.researchAndDevelopment).toEqual(
-        financialTestData.capitalExpenditure.researchAndDevelopmentExpense
+        financialTestData.capitalExpenditure.researchAndDevelopment
       );
     });
   });

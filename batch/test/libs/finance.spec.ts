@@ -25,7 +25,7 @@ describe("Finance", () => {
 
   beforeAll(() => {
     parse = new Parse();
-    finance = new Finance();
+
     random = new Random();
     mockFinanceStatement = {
       information: {
@@ -66,14 +66,14 @@ describe("Finance", () => {
         costOfSale: random.randomInt(1000, 10000),
         operatingIncome: random.randomInt(1000, 10000),
         ordinaryIncome: random.randomInt(1000, 10000),
-        incomeBeforeIncomeTax: random.randomInt(1000, 10000),
+        incomeBeforeTax: random.randomInt(1000, 10000),
         tax: random.randomInt(1000, 10000),
         profitLoss: random.randomInt(1000, 10000),
       },
       cashFlowStatement: {
-        netCashProvidedByOperatingActivity: random.randomInt(1000, 10000),
-        netCashProvidedByInvestingActivity: random.randomInt(1000, 10000),
-        netCashProvidedByFinancingActivity: random.randomInt(1000, 10000),
+        operatingCF: random.randomInt(1000, 10000),
+        investingCF: random.randomInt(1000, 10000),
+        financeCF: random.randomInt(1000, 10000),
         cashAndCashEquivalent: random.randomInt(1000, 10000),
         dividendsPaid: random.randomInt(1000, 10000),
       },
@@ -81,7 +81,7 @@ describe("Finance", () => {
         depreciation: random.randomInt(1000, 10000),
         amortization: random.randomInt(1000, 10000),
         equipmentInvestment: random.randomInt(1000, 10000),
-        researchAndDevelopmentExpense: random.randomInt(1000, 10000),
+        researchAndDevelopment: random.randomInt(1000, 10000),
       },
       interestBearingDebt: {
         debt: random.randomInt(1000, 10000),
@@ -105,13 +105,14 @@ describe("Finance", () => {
     describe("証券コードがある場合", () => {
       beforeEach(async () => {
         xmlData = await parse.xbrl("test/xbrl_finance");
-        financialStatements = finance.extractFinancialStatements(
+        finance = new Finance(
           xmlData,
           `${random.randomDate().getFullYear()}-${
             random.randomDate().getMonth() + 1
           }-${random.randomDate().getDate()}`,
           "1"
         );
+        financialStatements = finance.extractFinancialStatements();
       });
       it("should return financial statements", () => {
         expect(financialStatements).toBeDefined();
@@ -120,11 +121,18 @@ describe("Finance", () => {
     describe("証券コードがない場合", () => {
       beforeEach(async () => {
         xmlData = await parse.xbrl("test/xbrl_without_code");
+        finance = new Finance(
+          xmlData,
+          `${random.randomDate().getFullYear()}-${
+            random.randomDate().getMonth() + 1
+          }-${random.randomDate().getDate()}`,
+          "1"
+        );
       });
       it("エラーを返すこと", () => {
-        expect(() =>
-          finance.extractFinancialStatements(xmlData, "2024-01-01", "1")
-        ).toThrow("証券コードがありません");
+        expect(() => finance.extractFinancialStatements()).toThrow(
+          "証券コードがありません"
+        );
       });
     });
   });
@@ -133,10 +141,10 @@ describe("Finance", () => {
     it("値を返すこと", () => {
       const equity = mockFinanceStatement.balanceSheet.equity;
       const debt = mockFinanceStatement.balanceSheet.debt;
-      const { operatingIncome, tax, incomeBeforeIncomeTax } =
+      const { operatingIncome, tax, incomeBeforeTax } =
         mockFinanceStatement.incomeStatement;
       const expected =
-        (operatingIncome * (1 - tax / incomeBeforeIncomeTax)) / (equity + debt);
+        (operatingIncome * (1 - tax / incomeBeforeTax)) / (equity + debt);
       const acutual = finance.calcROIC(mockFinanceStatement);
       expect(acutual).toBeCloseTo(expected, 4);
     });
@@ -150,7 +158,7 @@ describe("Finance", () => {
     it("税引き前利益がマイナスの場合法人税率を30%として計算すること", () => {
       mockFinanceStatement.balanceSheet.equity = random.randomInt(1000, 10000);
       mockFinanceStatement.balanceSheet.debt = random.randomInt(1000, 10000);
-      mockFinanceStatement.incomeStatement.incomeBeforeIncomeTax = -1000;
+      mockFinanceStatement.incomeStatement.incomeBeforeTax = -1000;
 
       const equity = mockFinanceStatement.balanceSheet.equity;
       const debt = mockFinanceStatement.balanceSheet.debt;
@@ -343,84 +351,29 @@ describe("Finance", () => {
   });
 
   describe("運転資本の増減額の計算", async () => {
-    let xmlData: any;
-    beforeEach(async () => {});
+    let prevAccountReceivable: number;
+    let prevInventory: number;
+    let prevAccountPayable: number;
+    beforeEach(async () => {
+      prevAccountReceivable = random.randomInt(1000, 500);
+      prevInventory = random.randomInt(1000, 500);
+      prevAccountPayable = random.randomInt(600, 300);
+    });
     it("値を返すこと", async () => {
-      xmlData = await parse.xbrl("test/xbrl_finance");
-      const currentAssets = extractNumber(
-        xmlData,
-        "jppfs_cor:CurrentAssets",
-        "CurrentYearInstant"
+      const acutual = finance.calcWorkingCapital(
+        financialStatements.balanceSheet.accountsReceivable,
+        financialStatements.balanceSheet.inventory,
+        financialStatements.balanceSheet.accountsPayable,
+        prevAccountReceivable,
+        prevInventory,
+        prevAccountPayable
       );
-      const currentAssetsOneYearAgo = extractNumber(
-        xmlData,
-        "jppfs_cor:CurrentAssets",
-        "Prior1YearInstant"
-      );
-      const cash = extractNumber(
-        xmlData,
-        "jppfs_cor:CashAndDeposits",
-        "CurrentYearInstant"
-      );
-      const cashOneYearAgo = extractNumber(
-        xmlData,
-        "jppfs_cor:CashAndDeposits",
-        "Prior1YearInstant"
-      );
-
-      const currentPortionOfLongTermLoansPayable = extractNumber(
-        xmlData,
-        "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
-        "CurrentYearDuration"
-      );
-      const shortTermLoansPayable = extractNumber(
-        xmlData,
-        "jppfs_cor:ShortTermLoansPayable",
-        "CurrentYearDuration"
-      );
-      const notesAndAccountsPayableTrade = extractNumber(
-        xmlData,
-        "jppfs_cor:NotesAndAccountsPayableTrade",
-        "CurrentYearDuration"
-      );
-      const currentPortionOfLongTermLoansPayableOneYearAgo = extractNumber(
-        xmlData,
-        "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
-        "Prior1YearInstant"
-      );
-
-      const shortTermLoansPayableOneYearAgo = extractNumber(
-        xmlData,
-        "jppfs_cor:ShortTermLoansPayable",
-        "Prior1YearInstant"
-      );
-
-      const notesAndAccountsPayableTradeOneYearAgo = extractNumber(
-        xmlData,
-        "jppfs_cor:NotesAndAccountsPayableTrade",
-        "Prior1YearInstant"
-      );
-
-      const currentAssetsWithoutCash = currentAssets - cash;
-
-      const currentAssetsWithoutCashOneYearAgo =
-        currentAssetsOneYearAgo - cashOneYearAgo;
-
-      const accountsPayable =
-        currentPortionOfLongTermLoansPayable +
-        shortTermLoansPayable +
-        notesAndAccountsPayableTrade;
-
-      const accountsPayableOneYearAgo =
-        currentPortionOfLongTermLoansPayableOneYearAgo +
-        shortTermLoansPayableOneYearAgo +
-        notesAndAccountsPayableTradeOneYearAgo;
       const expected =
-        currentAssetsWithoutCash -
-        accountsPayable -
-        (currentAssetsWithoutCashOneYearAgo - accountsPayableOneYearAgo);
+        financialStatements.balanceSheet.accountsReceivable +
+        financialStatements.balanceSheet.inventory -
+        financialStatements.balanceSheet.accountsPayable -
+        (prevAccountReceivable + prevInventory - prevAccountPayable);
 
-      const acutual = finance.calcWorkingCapital(xmlData);
       expect(acutual).toEqual(expected);
     });
   });

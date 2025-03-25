@@ -70,7 +70,7 @@ describe("ProfitLossStatementRepository", () => {
         financialTestData.incomeStatement.ordinaryIncome
       );
       expect(Number(profitLossStatement?.profitBeforeTax)).toBe(
-        financialTestData.incomeStatement.incomeBeforeIncomeTax
+        financialTestData.incomeStatement.incomeBeforeTax
       );
       expect(Number(profitLossStatement?.tax)).toBe(
         financialTestData.incomeStatement.tax

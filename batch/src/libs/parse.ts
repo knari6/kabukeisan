@@ -3,13 +3,12 @@ import * as xml2js from "xml2js";
 
 export class Parse {
   constructor() {}
-
   /**
    * xbrlファイルをパースする
    * @param directory
    * @returns
    */
-  public async xbrl(directory: string) {
+  public async xbrl(directory: string): Promise<any> {
     try {
       // ディレクトリ内の.xbrlファイルを検索（withFileTypesオプションを使用）
       const dirents = fs.readdirSync(directory, { withFileTypes: true });

@@ -14,12 +14,9 @@ export class CashFlowDto {
           id: companyId,
         },
       },
-      operatingCashFlow:
-        this.financialData.cashFlowStatement.netCashProvidedByOperatingActivity,
-      investingCashFlow:
-        this.financialData.cashFlowStatement.netCashProvidedByInvestingActivity,
-      financingCashFlow:
-        this.financialData.cashFlowStatement.netCashProvidedByFinancingActivity,
+      operatingCashFlow: this.financialData.cashFlowStatement.operatingCF,
+      investingCashFlow: this.financialData.cashFlowStatement.investingCF,
+      financingCashFlow: this.financialData.cashFlowStatement.financeCF,
       cashAndCashEquivalent:
         this.financialData.cashFlowStatement.cashAndCashEquivalent,
       dividendPaid: this.financialData.cashFlowStatement.dividendsPaid,

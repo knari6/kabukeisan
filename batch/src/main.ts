@@ -16,7 +16,7 @@ const apiKey = process.argv[4];
 const api = new Api();
 const file = new File();
 const parse = new Parse();
-const finance = new Finance();
+
 const prismaClient = new PrismaClient();
 const log = new LogClient();
 
@@ -40,11 +40,8 @@ async function execute() {
         file.unzipFile(docID);
         const parsedData = await parse.xbrl(docID + "/XBRL/PublicDoc");
 
-        const financialData = finance.extractFinancialStatements(
-          parsedData,
-          fiscalYear,
-          docID
-        );
+        const finance = new Finance(parsedData, fiscalYear, docID);
+        const financialData = finance.extractFinancialStatements();
         const financeService = new FinanceService(prismaClient, financialData);
         await financeService.create();
         await file.deleteDir(docID);

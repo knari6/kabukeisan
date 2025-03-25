@@ -2,304 +2,566 @@ import { File } from "./file";
 import { FinancialData, QuarterType } from "./interfaces";
 
 export class Finance {
-  constructor() {}
+  private readonly xmlData: any;
+  private readonly fiscalYear: string;
+  private readonly docID: string;
+  private readonly informationContext = "FilingDateInstant";
+  private readonly context = "CurrentYearInstant_NonConsolidatedMember";
+  private readonly durationContext =
+    "CurrentYearDuration_NonConsolidatedMember";
+  private readonly oneYearAgo = "Prior1YearInstant";
+  constructor(xmlData: any, fiscalYear: string, docID: string) {
+    this.xmlData = xmlData;
+    this.fiscalYear = fiscalYear;
+    this.docID = docID;
+  }
+
+  /** 証券コード */
+  public get code(): string {
+    return this.extractValue(
+      this.xmlData,
+      "jpdei_cor:SecurityCodeDEI",
+      this.informationContext
+    );
+  }
+
+  /** 提出日 */
+  public get fillingDate(): string {
+    return this.extractValue(
+      this.xmlData,
+      "jpcrp_cor:FilingDateCoverPage",
+      this.informationContext
+    );
+  }
+
+  /** 会社名 */
+  public get companyName(): string {
+    return this.extractValue(
+      this.xmlData,
+      "jpdei_cor:FilerNameInJapaneseDEI",
+      this.informationContext
+    );
+  }
+
+  /** 四半期 */
+  public get quaeterType(): QuarterType {
+    return this.getQuarterType(
+      this.extractValue(
+        this.xmlData,
+        "jppfs_cor:Quarter",
+        this.informationContext
+      )
+    );
+  }
+
+  /** 株数 */
+  public get stockAmount(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
+      this.context
+    );
+  }
+
+  /** 流動資産 */
+  public get currentAsset(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CurrentAssets",
+      this.context
+    );
+  }
+
+  /** 前期流動資産 */
+  public get currentAssetOneYearAgo(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CurrentAssets",
+      this.oneYearAgo
+    );
+  }
+
+  /** 現金及び預金 */
+  public get cash(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CashAndDeposits",
+      this.context
+    );
+  }
+  /** 前期現金及び預金 */
+  public get cashOneYearAgo(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CashAndDeposits",
+      this.oneYearAgo
+    );
+  }
+
+  /** 売掛金 */
+  public get accountReceivable(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:AccountsReceivableTrade",
+        this.context
+      ) ?? 0
+    );
+  }
+
+  /** 前期売掛金 */
+  public get prevAccountReceivable(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:AccountsReceivableTrade",
+        this.oneYearAgo
+      ) ?? 0
+    );
+  }
+
+  /** 電子記録債権 */
+  public get electronicallyRecordedMonetary(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:ElectronicallyRecordedMonetaryClaimsOperatingCA",
+        this.context
+      ) ?? 0
+    );
+  }
+
+  /** 前期電子記録債権 */
+  public get prevElectronicallyRecordedMonetary(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:ElectronicallyRecordedMonetaryClaimsOperatingCA",
+        this.oneYearAgo
+      ) ?? 0
+    );
+  }
+
+  /** 商品 製品 */
+  public get good(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:MerchandiseAndFinishedGoods",
+      this.context
+    );
+  }
+
+  /** 有価証券 */
+  public get security(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:Securities",
+      this.context
+    );
+  }
+
+  /** 棚卸資産 */
+  public get inventory(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:Inventory",
+      this.context
+    );
+  }
+  /** 前期棚卸資産 */
+  public get prevInventory(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:Inventory",
+      this.context
+    );
+  }
+
+  /** その他流動資産 */
+  public get otherCurrentAsset(): number {
+    return this.extractNumber(this.xmlData, "jppfs_cor:OtherCA", this.context);
+  }
+
+  /** 固定資産 */
+  public get fixedAsset(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NoncurrentAssets",
+      this.context
+    );
+  }
+
+  /** 土地 */
+  public get land(): number {
+    return this.extractNumber(this.xmlData, "jppfs_cor:Land", this.context);
+  }
+
+  /** 有形固定資産 */
+  public get tangibleFixedAsset(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:PropertyPlantAndEquipment",
+      this.context
+    );
+  }
+
+  /** 無形固定資産 */
+  public get intangibleFixedAsset(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:IntangibleAssets",
+        this.context
+      ) && 0
+    );
+  }
+
+  /** 投資有価証券 */
+  public get investmentSecurity(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:InvestmentsAndOtherAssets",
+      "CurrentYearInstant"
+    );
+  }
+
+  /** その他資産 */
+  public get otherAsset(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:OtherAssets",
+      this.context
+    );
+  }
+
+  /** 資産合計 */
+  public get asset(): number {
+    return this.extractNumber(this.xmlData, "jppfs_cor:Assets", this.context);
+  }
+
+  /** 流動負債 */
+  public get currentLiability(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CurrentLiabilities",
+      this.context
+    );
+  }
+  /** 買入債務 */
+  public get accountPayable(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:AccountsPayableOperatingSpecific",
+      this.context
+    );
+  }
+
+  /** 前期買入債務 */
+  public get prevAccountPayable(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:AccountsPayableOperatingSpecific",
+      this.oneYearAgo
+    );
+  }
+
+  /** 短期借入金 */
+  public get debt(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:ShortTermLoansPayable",
+      this.context
+    );
+  }
+
+  /** その他流動負債 */
+  public get otherCurrentLiability(): number {
+    return this.extractNumber(this.xmlData, "jppfs_cor:OtherCL", this.context);
+  }
+
+  /** 固定負債 */
+  public get fixedLiability(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:FixedLiabilities",
+      this.context
+    );
+  }
+
+  /** その他負債 */
+  public get otherLiability(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:OtherLiabilities",
+      this.context
+    );
+  }
+
+  /** 負債合計 */
+  public get liability(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:Liabilities",
+      this.context
+    );
+  }
+
+  /** 純資産 */
+  public get netAsset(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NetAssets",
+      this.context
+    );
+  }
+
+  /** 株主資本 */
+  public get equity(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:ShareholdersEquity",
+      this.context
+    );
+  }
+
+  /** 売上 */
+  public get sale(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NetSales",
+      this.durationContext
+    );
+  }
+
+  /** 売上原価 */
+  public get costOfSale(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CostOfSales",
+      this.durationContext
+    );
+  }
+
+  /** 営業利益 */
+  public get operatingIncome(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:OperatingIncome",
+      this.durationContext
+    );
+  }
+
+  /** 経常利益 */
+  public get ordinaryIncome(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:OrdinaryIncome",
+      this.durationContext
+    );
+  }
+
+  /** 税引き前当期純利益 */
+  public get incomeBeforeTax(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:incomeBeforeTaxes",
+      this.durationContext
+    );
+  }
+
+  /** 法人税 */
+  public get tax(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:IncomeTaxes",
+      this.durationContext
+    );
+  }
+
+  /** 当期純利益 */
+  public get profitLoss(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:ProfitLoss",
+      this.durationContext
+    );
+  }
+
+  /** 営業CF */
+  public get operatingCF(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 投資CF */
+  public get investingCF(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 財務CF */
+  public get financeCF(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 現金同等物 */
+  public get cashAndCashEquivalent(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CashAndCashEquivalents",
+      "CurrentYearInstant"
+    );
+  }
+
+  /** 配当金 */
+  public get dividendsPaid(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:DividendsPaid",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 減価償却費 */
+  public get depreciation(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CapitalInvestment",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** のれん償却費 */
+  public get amortization(): number {
+    return (
+      this.extractNumber(
+        this.xmlData,
+        "jppfs_cor:AmortizationOfGoodwillOpeCF",
+        "CurrentYearInstant"
+      ) && 0
+    );
+  }
+
+  /** 設備投資 */
+  public get equipmentInvestiment(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 研究開発費 */
+  public get researchAndDevelopment(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jpcrp_cor:ResearchAndDevelopmentExpensesResearchAndDevelopmentActivities",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 有利子負債 */
+  public get currentPortionOfLongTermLoansPayable(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
+      "CurrentYearDuration"
+    );
+  }
+
+  /** 長期借入金 */
+  public get longTermLoan(): number {
+    return this.extractNumber(
+      this.xmlData,
+      "jppfs_cor:LongTermLoansPayable",
+      "CurrentYearInstant_NonConsolidatedMember"
+    );
+  }
+
   /**
    * xbrlファイルから財務諸表を抽出する
    * @param xmlData
    * @returns FinancialData
    */
-  public extractFinancialStatements(
-    xmlData: any,
-    fiscalYear: string,
-    docID: string
-  ): FinancialData {
-    const context = "CurrentYearInstant_NonConsolidatedMember";
-    const durationContext = "CurrentYearDuration_NonConsolidatedMember";
-    const informationContext = "FilingDateInstant";
-    const code = this.extractValue(
-      xmlData,
-      "jpdei_cor:SecurityCodeDEI",
-      informationContext
-    );
+  public extractFinancialStatements(): FinancialData {
+    const code = this.code;
     const file = new File();
     if (!code) {
-      file.deleteFile(docID);
+      file.deleteFile(this.docID);
       throw "証券コードがありません";
     }
     return {
       information: {
-        /** 証券コード */
         code: code.substring(0, 4),
-        year: fiscalYear.substring(0, 4),
-        /** ファンド名 */
-        companyName: this.extractValue(
-          xmlData,
-          "jpdei_cor:FilerNameInJapaneseDEI",
-          informationContext
-        ),
-        /** 提出日 */
-        filingDate: this.extractValue(
-          xmlData,
-          "jpcrp_cor:FilingDateCoverPage",
-          informationContext
-        ),
-        /** 会計期間 */
-        fiscalPeriod: fiscalYear.substring(0, 4),
-        /** 四半期 */
-        quarterType: this.getQuarterType(
-          this.extractValue(xmlData, "jppfs_cor:Quarter", informationContext)
-        ),
+        year: this.fiscalYear.substring(0, 4),
+        companyName: this.companyName,
+        filingDate: this.fillingDate,
+        fiscalPeriod: this.fiscalYear.substring(0, 4),
+        quarterType: this.quaeterType,
       },
       balanceSheet: {
-        /** 資産 */
-
-        /** 流動資産 */
-        currentAsset: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CurrentAssets",
-          context
-        ),
-        /** 現金預金 */
-        cashAndDeposit: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CashAndDeposits",
-          context
-        ),
-        /** 売上債権 */
-        accountsReceivable: this.extractNumber(
-          xmlData,
-          "jppfs_cor:AccountsReceivableTrade",
-          context
-        ),
-        /** 製品 */
-        merchandiseAndFinishedGood: this.extractNumber(
-          xmlData,
-          "jppfs_cor:MerchandiseAndFinishedGoods",
-          context
-        ),
-        /** 有価証券 */
-        security: this.extractNumber(xmlData, "jppfs_cor:Securities", context),
-        /** 棚卸資産 */
-        inventory: this.extractNumber(xmlData, "jppfs_cor:Inventory", context),
-        /** その他 */
-        otherCurrentAsset: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OtherCA",
-          context
-        ),
-
-        /** 固定資産 */
-        fixedAsset: this.extractNumber(
-          xmlData,
-          "jppfs_cor:NoncurrentAssets",
-          context
-        ),
-        /** 有形固定資産 */
-        tangibleFixedAsset: this.extractNumber(
-          xmlData,
-          "jppfs_cor:PropertyPlantAndEquipment",
-          context
-        ),
-        /** 土地 */
-        land: this.extractNumber(xmlData, "jppfs_cor:Land", context) && 0,
-        /** 無形固定資産 */
-        intangibleFixedAsset:
-          this.extractNumber(xmlData, "jppfs_cor:IntangibleAssets", context) &&
-          0,
-        /** 投資その他有価証券 */
-        investmentSecurity: this.extractNumber(
-          xmlData,
-          "jppfs_cor:InvestmentsAndOtherAssets",
-          "CurrentYearInstant"
-        ),
-
-        /** その他 */
-        otherAsset: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OtherAssets",
-          context
-        ),
-        /** 資産合計 */
-        asset: this.extractNumber(xmlData, "jppfs_cor:Assets", context),
-
-        /** 流動負債合計 */
-        currentLiability: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CurrentLiabilities",
-          context
-        ),
-        /** 買入債務 */
-        accountsPayable: this.extractNumber(
-          xmlData,
-          "jppfs_cor:AccountsPayableOperatingSpecific",
-          context
-        ),
-
-        /** 債務 */
-        debt: this.extractNumber(
-          xmlData,
-          "jppfs_cor:ShortTermLoansPayable",
-          context
-        ),
-
-        /** その他 */
-        otherCurrentLiability: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OtherCL",
-          context
-        ),
-
-        /** 固定負債 */
-        fixedLiability: this.extractNumber(
-          xmlData,
-          "jppfs_cor:FixedLiabilities",
-          context
-        ),
-        /** その他 */
-        otherLiability: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OtherLiabilities",
-          context
-        ),
-        /** 負債合計 */
-        liability: this.extractNumber(
-          xmlData,
-          "jppfs_cor:Liabilities",
-          context
-        ),
-
-        /** 純資産合計 */
-        netAsset: this.extractNumber(xmlData, "jppfs_cor:NetAssets", context),
-        /** 純資産 */
-        equity: this.extractNumber(
-          xmlData,
-          "jppfs_cor:ShareholdersEquity",
-          context
-        ),
+        currentAsset: this.currentAsset,
+        cashAndDeposit: this.cash,
+        accountsReceivable: this.accountReceivable,
+        merchandiseAndFinishedGood: this.good,
+        security: this.security,
+        inventory: this.inventory,
+        otherCurrentAsset: this.otherCurrentAsset,
+        fixedAsset: this.fixedAsset,
+        tangibleFixedAsset: this.tangibleFixedAsset,
+        land: this.land,
+        intangibleFixedAsset: this.intangibleFixedAsset,
+        investmentSecurity: this.investmentSecurity,
+        otherAsset: this.otherAsset,
+        asset: this.asset,
+        currentLiability: this.currentLiability,
+        accountsPayable: this.accountPayable,
+        debt: this.debt,
+        otherCurrentLiability: this.otherCurrentLiability,
+        fixedLiability: this.fixedLiability,
+        otherLiability: this.otherLiability,
+        liability: this.liability,
+        netAsset: this.netAsset,
+        equity: this.equity,
       },
       incomeStatement: {
-        /** 売上高 */
-        sale: this.extractNumber(
-          xmlData,
-          "jppfs_cor:NetSales",
-          durationContext
-        ),
-        /** 売上原価 */
-        costOfSale: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CostOfSales",
-          durationContext
-        ),
-        /** 営業利益 */
-        operatingIncome: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OperatingIncome",
-          durationContext
-        ),
-        /** 経常利益 */
-        ordinaryIncome: this.extractNumber(
-          xmlData,
-          "jppfs_cor:OrdinaryIncome",
-          durationContext
-        ),
-        /** 税引前利益 */
-        incomeBeforeIncomeTax: this.extractNumber(
-          xmlData,
-          "jppfs_cor:IncomeBeforeIncomeTaxes",
-          durationContext
-        ),
-        /** 法人税等合計 */
-        tax: this.extractNumber(
-          xmlData,
-          "jppfs_cor:IncomeTaxes",
-          durationContext
-        ),
-        /** 当期純利益 */
-        profitLoss: this.extractNumber(
-          xmlData,
-          "jppfs_cor:ProfitLoss",
-          durationContext
-        ),
+        sale: this.sale,
+        costOfSale: this.costOfSale,
+        operatingIncome: this.operatingIncome,
+        ordinaryIncome: this.ordinaryIncome,
+        incomeBeforeTax: this.incomeBeforeTax,
+        tax: this.tax,
+        profitLoss: this.profitLoss,
       },
       cashFlowStatement: {
-        /** 営業キャッシュフロー */
-        netCashProvidedByOperatingActivity: this.extractNumber(
-          xmlData,
-          "jppfs_cor:NetCashProvidedByUsedInOperatingActivities",
-          "CurrentYearDuration"
-        ),
-        /** 投資キャッシュフロー */
-        netCashProvidedByInvestingActivity: this.extractNumber(
-          xmlData,
-          "jppfs_cor:NetCashProvidedByUsedInInvestmentActivities",
-          "CurrentYearDuration"
-        ),
-        /** 財務キャッシュフロー */
-        netCashProvidedByFinancingActivity: this.extractNumber(
-          xmlData,
-          "jppfs_cor:NetCashProvidedByUsedInFinancingActivities",
-          "CurrentYearDuration"
-        ),
-        /** 現金及び現金同等物 */
-        cashAndCashEquivalent: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CashAndCashEquivalents",
-          "CurrentYearInstant"
-        ),
-        /** 配当支払い */
-        dividendsPaid: this.extractNumber(
-          xmlData,
-          "jppfs_cor:DividendsPaid",
-          "CurrentYearDuration"
-        ),
+        operatingCF: this.operatingCF,
+        investingCF: this.investingCF,
+        financeCF: this.financeCF,
+        cashAndCashEquivalent: this.cashAndCashEquivalent,
+        dividendsPaid: this.dividendsPaid,
       },
       capitalExpenditure: {
-        /** 減価償却費 */
-        depreciation: this.extractNumber(
-          xmlData,
-          "jppfs_cor:CapitalInvestment",
-          "CurrentYearDuration"
-        ),
-        /** 無形固定資産の償却 */
-        amortization:
-          this.extractNumber(
-            xmlData,
-            "jppfs_cor:AmortizationOfGoodwillOpeCF",
-            "CurrentYearInstant"
-          ) && 0,
-        /** 設備投資 */
-        equipmentInvestment: this.extractNumber(
-          xmlData,
-          "jpcrp_cor:IncreaseInPropertyPlantAndEquipmentAndIntangibleAssets",
-          "CurrentYearDuration"
-        ),
-        /** 研究開発費 */
-        researchAndDevelopmentExpense: this.extractNumber(
-          xmlData,
-          "jpcrp_cor:ResearchAndDevelopmentExpensesResearchAndDevelopmentActivities",
-          "CurrentYearDuration"
-        ),
+        depreciation: this.depreciation,
+        amortization: this.amortization,
+        equipmentInvestment: this.equipmentInvestiment,
+        researchAndDevelopment: this.researchAndDevelopment,
       },
       interestBearingDebt: {
-        debt:
-          this.extractNumber(
-            xmlData,
-            "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
-            "CurrentYearInstant_NonConsolidatedMember"
-          ) +
-          this.extractNumber(
-            xmlData,
-            "jppfs_cor:LongTermLoansPayable",
-            "CurrentYearInstant_NonConsolidatedMember"
-          ),
+        debt: this.currentPortionOfLongTermLoansPayable + this.longTermLoan,
       },
       stockInfo: {
         /** 株式発行総数 */
-        stockAmount: this.extractNumber(
-          xmlData,
-          "jpcrp_cor:TotalNumberOfIssuedSharesSummaryOfBusinessResults",
-          context
-        ),
+        stockAmount: this.stockAmount,
       },
     };
   }
@@ -314,13 +576,12 @@ export class Finance {
     const debt = financialStatement.balanceSheet.debt;
     const operatingIncome = financialStatement.incomeStatement.operatingIncome;
     const tax = financialStatement.incomeStatement.tax;
-    const incomeBeforeIncomeTax =
-      financialStatement.incomeStatement.incomeBeforeIncomeTax;
+    const incomeBeforeTax = financialStatement.incomeStatement.incomeBeforeTax;
     if (equity + debt === 0) {
       throw "自己資本と有利子負債の合計が0になったため計算できません";
     }
-    if (incomeBeforeIncomeTax > 0) {
-      const taxRate = tax / incomeBeforeIncomeTax;
+    if (incomeBeforeTax > 0) {
+      const taxRate = tax / incomeBeforeTax;
       return (operatingIncome * (1 - taxRate)) / (equity + debt);
     }
     return (operatingIncome * 0.7) / (equity + debt);
@@ -484,80 +745,17 @@ export class Finance {
     return amortization + depreciation;
   }
 
-  public calcWorkingCapital(xmlData: any): number {
-    const currentAssets = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CurrentAssets",
-      "CurrentYearInstant"
-    );
-    const currentAssetsOneYearAgo = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CurrentAssets",
-      "Prior1YearInstant"
-    );
-    const cash = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CashAndDeposits",
-      "CurrentYearInstant"
-    );
-    const cashOneYearAgo = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CashAndDeposits",
-      "Prior1YearInstant"
-    );
-
-    const currentPortionOfLongTermLoansPayable = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
-      "CurrentYearDuration"
-    );
-    const shortTermLoansPayable = this.extractNumber(
-      xmlData,
-      "jppfs_cor:ShortTermLoansPayable",
-      "CurrentYearDuration"
-    );
-    const notesAndAccountsPayableTrade = this.extractNumber(
-      xmlData,
-      "jppfs_cor:NotesAndAccountsPayableTrade",
-      "CurrentYearDuration"
-    );
-    const currentPortionOfLongTermLoansPayableOneYearAgo = this.extractNumber(
-      xmlData,
-      "jppfs_cor:CurrentPortionOfLongTermLoansPayable",
-      "Prior1YearInstant"
-    );
-
-    const shortTermLoansPayableOneYearAgo = this.extractNumber(
-      xmlData,
-      "jppfs_cor:ShortTermLoansPayable",
-      "Prior1YearInstant"
-    );
-
-    const notesAndAccountsPayableTradeOneYearAgo = this.extractNumber(
-      xmlData,
-      "jppfs_cor:NotesAndAccountsPayableTrade",
-      "Prior1YearInstant"
-    );
-
-    const currentAssetsWithoutCash = currentAssets - cash;
-
-    const currentAssetsWithoutCashOneYearAgo =
-      currentAssetsOneYearAgo - cashOneYearAgo;
-
-    const accountsPayable =
-      currentPortionOfLongTermLoansPayable +
-      shortTermLoansPayable +
-      notesAndAccountsPayableTrade;
-
-    const accountsPayableOneYearAgo =
-      currentPortionOfLongTermLoansPayableOneYearAgo +
-      shortTermLoansPayableOneYearAgo +
-      notesAndAccountsPayableTradeOneYearAgo;
-    const result =
-      currentAssetsWithoutCash -
-      accountsPayable -
-      (currentAssetsWithoutCashOneYearAgo - accountsPayableOneYearAgo);
-    return result;
+  public calcWorkingCapital(
+    accountsReceivable: number,
+    inventory: number,
+    accountsPayable: number,
+    prevAccountReceivable: number,
+    prevInventory: number,
+    prevAccountPayable: number
+  ): number {
+    const thisYear = accountsReceivable + inventory - accountsPayable;
+    const prevYear = prevAccountReceivable + prevInventory - prevAccountPayable;
+    return thisYear - prevYear;
   }
 
   /**
@@ -603,13 +801,13 @@ export class Finance {
    * 数値を抽出する
    * @param xmlData
    * @param key タグ名
-   * @param context
+   * @param this.context
    * @returns
    */
-  private extractNumber(xmlData: any, key: string, context: string): number {
+  private extractNumber(xmlData: any, key: string, ontext: string): number {
     try {
       const value = xmlData["xbrli:xbrl"][key]?.find(
-        (item: any) => item["$"].contextRef === context
+        (item: any) => item["$"].contextRef === this.context
       );
       return value ? parseInt(value["_"], 10) : 0;
     } catch (error) {

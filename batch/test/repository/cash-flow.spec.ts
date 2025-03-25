@@ -61,13 +61,13 @@ describe.sequential("CashFlowRepository", () => {
     test.sequential("DBにデータを登録できること", async () => {
       expect(cashFlow).not.toBeNull();
       expect(Number(cashFlow?.operatingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByOperatingActivity
+        financialTestData.cashFlowStatement.operatingCF
       );
       expect(Number(cashFlow?.investingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByInvestingActivity
+        financialTestData.cashFlowStatement.investingCF
       );
       expect(Number(cashFlow?.financingCashFlow)).toBe(
-        financialTestData.cashFlowStatement.netCashProvidedByFinancingActivity
+        financialTestData.cashFlowStatement.financeCF
       );
       expect(Number(cashFlow?.dividendPaid)).toBe(
         financialTestData.cashFlowStatement.dividendsPaid
